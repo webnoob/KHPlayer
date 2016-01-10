@@ -215,11 +215,11 @@ namespace KHPlayer.Forms
         private void bAddSong_Click(object sender, EventArgs e)
         {
             var point = GetScreenPoint();
-            var songList = Microsoft.VisualBasic.Interaction.InputBox("Please enter your songs (add multiples like 1,45,67)", "Song Selection", "", point.X, point.Y);
+            var songList = Microsoft.VisualBasic.Interaction.InputBox("Please enter your songs (split multiple song numbers with comma, space, fullstop or hyphen)", "Song Selection", "", point.X, point.Y);
             if (String.IsNullOrEmpty(songList))
                 return;
 
-            var songStrings = songList.Split(',').Select(s => s.Trim());
+            var songStrings = songList.Split(',', ' ', '.', '-').Select(s => s.Trim());
             var playList = GetSelectedPlayList();
             if (playList == null)
                 return;

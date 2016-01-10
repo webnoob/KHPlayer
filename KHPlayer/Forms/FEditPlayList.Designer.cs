@@ -205,7 +205,7 @@
             this.playlistsFromDriveFromToolStripMenuItem,
             this.playlistsFromFileToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.importToolStripMenuItem.Text = "Import";
             // 
             // playlistsFromDriveFromToolStripMenuItem
@@ -227,7 +227,7 @@
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.playListsToFileToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Visible = false;
             // 
@@ -243,7 +243,7 @@
             this.clearAllImportedMediaToolStripMenuItem,
             this.clearAllThumbnailsToolStripMenuItem});
             this.maintenanceToolStripMenuItem.Name = "maintenanceToolStripMenuItem";
-            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.maintenanceToolStripMenuItem.Text = "Maintenance";
             this.maintenanceToolStripMenuItem.Visible = false;
             // 
@@ -262,7 +262,7 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Visible = false;
             // 
