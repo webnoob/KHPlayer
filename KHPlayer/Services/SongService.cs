@@ -26,13 +26,25 @@ namespace KHPlayer.Services
 
         public string GetSongFile(int songNumber)
         {
-            foreach (var file in Directory.GetFiles(PathHelper.GetApplicationPath() + "\\" + Settings.Default.SongLocation))
-            using (var fileStream = new FileStream(file, FileMode.Open))
+            var allSongFiles = Directory.GetFiles(PathHelper.GetApplicationPath() + "\\" + Settings.Default.SongLocation);
+
+            foreach (var file in allSongFiles)
             {
-                var tagFile = File.Create(new StreamFileAbstraction(file, fileStream, fileStream));
-                if (tagFile.Tag.Track == songNumber)
-                    return file;
+                try
+                {
+                    using (var fileStream = new FileStream(file, FileMode.Open))
+                    {
+                        var tagFile = File.Create(new StreamFileAbstraction(file, fileStream, fileStream));
+                        if (tagFile.Tag.Track == songNumber)
+                            return file;
+                    }
+                }
+                //If the file is in use (already playing) then we don't want to throw an error.
+                //This will however prevent the same file being added to the play list when it's currently playing
+                //I can live with that ...
+                catch (IOException) { }
             }
+
 
             return "";
         }
