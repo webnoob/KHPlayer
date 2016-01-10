@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="KHPlayer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="WindowLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">0, 0</Value>
+    </Setting>
+    <Setting Name="UiMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">none</Value>
+    </Setting>
+    <Setting Name="LaunchScreen" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="FullScreen" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SavedData" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SongLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Media\Songs</Value>
+    </Setting>
+    <Setting Name="ThumbnailLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Media\Thumbnails</Value>
+    </Setting>
+    <Setting Name="ImportLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Media\ImportedMediaFiles</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
