@@ -40,6 +40,9 @@ namespace KHPlayer.Forms
             _playListService = new PlayListService();
             _dbService = new DbService();
 
+            if (!Directory.Exists(Settings.Default.SongLocation))
+                Directory.CreateDirectory(Settings.Default.SongLocation);
+
             _currentVideoState = WMPPlayState.wmppsStopped;
             numScreen.Maximum = Screen.AllScreens.Count() - 1;
 

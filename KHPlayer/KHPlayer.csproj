@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CopyFileEx.cs" />
+    <Compile Include="Extensions\FileExtensions.cs" />
     <Compile Include="Forms\DriveDetector.cs">
       <SubType>Form</SubType>
     </Compile>

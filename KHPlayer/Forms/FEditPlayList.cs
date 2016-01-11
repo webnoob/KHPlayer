@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -6,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using KHPlayer.Classes;
+using KHPlayer.Extensions;
+using KHPlayer.Properties;
 using KHPlayer.Services;
 
 namespace KHPlayer.Forms
@@ -253,6 +257,19 @@ namespace KHPlayer.Forms
             var playlist = GetSelectedPlayList();
             await _playlistImportExportService.ImportFromDirectory(path, playlist);
             LoadPlayListItems();
+        }
+
+        private void openThumbnailFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Warning: Do not delete the \"Songs\" folder as this is required.");
+
+            var info = new ProcessStartInfo
+            {
+                FileName = "explorer",
+                Arguments = String.Format("/e, /select, \"{0}\"", Settings.Default.ThumbnailLocation)
+            };
+
+            Process.Start(info);
         }
     }
 }

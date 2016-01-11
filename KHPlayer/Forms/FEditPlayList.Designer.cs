@@ -49,13 +49,12 @@
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playListsToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.maintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearAllImportedMediaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearAllThumbnailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dDlgPlaylist = new System.Windows.Forms.FolderBrowserDialog();
             this.pnlProgress = new System.Windows.Forms.Panel();
             this.progressBarMain = new System.Windows.Forms.ProgressBar();
             this.lblProgressStatus = new System.Windows.Forms.Label();
+            this.openThumbnailFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.pnlProgress.SuspendLayout();
@@ -205,7 +204,7 @@
             this.playlistsFromDriveFromToolStripMenuItem,
             this.playlistsFromFileToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.importToolStripMenuItem.Text = "Import";
             // 
             // playlistsFromDriveFromToolStripMenuItem
@@ -227,7 +226,7 @@
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.playListsToFileToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Visible = false;
             // 
@@ -240,29 +239,15 @@
             // maintenanceToolStripMenuItem
             // 
             this.maintenanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clearAllImportedMediaToolStripMenuItem,
-            this.clearAllThumbnailsToolStripMenuItem});
+            this.openThumbnailFolderToolStripMenuItem});
             this.maintenanceToolStripMenuItem.Name = "maintenanceToolStripMenuItem";
-            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.maintenanceToolStripMenuItem.Text = "Maintenance";
-            this.maintenanceToolStripMenuItem.Visible = false;
-            // 
-            // clearAllImportedMediaToolStripMenuItem
-            // 
-            this.clearAllImportedMediaToolStripMenuItem.Name = "clearAllImportedMediaToolStripMenuItem";
-            this.clearAllImportedMediaToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
-            this.clearAllImportedMediaToolStripMenuItem.Text = "Clear All Imported Media";
-            // 
-            // clearAllThumbnailsToolStripMenuItem
-            // 
-            this.clearAllThumbnailsToolStripMenuItem.Name = "clearAllThumbnailsToolStripMenuItem";
-            this.clearAllThumbnailsToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
-            this.clearAllThumbnailsToolStripMenuItem.Text = "Clear All Media Thumbnails";
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Visible = false;
             // 
@@ -293,6 +278,13 @@
             this.lblProgressStatus.Size = new System.Drawing.Size(214, 99);
             this.lblProgressStatus.TabIndex = 20;
             this.lblProgressStatus.Text = "Copying ...";
+            // 
+            // openThumbnailFolderToolStripMenuItem
+            // 
+            this.openThumbnailFolderToolStripMenuItem.Name = "openThumbnailFolderToolStripMenuItem";
+            this.openThumbnailFolderToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
+            this.openThumbnailFolderToolStripMenuItem.Text = "Open Storage Folder in Explorer";
+            this.openThumbnailFolderToolStripMenuItem.Click += new System.EventHandler(this.openThumbnailFolderToolStripMenuItem_Click);
             // 
             // FEditPlayList
             // 
@@ -352,10 +344,9 @@
         private System.Windows.Forms.FolderBrowserDialog dDlgPlaylist;
         private System.Windows.Forms.ToolStripMenuItem playlistsFromFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem maintenanceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clearAllImportedMediaToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clearAllThumbnailsToolStripMenuItem;
         private System.Windows.Forms.Panel pnlProgress;
         private System.Windows.Forms.Label lblProgressStatus;
         private System.Windows.Forms.ProgressBar progressBarMain;
+        private System.Windows.Forms.ToolStripMenuItem openThumbnailFolderToolStripMenuItem;
     }
 }
