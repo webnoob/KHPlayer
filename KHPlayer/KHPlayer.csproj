@@ -169,7 +169,6 @@
   <ItemGroup>
     <Content Include="favicon.ico" />
     <Content Include="FodyWeavers.xml" />
-    <None Include="Resources\favicon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Media\Songs\" />
