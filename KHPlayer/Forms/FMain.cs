@@ -14,6 +14,9 @@ namespace KHPlayer.Forms
 {
     public partial class FMain : Form
     {
+        private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
+        private const int WM_APPCOMMAND = 0x319;
+
         private readonly PlayListService _playListService;
         private readonly DbService _dbService;
 
@@ -24,6 +27,9 @@ namespace KHPlayer.Forms
         
         public bool FullScreen { get { return cbFullScreen.Checked; } set { cbFullScreen.Checked = value; } }
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessageW(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+        
         public WMPPlayState VideoState
         {
             get { return _currentVideoState; }
@@ -48,6 +54,13 @@ namespace KHPlayer.Forms
 
             RefreshPlayLists(null, null);
             SetButtonState();
+        }
+
+        //Not using this method at the moment as I'm not convinced about the reliability with not being able to check if sound is muted first.
+        //I need a Mute() and UnMute().
+        private void ToggleMute()
+        {
+            SendMessageW(Handle, WM_APPCOMMAND, Handle, (IntPtr)APPCOMMAND_VOLUME_MUTE);
         }
 
         protected override void OnLoad(EventArgs e)

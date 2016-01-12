@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using KHPlayer.Classes;
+using KHPlayer.Extensions;
 using TagLib;
 using File = System.IO.File;
 
@@ -13,11 +14,13 @@ namespace KHPlayer.Services
     {
         private readonly PlayListService _playListService;
         private readonly ThumbnailService _thumbnailService;
+        private readonly FileTagService _fileTagService;
 
         public PlayListItemService()
         {
             _playListService = new PlayListService();
             _thumbnailService = new ThumbnailService();
+            _fileTagService = new FileTagService();
         }
 
         public IEnumerable<PlayListItem> Get(PlayList playList)
@@ -62,13 +65,17 @@ namespace KHPlayer.Services
                 ThumbnailPath = _thumbnailService.GenerateForFile(filePath)
             };
 
-            using (var fileStream = new FileStream(plItem.FilePath, FileMode.Open))
-            {
-                var tagFile = TagLib.File.Create(new StreamFileAbstraction(plItem.FilePath, fileStream, fileStream));
-                plItem.Type = tagFile is TagLib.Mpeg.AudioFile ? PlayListItemType.Audio : PlayListItemType.Video;
-                plItem.TagName = String.Format("[{0}] - {1}", plItem.Type, tagFile.Tag.Title);
-            }
+            var fileInfo = new FileInfo(filePath);
+            if (fileInfo.IsLocked())
+                return null;
 
+            var tagFile = _fileTagService.GetTag(plItem.FilePath);
+            if (tagFile == null)
+                return null;
+
+            plItem.Type = tagFile is TagLib.Mpeg.AudioFile ? PlayListItemType.Audio : PlayListItemType.Video;
+            plItem.TagName = String.Format("[{0}] - {1}", plItem.Type, tagFile.Tag.Title);
+            
             return plItem;
         }
 
@@ -77,7 +84,9 @@ namespace KHPlayer.Services
             if (File.Exists(path))
             {
                 var playListItem = GetByFileName(path, playList) ?? Create(path, playList);
-                Insert(playListItem, playList);
+
+                if (playListItem != null)
+                    Insert(playListItem, playList);
             }
         }
 

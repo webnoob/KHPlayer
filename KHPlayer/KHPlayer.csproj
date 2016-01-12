@@ -104,6 +104,7 @@
       <DependentUpon>FPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\DbService.cs" />
+    <Compile Include="Services\FileTagService.cs" />
     <Compile Include="Services\PlaylistImportExportService.cs" />
     <Compile Include="Services\PlayListItemService.cs" />
     <Compile Include="Services\PlayListService.cs" />

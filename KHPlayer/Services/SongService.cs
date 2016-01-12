@@ -9,6 +9,13 @@ namespace KHPlayer.Services
 {
     public class SongService
     {
+        private readonly FileTagService _fileTagService;
+
+        public SongService()
+        {
+            _fileTagService = new FileTagService();
+        }
+
         public string GetSongFile(string songStr)
         {
             var songNumber = GetSongNumber(songStr);
@@ -30,21 +37,13 @@ namespace KHPlayer.Services
 
             foreach (var file in allSongFiles)
             {
-                try
-                {
-                    using (var fileStream = new FileStream(file, FileMode.Open))
-                    {
-                        var tagFile = File.Create(new StreamFileAbstraction(file, fileStream, fileStream));
-                        if (tagFile.Tag.Track == songNumber)
-                            return file;
-                    }
-                }
-                //If the file is in use (already playing) then we don't want to throw an error.
-                //This will however prevent the same file being added to the play list when it's currently playing
-                //I can live with that ...
-                catch (IOException) { }
-            }
+                var tagFile = _fileTagService.GetTag(file);
+                if (tagFile == null)
+                    continue;
 
+                if (tagFile.Tag.Track == songNumber)
+                    return file;
+            }
 
             return "";
         }
