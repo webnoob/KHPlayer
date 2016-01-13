@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FPlayer));
             this.wmPlayer = new AxWMPLib.AxWindowsMediaPlayer();
+            this.timerPlayerStateChange = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.wmPlayer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -45,6 +47,11 @@
             this.wmPlayer.Size = new System.Drawing.Size(508, 383);
             this.wmPlayer.TabIndex = 0;
             this.wmPlayer.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(this.wmPlayer_PlayStateChange);
+            // 
+            // timerPlayerStateChange
+            // 
+            this.timerPlayerStateChange.Enabled = true;
+            this.timerPlayerStateChange.Tick += new System.EventHandler(this.timerPlayerStateChange_Tick);
             // 
             // FPlayer
             // 
@@ -66,5 +73,6 @@
         #endregion
 
         private AxWMPLib.AxWindowsMediaPlayer wmPlayer;
+        private System.Windows.Forms.Timer timerPlayerStateChange;
     }
 }

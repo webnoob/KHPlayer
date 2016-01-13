@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -13,6 +14,7 @@ namespace KHPlayer.Forms
     {
         private readonly FMain _parent;
         private PlayListItem _currentlyPlayListItem;
+        private WMPPlayState _currentState;
 
         public AxWindowsMediaPlayer WmPlayer { get { return wmPlayer; } }
 
@@ -28,6 +30,7 @@ namespace KHPlayer.Forms
             InitializeComponent();
             
             wmPlayer.settings.volume += 100;
+            _currentState = WMPPlayState.wmppsStopped;
             StopAndHidePlayer();
         }
 
@@ -47,17 +50,24 @@ namespace KHPlayer.Forms
             }
         }
 
+        public void PlayPlayListItem(List<PlayListItem> playListItems)
+        {
+            foreach (var playListItem in playListItems)
+                PlayPlayListItem(playListItem);
+        }
+
         public void PlayPlayListItem(PlayListItem playListItem)
         {
             if (playListItem == null)
                 return;
 
             _currentlyPlayListItem = playListItem;
-            wmPlayer.URL = _currentlyPlayListItem.FilePath;
+            wmPlayer.URL = playListItem.FilePath;
         }
 
         public void Stop()
         {
+            SetStateChanged(WMPPlayState.wmppsStopped);
             wmPlayer.Ctlcontrols.stop();
             SetStopped();
         }
@@ -86,8 +96,23 @@ namespace KHPlayer.Forms
 
         private void wmPlayer_PlayStateChange(object sender, _WMPOCXEvents_PlayStateChangeEvent e)
         {
-            _parent.VideoState = wmPlayer.playState;
-            
+            //Don't use this event as it gets confused.
+            //SetStateChanged(wmPlayer.playState);
+        }
+
+        private void timerPlayerStateChange_Tick(object sender, EventArgs e)
+        {
+            if (wmPlayer.playState == _currentState)
+                return;
+
+            SetStateChanged(wmPlayer.playState);
+        }
+
+        private void SetStateChanged(WMPPlayState playState)
+        {
+            _parent.VideoState = playState;
+            _currentState = playState;
+
             switch (wmPlayer.playState)
             {
                 case WMPPlayState.wmppsUndefined:
@@ -96,6 +121,7 @@ namespace KHPlayer.Forms
                     SetStopped();
                     break;
                 case WMPPlayState.wmppsPaused:
+                    ;
                     break;
                 case WMPPlayState.wmppsPlaying:
                     ShowPlayer();

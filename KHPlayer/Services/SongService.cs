@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using KHPlayer.Classes;
 using KHPlayer.Properties;
-using TagLib;
-using File = TagLib.File;
 
 namespace KHPlayer.Services
 {
     public class SongService
     {
         private readonly FileTagService _fileTagService;
+        private readonly List<int> _playedRandomSongs; 
+        private readonly int _totalSongCount;
 
         public SongService()
         {
             _fileTagService = new FileTagService();
+            _playedRandomSongs = new List<int>();
+            _totalSongCount = Directory.GetFiles(Settings.Default.SongLocation).Count();
         }
 
         public string GetSongFile(string songStr)
@@ -51,6 +55,33 @@ namespace KHPlayer.Services
         public string GetSongUrl(string songStr)
         {
             return String.Format("http://download.jw.org/files/media_music/b9/iasn_E_00{0}.mp3", songStr);
+        }
+
+        public int GetRandomSongNumer()
+        {
+            var possibleSongs = GetPossibleSongs();
+            
+            var rnd = new Random();
+            var index = rnd.Next(0, possibleSongs.Count);
+            var songNum = possibleSongs[index];
+            _playedRandomSongs.Add(songNum);
+            return songNum;
+        }
+
+        private List<int> GetPossibleSongs()
+        {
+            var possibleSongs = new List<int>();
+            for (var i = 1; i <= _totalSongCount; i++)
+                if (!_playedRandomSongs.Contains(i))
+                    possibleSongs.Add(i);
+
+            if (possibleSongs.Any()) 
+                return possibleSongs;
+
+            //If we don't have any songs left to play, clear the played list and start the random process again.
+            _playedRandomSongs.Clear();
+            possibleSongs = GetPossibleSongs();
+            return possibleSongs;
         }
     }
 }

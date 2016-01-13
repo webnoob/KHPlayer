@@ -19,11 +19,15 @@ namespace KHPlayer.Forms
 
         private readonly PlayListService _playListService;
         private readonly DbService _dbService;
+        private readonly SongService _songService;
+        private readonly PlayListItemService _playListItemService;
 
         private FPlayer _fplayer;
         private FEditPlayList _fEditPlayList;
         private PlayListItem _currentFile;
         private WMPPlayState _currentVideoState;
+        private PlayListMode _playListMode;
+        private PlayMode _playMode;
         
         public bool FullScreen { get { return cbFullScreen.Checked; } set { cbFullScreen.Checked = value; } }
 
@@ -45,12 +49,16 @@ namespace KHPlayer.Forms
             InitializeComponent();
             _playListService = new PlayListService();
             _dbService = new DbService();
+            _songService = new SongService();
+            _playListItemService = new PlayListItemService();
 
             if (!Directory.Exists(Settings.Default.SongLocation))
                 Directory.CreateDirectory(Settings.Default.SongLocation);
 
             _currentVideoState = WMPPlayState.wmppsStopped;
             numScreen.Maximum = Screen.AllScreens.Count() - 1;
+            _playListMode = PlayListMode.PlayList;
+            _playMode = PlayMode.Single;
 
             RefreshPlayLists(null, null);
             SetButtonState();
@@ -156,7 +164,7 @@ namespace KHPlayer.Forms
             if (_fplayer == null)
             {
                 _fplayer = new FPlayer(this, Convert.ToInt32(numScreen.Text));
-                _fplayer.Closed += PlayerClosed;
+                _fplayer.Closing += PlayerClosed;
                 _fplayer.Show(this);
                 SetButtonState();
             }
@@ -164,7 +172,9 @@ namespace KHPlayer.Forms
 
         private void PlayerClosed(object sender, EventArgs e)
         {
-            _fplayer.Stop();
+            if (_currentVideoState == WMPPlayState.wmppsPlaying)
+                bStop_Click(sender, e);
+
             _fplayer.Dispose();
             _fplayer = null;
             SetButtonState();
@@ -214,8 +224,6 @@ namespace KHPlayer.Forms
                     {
                         if (lbPlayListItems.Items.Count >= i)
                             lbPlayListItems.SelectedIndex = i;
-                        /*else
-                            lbPlayListItems.SelectedIndex = 0;*/
                         break;
                     }
                 }
@@ -229,63 +237,83 @@ namespace KHPlayer.Forms
 
         private void bPlayNext_Click(object sender, EventArgs e)
         {
-            var playList = GetCurrentPlayList();
+            _playListMode = PlayListMode.PlayList;
+            PlayNext();
+        }
 
-            if (!playList.Items.Any())
+        private void PlayNext()
+        {
+            var playList = GetCurrentPlayList();
+            
+            if (playList != null && !playList.Items.Any() && _playListMode != PlayListMode.RandomSong)
             {
                 var confirmResult = MessageBox.Show("No play list currently configured, do you want to configure one now?", "Configure Play List?",
                 MessageBoxButtons.YesNo);
 
                 if (confirmResult == DialogResult.Yes)
-                    bEditPlayList_Click(sender, e);
+                    bEditPlayList_Click(null, null);
                 else
                     return;
             }
 
-            _currentFile = GetNextVideo();
+            _currentFile = GetNextFile();
             if (_currentFile == null)
             {
                 MessageBox.Show("No play list item selected.");
                 return;
             }
 
-            if (_fplayer == null)
-                bLaunch_Click(sender, e);
-            
-            if (_fplayer == null)
-                return;
-
             PlayCurrentFile();
         }
 
         private void PlayCurrentFile()
         {
+            if (_fplayer == null)
+                bLaunch_Click(null, null);
+
+            if (_fplayer == null)
+                return;
+
             _fplayer.PlayPlayListItem(_currentFile);
             UpdatePlayListItemDisplays();
         }
 
-        private PlayListItem GetNextVideo()
+        private PlayListItem GetNextFile()
         {
+            if (_playListMode == PlayListMode.RandomSong)
+                return GetRandomSong();
+
             return GetSelectedPlayListItem();
+        }
+
+        private PlayListItem GetRandomSong()
+        {
+            var songNum = _songService.GetRandomSongNumer();
+            var songFilePath = _songService.GetSongFile(songNum);
+            return _playListItemService.Create(songFilePath, new PlayList {Guid = Guid.NewGuid().ToString()});
         }
 
         private void SetNextVideo()
         {
-            if (lbPlayListItems.SelectedIndex != lbPlayListItems.Items.Count - 1)
+            if (_playListMode == PlayListMode.PlayList && lbPlayListItems.SelectedIndex != lbPlayListItems.Items.Count - 1)
             {
                 var nextIndex = lbPlayListItems.SelectedIndex + 1;
                 lbPlayListItems.SelectedIndex = nextIndex >= lbPlayListItems.Items.Count
                     ? 0
                     : nextIndex;
             }
-            else
-                lbPlayListItems.SelectedIndex = -1;
+            else if (lbPlayListItems.Items.Count > 0)
+                lbPlayListItems.SelectedIndex = 0;
 
             lblNowPlaying.Text = "Nothing currently playing.";
+
+            if (_playMode == PlayMode.AutoPlay)
+                PlayNext();
         }
 
         private void bStop_Click(object sender, EventArgs e)
         {
+            _playMode = PlayMode.Single;
             _fplayer.Stop();
         }
 
@@ -298,7 +326,8 @@ namespace KHPlayer.Forms
         {
             var showPlay = _currentVideoState == WMPPlayState.wmppsStopped ||
                            _currentVideoState == WMPPlayState.wmppsTransitioning ||
-                           _currentVideoState == WMPPlayState.wmppsReady;
+                           _currentVideoState == WMPPlayState.wmppsReady ||
+                           _currentVideoState == WMPPlayState.wmppsUndefined;
 
             bPlayNext.Visible = showPlay;
             
@@ -363,6 +392,13 @@ namespace KHPlayer.Forms
         private void bClosePlayerWindow_Click(object sender, EventArgs e)
         {
             PlayerClosed(sender, e);
+        }
+
+        private void bPlayIntroMusic_Click(object sender, EventArgs e)
+        {
+            _playListMode = PlayListMode.RandomSong;
+            _playMode = PlayMode.AutoPlay;
+            PlayNext();
         }
     }
 }

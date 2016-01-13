@@ -103,6 +103,8 @@
     <Compile Include="Forms\FPlayer.Designer.cs">
       <DependentUpon>FPlayer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Classes\PlayMode.cs" />
+    <Compile Include="Classes\PlayListMode.cs" />
     <Compile Include="Services\DbService.cs" />
     <Compile Include="Services\FileTagService.cs" />
     <Compile Include="Services\PlaylistImportExportService.cs" />

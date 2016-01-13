@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using KHPlayer.Classes;
-using KHPlayer.Extensions;
 using KHPlayer.Properties;
 using KHPlayer.Services;
+using Microsoft.VisualBasic;
 
 namespace KHPlayer.Forms
 {
@@ -144,7 +141,7 @@ namespace KHPlayer.Forms
         private void bAddNewPlayList_Click(object sender, EventArgs e)
         {
             var point = GetScreenPoint();
-            var playListName = Microsoft.VisualBasic.Interaction.InputBox("Please enter the play list name.", "Play List Name", "", point.X, point.Y);
+            var playListName = Interaction.InputBox("Please enter the play list name.", "Play List Name", "", point.X, point.Y);
             if (String.IsNullOrEmpty(playListName))
             {
                 MessageBox.Show("No play list name entered.");
@@ -219,7 +216,7 @@ namespace KHPlayer.Forms
         private void bAddSong_Click(object sender, EventArgs e)
         {
             var point = GetScreenPoint();
-            var songList = Microsoft.VisualBasic.Interaction.InputBox("Please enter your songs (split multiple song numbers with comma, space, fullstop or hyphen)", "Song Selection", "", point.X, point.Y);
+            var songList = Interaction.InputBox("Please enter your songs (split multiple song numbers with comma, space, fullstop or hyphen)", "Song Selection", "", point.X, point.Y);
             if (String.IsNullOrEmpty(songList))
                 return;
 

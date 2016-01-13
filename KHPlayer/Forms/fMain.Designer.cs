@@ -46,6 +46,7 @@
             this.lblScreen = new System.Windows.Forms.Label();
             this.lblNowPlaying = new System.Windows.Forms.Label();
             this.bClosePlayerWindow = new System.Windows.Forms.Button();
+            this.bPlayIntroMusic = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numScreen)).BeginInit();
             this.SuspendLayout();
@@ -53,7 +54,7 @@
             // bExit
             // 
             this.bExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bExit.Location = new System.Drawing.Point(11, 433);
+            this.bExit.Location = new System.Drawing.Point(11, 503);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(447, 64);
             this.bExit.TabIndex = 0;
@@ -224,9 +225,21 @@
             this.bClosePlayerWindow.UseVisualStyleBackColor = false;
             this.bClosePlayerWindow.Click += new System.EventHandler(this.bClosePlayerWindow_Click);
             // 
+            // bPlayIntroMusic
+            // 
+            this.bPlayIntroMusic.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bPlayIntroMusic.Location = new System.Drawing.Point(11, 433);
+            this.bPlayIntroMusic.Name = "bPlayIntroMusic";
+            this.bPlayIntroMusic.Size = new System.Drawing.Size(447, 64);
+            this.bPlayIntroMusic.TabIndex = 18;
+            this.bPlayIntroMusic.Text = "Play Random Songs";
+            this.bPlayIntroMusic.UseVisualStyleBackColor = true;
+            this.bPlayIntroMusic.Click += new System.EventHandler(this.bPlayIntroMusic_Click);
+            // 
             // FMain
             // 
-            this.ClientSize = new System.Drawing.Size(470, 508);
+            this.ClientSize = new System.Drawing.Size(470, 576);
+            this.Controls.Add(this.bPlayIntroMusic);
             this.Controls.Add(this.bClosePlayerWindow);
             this.Controls.Add(this.lblNowPlaying);
             this.Controls.Add(this.lblScreen);
@@ -276,6 +289,7 @@
         private System.Windows.Forms.Label lblScreen;
         private System.Windows.Forms.Label lblNowPlaying;
         private System.Windows.Forms.Button bClosePlayerWindow;
+        private System.Windows.Forms.Button bPlayIntroMusic;
     }
 }
 
