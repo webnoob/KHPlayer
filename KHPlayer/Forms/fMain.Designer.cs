@@ -47,6 +47,8 @@
             this.lblNowPlaying = new System.Windows.Forms.Label();
             this.bClosePlayerWindow = new System.Windows.Forms.Button();
             this.bPlayIntroMusic = new System.Windows.Forms.Button();
+            this.bHelp = new System.Windows.Forms.Button();
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numScreen)).BeginInit();
             this.SuspendLayout();
@@ -54,7 +56,7 @@
             // bExit
             // 
             this.bExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bExit.Location = new System.Drawing.Point(11, 503);
+            this.bExit.Location = new System.Drawing.Point(11, 573);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(447, 64);
             this.bExit.TabIndex = 0;
@@ -217,8 +219,10 @@
             // 
             this.bClosePlayerWindow.BackColor = System.Drawing.SystemColors.ControlLight;
             this.bClosePlayerWindow.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.helpProvider1.SetHelpString(this.bClosePlayerWindow, "Tester");
             this.bClosePlayerWindow.Location = new System.Drawing.Point(11, 12);
             this.bClosePlayerWindow.Name = "bClosePlayerWindow";
+            this.helpProvider1.SetShowHelp(this.bClosePlayerWindow, true);
             this.bClosePlayerWindow.Size = new System.Drawing.Size(447, 64);
             this.bClosePlayerWindow.TabIndex = 17;
             this.bClosePlayerWindow.Text = "Close Player Window";
@@ -236,9 +240,21 @@
             this.bPlayIntroMusic.UseVisualStyleBackColor = true;
             this.bPlayIntroMusic.Click += new System.EventHandler(this.bPlayIntroMusic_Click);
             // 
+            // bHelp
+            // 
+            this.bHelp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bHelp.Location = new System.Drawing.Point(11, 503);
+            this.bHelp.Name = "bHelp";
+            this.bHelp.Size = new System.Drawing.Size(447, 64);
+            this.bHelp.TabIndex = 19;
+            this.bHelp.Text = "Help";
+            this.bHelp.UseVisualStyleBackColor = true;
+            this.bHelp.Click += new System.EventHandler(this.bHelp_Click);
+            // 
             // FMain
             // 
-            this.ClientSize = new System.Drawing.Size(470, 576);
+            this.ClientSize = new System.Drawing.Size(470, 650);
+            this.Controls.Add(this.bHelp);
             this.Controls.Add(this.bPlayIntroMusic);
             this.Controls.Add(this.bClosePlayerWindow);
             this.Controls.Add(this.lblNowPlaying);
@@ -290,6 +306,8 @@
         private System.Windows.Forms.Label lblNowPlaying;
         private System.Windows.Forms.Button bClosePlayerWindow;
         private System.Windows.Forms.Button bPlayIntroMusic;
+        private System.Windows.Forms.Button bHelp;
+        private System.Windows.Forms.HelpProvider helpProvider1;
     }
 }
 

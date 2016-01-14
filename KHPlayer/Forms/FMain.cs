@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -399,6 +400,20 @@ namespace KHPlayer.Forms
             _playListMode = PlayListMode.RandomSong;
             _playMode = PlayMode.AutoPlay;
             PlayNext();
+        }
+
+        private void bHelp_Click(object sender, EventArgs e)
+        {
+            var proc = new Process
+            {
+                StartInfo =
+                {
+                    FileName = PathHelper.GetApplicationPath() + "\\KHPlayer.chm"
+                }
+            
+            };
+
+            proc.Start();
         }
     }
 }
