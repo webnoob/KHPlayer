@@ -118,5 +118,17 @@ namespace KHPlayer.Properties {
                 this["ImportLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ClosePlayerOnStop {
+            get {
+                return ((bool)(this["ClosePlayerOnStop"]));
+            }
+            set {
+                this["ClosePlayerOnStop"] = value;
+            }
+        }
     }
 }

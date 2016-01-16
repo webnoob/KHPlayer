@@ -57,10 +57,14 @@ namespace KHPlayer.Forms
                 Directory.CreateDirectory(Settings.Default.SongLocation);
 
             _currentVideoState = WMPPlayState.wmppsStopped;
-            numScreen.Maximum = Screen.AllScreens.Count() - 1;
             _playListMode = PlayListMode.PlayList;
             _playMode = PlayMode.Single;
 
+            //Commenting this option out for now as it's hard to use when in the hall.
+            //If the projector is unplugged, it resets the optoin to zero which means it resets your
+            //saved value on close.
+            //numScreen.Maximum = Screen.AllScreens.Count() - 1;
+            
             RefreshPlayLists(null, null);
             SetButtonState();
         }
@@ -165,19 +169,23 @@ namespace KHPlayer.Forms
             if (_fplayer == null)
             {
                 _fplayer = new FPlayer(this, Convert.ToInt32(numScreen.Text));
-                _fplayer.Closing += PlayerClosed;
+                _fplayer.Closing += ClosePlayer;
                 _fplayer.Show(this);
                 SetButtonState();
             }
         }
 
-        private void PlayerClosed(object sender, EventArgs e)
+        private void ClosePlayer(object sender, EventArgs e)
         {
-            if (_currentVideoState == WMPPlayState.wmppsPlaying)
+            if (_currentVideoState == WMPPlayState.wmppsPlaying || _currentVideoState == WMPPlayState.wmppsPaused)
                 bStop_Click(sender, e);
-
-            _fplayer.Dispose();
-            _fplayer = null;
+            
+            if (_fplayer != null)
+            {
+                _fplayer.Dispose();
+                _fplayer = null;
+            }
+            
             SetButtonState();
         }
 
@@ -316,6 +324,9 @@ namespace KHPlayer.Forms
         {
             _playMode = PlayMode.Single;
             _fplayer.Stop();
+
+            if (Settings.Default.ClosePlayerOnStop)
+                ClosePlayer(sender, e);
         }
 
         private void bPause_Click(object sender, EventArgs e)
@@ -392,7 +403,7 @@ namespace KHPlayer.Forms
 
         private void bClosePlayerWindow_Click(object sender, EventArgs e)
         {
-            PlayerClosed(sender, e);
+            ClosePlayer(sender, e);
         }
 
         private void bPlayIntroMusic_Click(object sender, EventArgs e)

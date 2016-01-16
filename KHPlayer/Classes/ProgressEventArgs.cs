@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KHPlayer.Services
+namespace KHPlayer.Classes
 {
     public class ProgressEventArgs : EventArgs
     {

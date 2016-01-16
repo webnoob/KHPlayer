@@ -59,7 +59,7 @@ namespace KHPlayer.Forms
 
         private void bAddVideos_Click(object sender, EventArgs e)
         {
-            var result = fDlgPlayList.ShowDialog();
+            var result = fDlgPlayList.ShowDialog(this);
             if (result == DialogResult.OK)
             {
                 var playList = GetSelectedPlayList();

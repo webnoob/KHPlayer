@@ -46,6 +46,7 @@ namespace KHPlayer.Classes
     public enum PlayListItemType
     {
         Video,
-        Audio
+        Audio,
+        Pdf
     }
 }

@@ -73,7 +73,7 @@ namespace KHPlayer.Services
             if (tagFile == null)
                 return null;
 
-            plItem.Type = tagFile is TagLib.Mpeg.AudioFile ? PlayListItemType.Audio : PlayListItemType.Video;
+            plItem.Type = tagFile.Type;
             plItem.TagName = String.Format("[{0}] - {1}", plItem.Type, tagFile.Tag.Title);
             
             return plItem;

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using AxWMPLib;
 using KHPlayer.Classes;
@@ -45,8 +47,17 @@ namespace KHPlayer.Forms
             wmPlayer.Visible = _currentlyPlayListItem.Type == PlayListItemType.Video;
             if (wmPlayer.Visible)
             {
-                wmPlayer.Dock = DockStyle.Fill;
-                wmPlayer.fullScreen = _parent.FullScreen;
+                if (_currentlyPlayListItem.Type == PlayListItemType.Video)
+                {
+                    wmPlayer.Dock = DockStyle.Fill;
+                    wmPlayer.fullScreen = _parent.FullScreen;
+                }
+            }
+
+            axReader.Visible = _currentlyPlayListItem.Type == PlayListItemType.Pdf;
+            if (axReader.Visible)
+            {
+                axReader.Dock = DockStyle.Fill;
             }
         }
 
@@ -62,7 +73,14 @@ namespace KHPlayer.Forms
                 return;
 
             _currentlyPlayListItem = playListItem;
-            wmPlayer.URL = playListItem.FilePath;
+
+            if (_currentlyPlayListItem.Type == PlayListItemType.Video || _currentlyPlayListItem.Type == PlayListItemType.Audio)
+                wmPlayer.URL = playListItem.FilePath;
+            else if (_currentlyPlayListItem.Type == PlayListItemType.Pdf)
+            {
+                axReader.LoadFile("");
+                axReader.LoadFile(playListItem.FilePath);
+            }
         }
 
         public void Stop()

@@ -26,5 +26,8 @@
     <Setting Name="ImportLocation" Type="System.String" Scope="User">
       <Value Profile="(Default)">Media\ImportedMediaFiles</Value>
     </Setting>
+    <Setting Name="ClosePlayerOnStop" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
