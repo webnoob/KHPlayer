@@ -60,6 +60,8 @@ namespace KHPlayer.Services
         public int GetRandomSongNumer()
         {
             var possibleSongs = GetPossibleSongs();
+            if (!possibleSongs.Any())
+                return 0;
             
             var rnd = new Random();
             var index = rnd.Next(0, possibleSongs.Count);
@@ -71,6 +73,9 @@ namespace KHPlayer.Services
         private List<int> GetPossibleSongs()
         {
             var possibleSongs = new List<int>();
+            if (_totalSongCount == 0)
+                return possibleSongs;
+
             for (var i = 1; i <= _totalSongCount; i++)
                 if (!_playedRandomSongs.Contains(i))
                     possibleSongs.Add(i);

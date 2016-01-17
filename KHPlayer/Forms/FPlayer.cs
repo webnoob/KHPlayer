@@ -80,6 +80,11 @@ namespace KHPlayer.Forms
             {
                 axReader.LoadFile("");
                 axReader.LoadFile(playListItem.FilePath);
+                //This is madness. The PDF won't actually show unless the form is resized.
+                //Tried a refresh but didn't help. This causes a slight flicker but it's the best I can do for now.
+                var currentWindowState = WindowState;
+                WindowState = FormWindowState.Minimized;
+                WindowState = currentWindowState;
             }
         }
 
@@ -184,6 +189,17 @@ namespace KHPlayer.Forms
             if (screenNumber < Screen.AllScreens.Count())
             {
                 Location = Screen.AllScreens[screenNumber].Bounds.Location;
+            }
+        }
+
+        public void DoBeforeClose()
+        {
+            if (axReader != null)
+            {
+                //The following lines are required in order to close the adobe PDF form viewer properly.
+                //Not sure why but the application hangs when closing without these.
+                axReader.Dispose();
+                System.Windows.Forms.Application.DoEvents();
             }
         }
     }

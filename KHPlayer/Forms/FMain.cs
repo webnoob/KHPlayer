@@ -48,13 +48,13 @@ namespace KHPlayer.Forms
         public FMain()
         {
             InitializeComponent();
+            if (!Directory.Exists(Settings.Default.SongLocation))
+                Directory.CreateDirectory(Settings.Default.SongLocation);
+
             _playListService = new PlayListService();
             _dbService = new DbService();
             _songService = new SongService();
             _playListItemService = new PlayListItemService();
-
-            if (!Directory.Exists(Settings.Default.SongLocation))
-                Directory.CreateDirectory(Settings.Default.SongLocation);
 
             _currentVideoState = WMPPlayState.wmppsStopped;
             _playListMode = PlayListMode.PlayList;
@@ -182,6 +182,7 @@ namespace KHPlayer.Forms
             
             if (_fplayer != null)
             {
+                _fplayer.DoBeforeClose();
                 _fplayer.Dispose();
                 _fplayer = null;
             }
@@ -336,10 +337,10 @@ namespace KHPlayer.Forms
 
         private void SetButtonState()
         {
-            var showPlay = _currentVideoState == WMPPlayState.wmppsStopped ||
+            var showPlay = (_currentVideoState == WMPPlayState.wmppsStopped ||
                            _currentVideoState == WMPPlayState.wmppsTransitioning ||
                            _currentVideoState == WMPPlayState.wmppsReady ||
-                           _currentVideoState == WMPPlayState.wmppsUndefined;
+                           _currentVideoState == WMPPlayState.wmppsUndefined);
 
             bPlayNext.Visible = showPlay;
             
