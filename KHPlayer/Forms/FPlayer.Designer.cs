@@ -46,14 +46,14 @@
             // 
             // axReader
             // 
-            this.axReader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.axReader.Enabled = true;
             this.axReader.Location = new System.Drawing.Point(0, 0);
             this.axReader.Name = "axReader";
             this.axReader.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axReader.OcxState")));
-            this.axReader.Size = new System.Drawing.Size(506, 382);
+            this.axReader.Size = new System.Drawing.Size(263, 179);
             this.axReader.TabIndex = 1;
             this.axReader.UseWaitCursor = true;
+            this.axReader.Visible = false;
             // 
             // wmPlayer
             // 
@@ -74,10 +74,12 @@
             this.ClientSize = new System.Drawing.Size(506, 382);
             this.Controls.Add(this.axReader);
             this.Controls.Add(this.wmPlayer);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FPlayer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Media Player";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FPlayer_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axReader)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.wmPlayer)).EndInit();
