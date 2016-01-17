@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using AxWMPLib;
 using KHPlayer.Classes;
 using KHPlayer.Properties;
@@ -15,6 +16,10 @@ namespace KHPlayer.Forms
 {
     public partial class FPlayer : Form
     {
+        private const int WM_NCHITTEST = 0x84;
+        private const int HTCLIENT = 0x1;
+        private const int HTCAPTION = 0x2;
+        
         private readonly FMain _parent;
         private PlayListItem _currentlyPlayListItem;
         private WMPPlayState _currentState;
@@ -35,6 +40,14 @@ namespace KHPlayer.Forms
             wmPlayer.settings.volume += 100;
             _currentState = WMPPlayState.wmppsStopped;
             StopAndHidePlayer();
+        }
+
+        protected override void WndProc(ref Message message)
+        {
+            base.WndProc(ref message);
+
+            if (message.Msg == WM_NCHITTEST && (int)message.Result == HTCLIENT)
+                message.Result = (IntPtr)HTCAPTION;
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -74,6 +87,7 @@ namespace KHPlayer.Forms
                 return;
 
             _currentlyPlayListItem = playListItem;
+            ShowPlayer();
 
             if (_currentlyPlayListItem.Type == PlayListItemType.Video || _currentlyPlayListItem.Type == PlayListItemType.Audio)
                 wmPlayer.URL = playListItem.FilePath;
@@ -204,21 +218,17 @@ namespace KHPlayer.Forms
             }
         }
 
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HT_CAPTION = 0x2;
-
-        [DllImport("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [DllImportAttribute("user32.dll")]
-        public static extern bool ReleaseCapture();
-
-        private void FPlayer_MouseDown(object sender, MouseEventArgs e)
+        private void FPlayer_Load(object sender, EventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-            }
+
+        }
+
+        public void ScrollPdf(ArrangeDirection direction)
+        {
+            if (_currentlyPlayListItem == null || _currentlyPlayListItem.Type != PlayListItemType.Pdf)
+                return;
+            
+            //Do something to scroll the PDF content down.
         }
     }
 }

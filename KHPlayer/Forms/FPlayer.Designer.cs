@@ -47,28 +47,28 @@
             // axReader
             // 
             this.axReader.Enabled = true;
-            this.axReader.Location = new System.Drawing.Point(0, 0);
+            this.axReader.Location = new System.Drawing.Point(289, 111);
             this.axReader.Name = "axReader";
             this.axReader.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axReader.OcxState")));
-            this.axReader.Size = new System.Drawing.Size(263, 179);
-            this.axReader.TabIndex = 1;
+            this.axReader.Size = new System.Drawing.Size(170, 103);
+            this.axReader.TabIndex = 5;
             this.axReader.UseWaitCursor = true;
             this.axReader.Visible = false;
             // 
             // wmPlayer
             // 
             this.wmPlayer.Enabled = true;
-            this.wmPlayer.Location = new System.Drawing.Point(0, 0);
+            this.wmPlayer.Location = new System.Drawing.Point(79, 194);
             this.wmPlayer.Name = "wmPlayer";
             this.wmPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("wmPlayer.OcxState")));
-            this.wmPlayer.Size = new System.Drawing.Size(208, 163);
-            this.wmPlayer.TabIndex = 0;
-            this.wmPlayer.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(this.wmPlayer_PlayStateChange);
+            this.wmPlayer.Size = new System.Drawing.Size(164, 118);
+            this.wmPlayer.TabIndex = 4;
             // 
             // FPlayer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(506, 382);
@@ -79,7 +79,7 @@
             this.Name = "FPlayer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Media Player";
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FPlayer_MouseDown);
+            this.Load += new System.EventHandler(this.FPlayer_Load);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axReader)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.wmPlayer)).EndInit();
@@ -89,9 +89,9 @@
 
         #endregion
 
-        private AxWMPLib.AxWindowsMediaPlayer wmPlayer;
         private System.Windows.Forms.Timer timerPlayerStateChange;
         private System.Windows.Forms.BindingSource bindingSource1;
         private AxAcroPDFLib.AxAcroPDF axReader;
+        private AxWMPLib.AxWindowsMediaPlayer wmPlayer;
     }
 }

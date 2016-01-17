@@ -49,6 +49,8 @@
             this.bPlayIntroMusic = new System.Windows.Forms.Button();
             this.bHelp = new System.Windows.Forms.Button();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.bPdfScollDown = new System.Windows.Forms.Button();
+            this.bPdfScrollUp = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numScreen)).BeginInit();
             this.SuspendLayout();
@@ -251,9 +253,33 @@
             this.bHelp.UseVisualStyleBackColor = true;
             this.bHelp.Click += new System.EventHandler(this.bHelp_Click);
             // 
+            // bPdfScollDown
+            // 
+            this.bPdfScollDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bPdfScollDown.Location = new System.Drawing.Point(350, 82);
+            this.bPdfScollDown.Name = "bPdfScollDown";
+            this.bPdfScollDown.Size = new System.Drawing.Size(108, 64);
+            this.bPdfScollDown.TabIndex = 20;
+            this.bPdfScollDown.Text = "Scroll Down";
+            this.bPdfScollDown.UseVisualStyleBackColor = true;
+            this.bPdfScollDown.Click += new System.EventHandler(this.bPdfScollDown_Click);
+            // 
+            // bPdfScrollUp
+            // 
+            this.bPdfScrollUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bPdfScrollUp.Location = new System.Drawing.Point(237, 82);
+            this.bPdfScrollUp.Name = "bPdfScrollUp";
+            this.bPdfScrollUp.Size = new System.Drawing.Size(108, 64);
+            this.bPdfScrollUp.TabIndex = 21;
+            this.bPdfScrollUp.Text = "Scroll Up";
+            this.bPdfScrollUp.UseVisualStyleBackColor = true;
+            this.bPdfScrollUp.Click += new System.EventHandler(this.bPdfScrollUp_Click);
+            // 
             // FMain
             // 
             this.ClientSize = new System.Drawing.Size(470, 650);
+            this.Controls.Add(this.bPdfScrollUp);
+            this.Controls.Add(this.bPdfScollDown);
             this.Controls.Add(this.bHelp);
             this.Controls.Add(this.bPlayIntroMusic);
             this.Controls.Add(this.bClosePlayerWindow);
@@ -308,6 +334,8 @@
         private System.Windows.Forms.Button bPlayIntroMusic;
         private System.Windows.Forms.Button bHelp;
         private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.Windows.Forms.Button bPdfScollDown;
+        private System.Windows.Forms.Button bPdfScrollUp;
     }
 }
 

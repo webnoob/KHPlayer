@@ -180,6 +180,7 @@ namespace KHPlayer.Forms
             if (_currentVideoState == WMPPlayState.wmppsPlaying || _currentVideoState == WMPPlayState.wmppsPaused)
                 bStop_Click(sender, e);
             
+            _currentFile = null;
             if (_fplayer != null)
             {
                 _fplayer.DoBeforeClose();
@@ -342,6 +343,9 @@ namespace KHPlayer.Forms
                            _currentVideoState == WMPPlayState.wmppsReady ||
                            _currentVideoState == WMPPlayState.wmppsUndefined);
 
+            if (_currentFile != null)
+                showPlay &= _currentFile.Type != PlayListItemType.Pdf;
+
             bPlayNext.Visible = showPlay;
             
             bStop.Visible = !showPlay;
@@ -350,6 +354,11 @@ namespace KHPlayer.Forms
             timerVideoClock.Enabled = _currentVideoState == WMPPlayState.wmppsPlaying;
             bClosePlayerWindow.Visible = _fplayer != null;
             bLaunch.Visible = _fplayer == null;
+            bPdfScollDown.Visible = _currentFile != null && _currentFile.Type == PlayListItemType.Pdf;
+            bPdfScrollUp.Visible = bPdfScollDown.Visible;
+
+            if (_currentFile != null)
+                bPause.Visible &= _currentFile.Type != PlayListItemType.Pdf;
         }
 
         private void bResume_Click(object sender, EventArgs e)
@@ -426,6 +435,22 @@ namespace KHPlayer.Forms
             };
 
             proc.Start();
+        }
+
+        private void bPdfScrollUp_Click(object sender, EventArgs e)
+        {
+            if (_fplayer == null)
+                return;
+
+            _fplayer.ScrollPdf(ArrangeDirection.Up);
+        }
+
+        private void bPdfScollDown_Click(object sender, EventArgs e)
+        {
+            if (_fplayer == null)
+                return;
+
+            _fplayer.ScrollPdf(ArrangeDirection.Down);
         }
     }
 }

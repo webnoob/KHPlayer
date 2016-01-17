@@ -11,7 +11,7 @@ namespace KHPlayer.Services
         {
             using (var reader = new PdfReader(filePath))
             {
-                var title = reader.Info.ContainsKey("Title")
+                var title = reader.Info.ContainsKey("Title") && !string.IsNullOrEmpty(reader.Info["Title"])
                     ? reader.Info["Title"]
                     : Path.GetFileNameWithoutExtension(filePath);
 
