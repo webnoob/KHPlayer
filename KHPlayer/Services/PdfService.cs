@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using iTextSharp.text.pdf;
 using KHPlayer.Classes;
+using KHPlayer.Properties;
 
 namespace KHPlayer.Services
 {
@@ -21,7 +23,15 @@ namespace KHPlayer.Services
                     Type = PlayListItemType.Pdf,
                     Tag = new PlayListItemFileTag
                     {
-                        Title = title
+                        Title = title,
+                        Pictures = new List<PlayListItemFileTagImage>
+                        {
+                            new PlayListItemFileTagImage
+                            {
+                                MimeType = "image/png",
+                                FilePath = PathHelper.GetApplicationPath() + "\\" + Settings.Default.ThumbnailLocation + "\\pdfimage.png"
+                            }
+                        }
                     }
                 };
             }

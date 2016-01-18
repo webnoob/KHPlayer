@@ -37,14 +37,19 @@ namespace KHPlayer.Services
                 
                 if (File.Exists(imageFilePath))
                     return imageFilePath;
-
-                using (var ms = new MemoryStream(picture.Data.Data))
+                if (string.IsNullOrEmpty(picture.FilePath))
                 {
-                    using (var returnImage = Image.FromStream(ms))
+                    using (var ms = new MemoryStream(picture.Data.Data))
                     {
-                        returnImage.Save(imageFilePath);
+                        using (var returnImage = Image.FromStream(ms))
+                        {
+                            returnImage.Save(imageFilePath);
+                        }
                     }
                 }
+                else
+                    imageFilePath = picture.FilePath;
+
                 return imageFilePath;
             }
 

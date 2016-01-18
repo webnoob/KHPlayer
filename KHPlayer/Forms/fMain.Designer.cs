@@ -49,8 +49,10 @@
             this.bPlayIntroMusic = new System.Windows.Forms.Button();
             this.bHelp = new System.Windows.Forms.Button();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.bPdfScollDown = new System.Windows.Forms.Button();
+            this.bPdfScrollDown = new System.Windows.Forms.Button();
             this.bPdfScrollUp = new System.Windows.Forms.Button();
+            this.bPdfPageUp = new System.Windows.Forms.Button();
+            this.bPdfPageDown = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numScreen)).BeginInit();
             this.SuspendLayout();
@@ -113,7 +115,7 @@
             // bStop
             // 
             this.bStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bStop.Location = new System.Drawing.Point(12, 82);
+            this.bStop.Location = new System.Drawing.Point(11, 82);
             this.bStop.Name = "bStop";
             this.bStop.Size = new System.Drawing.Size(219, 64);
             this.bStop.TabIndex = 7;
@@ -150,7 +152,7 @@
             this.cbPlayLists.ItemHeight = 13;
             this.cbPlayLists.Location = new System.Drawing.Point(12, 152);
             this.cbPlayLists.Name = "cbPlayLists";
-            this.cbPlayLists.Size = new System.Drawing.Size(446, 21);
+            this.cbPlayLists.Size = new System.Drawing.Size(445, 21);
             this.cbPlayLists.TabIndex = 10;
             this.cbPlayLists.SelectedIndexChanged += new System.EventHandler(this.cbPlayLists_SelectedIndexChanged);
             // 
@@ -253,33 +255,57 @@
             this.bHelp.UseVisualStyleBackColor = true;
             this.bHelp.Click += new System.EventHandler(this.bHelp_Click);
             // 
-            // bPdfScollDown
+            // bPdfScrollDown
             // 
-            this.bPdfScollDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bPdfScollDown.Location = new System.Drawing.Point(350, 82);
-            this.bPdfScollDown.Name = "bPdfScollDown";
-            this.bPdfScollDown.Size = new System.Drawing.Size(108, 64);
-            this.bPdfScollDown.TabIndex = 20;
-            this.bPdfScollDown.Text = "Scroll Down";
-            this.bPdfScollDown.UseVisualStyleBackColor = true;
-            this.bPdfScollDown.Click += new System.EventHandler(this.bPdfScollDown_Click);
+            this.bPdfScrollDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bPdfScrollDown.Location = new System.Drawing.Point(350, 82);
+            this.bPdfScrollDown.Name = "bPdfScrollDown";
+            this.bPdfScrollDown.Size = new System.Drawing.Size(108, 30);
+            this.bPdfScrollDown.TabIndex = 20;
+            this.bPdfScrollDown.Text = "Scroll Down";
+            this.bPdfScrollDown.UseVisualStyleBackColor = true;
+            this.bPdfScrollDown.Click += new System.EventHandler(this.bPdfScollDown_Click);
             // 
             // bPdfScrollUp
             // 
-            this.bPdfScrollUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bPdfScrollUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bPdfScrollUp.Location = new System.Drawing.Point(237, 82);
             this.bPdfScrollUp.Name = "bPdfScrollUp";
-            this.bPdfScrollUp.Size = new System.Drawing.Size(108, 64);
+            this.bPdfScrollUp.Size = new System.Drawing.Size(108, 30);
             this.bPdfScrollUp.TabIndex = 21;
             this.bPdfScrollUp.Text = "Scroll Up";
             this.bPdfScrollUp.UseVisualStyleBackColor = true;
             this.bPdfScrollUp.Click += new System.EventHandler(this.bPdfScrollUp_Click);
             // 
+            // bPdfPageUp
+            // 
+            this.bPdfPageUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bPdfPageUp.Location = new System.Drawing.Point(237, 116);
+            this.bPdfPageUp.Name = "bPdfPageUp";
+            this.bPdfPageUp.Size = new System.Drawing.Size(108, 30);
+            this.bPdfPageUp.TabIndex = 22;
+            this.bPdfPageUp.Text = "Page Up";
+            this.bPdfPageUp.UseVisualStyleBackColor = true;
+            this.bPdfPageUp.Click += new System.EventHandler(this.bPdfPageUp_Click);
+            // 
+            // bPdfPageDown
+            // 
+            this.bPdfPageDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bPdfPageDown.Location = new System.Drawing.Point(350, 116);
+            this.bPdfPageDown.Name = "bPdfPageDown";
+            this.bPdfPageDown.Size = new System.Drawing.Size(108, 30);
+            this.bPdfPageDown.TabIndex = 23;
+            this.bPdfPageDown.Text = "Page Down";
+            this.bPdfPageDown.UseVisualStyleBackColor = true;
+            this.bPdfPageDown.Click += new System.EventHandler(this.bPdfPageDown_Click);
+            // 
             // FMain
             // 
             this.ClientSize = new System.Drawing.Size(470, 650);
+            this.Controls.Add(this.bPdfPageDown);
+            this.Controls.Add(this.bPdfPageUp);
             this.Controls.Add(this.bPdfScrollUp);
-            this.Controls.Add(this.bPdfScollDown);
+            this.Controls.Add(this.bPdfScrollDown);
             this.Controls.Add(this.bHelp);
             this.Controls.Add(this.bPlayIntroMusic);
             this.Controls.Add(this.bClosePlayerWindow);
@@ -334,8 +360,10 @@
         private System.Windows.Forms.Button bPlayIntroMusic;
         private System.Windows.Forms.Button bHelp;
         private System.Windows.Forms.HelpProvider helpProvider1;
-        private System.Windows.Forms.Button bPdfScollDown;
+        private System.Windows.Forms.Button bPdfScrollDown;
         private System.Windows.Forms.Button bPdfScrollUp;
+        private System.Windows.Forms.Button bPdfPageUp;
+        private System.Windows.Forms.Button bPdfPageDown;
     }
 }
 

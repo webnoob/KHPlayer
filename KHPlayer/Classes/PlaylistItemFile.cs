@@ -33,6 +33,8 @@ namespace KHPlayer.Classes
         public string MimeType { get; set; }
 
         public PlayListItemFileTagImageData Data { get; set; }
+
+        public string FilePath { get; set; }
     }
 
     public class PlayListItemFileTagImageData

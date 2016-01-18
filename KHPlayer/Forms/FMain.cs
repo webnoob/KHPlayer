@@ -219,7 +219,11 @@ namespace KHPlayer.Forms
             lbPlayListItems.ValueMember = "FileName";
 
             if (lbPlayListItems.Items.Count == 0)
+            {
+                //Selected index change won't be triggered so make sure the image resets.
+                pbCurrentlySelected.Image = pbCurrentlySelected.InitialImage;
                 return;
+            }
 
             if (_currentFile == null)
                 lbPlayListItems.SelectedIndex = 0;
@@ -243,7 +247,8 @@ namespace KHPlayer.Forms
 
         private PlayList GetCurrentPlayList()
         {
-            return _playListService.GetByName(cbPlayLists.Text);
+            var playList = _playListService.GetByName(cbPlayLists.Text);
+            return playList;
         }
 
         private void bPlayNext_Click(object sender, EventArgs e)
@@ -287,6 +292,7 @@ namespace KHPlayer.Forms
 
             _fplayer.PlayPlayListItem(_currentFile);
             UpdatePlayListItemDisplays();
+            SetButtonState();
         }
 
         private PlayListItem GetNextFile()
@@ -354,8 +360,10 @@ namespace KHPlayer.Forms
             timerVideoClock.Enabled = _currentVideoState == WMPPlayState.wmppsPlaying;
             bClosePlayerWindow.Visible = _fplayer != null;
             bLaunch.Visible = _fplayer == null;
-            bPdfScollDown.Visible = _currentFile != null && _currentFile.Type == PlayListItemType.Pdf;
-            bPdfScrollUp.Visible = bPdfScollDown.Visible;
+            bPdfScrollDown.Visible = _currentFile != null && _currentFile.Type == PlayListItemType.Pdf;
+            bPdfScrollUp.Visible = bPdfScrollDown.Visible;
+            bPdfPageUp.Visible = bPdfScrollDown.Visible;
+            bPdfPageDown.Visible = bPdfScrollDown.Visible;
 
             if (_currentFile != null)
                 bPause.Visible &= _currentFile.Type != PlayListItemType.Pdf;
@@ -439,18 +447,31 @@ namespace KHPlayer.Forms
 
         private void bPdfScrollUp_Click(object sender, EventArgs e)
         {
-            if (_fplayer == null)
-                return;
-
-            _fplayer.ScrollPdf(ArrangeDirection.Up);
+            DoScroll(sender);
         }
 
         private void bPdfScollDown_Click(object sender, EventArgs e)
         {
+            DoScroll(sender);
+        }
+
+        private void DoScroll(object sender)
+        {
             if (_fplayer == null)
                 return;
 
-            _fplayer.ScrollPdf(ArrangeDirection.Down);
+            var control = sender as Control;
+            _fplayer.ScrollPdf(control != null && control.Name.Contains("Down"));
+        }
+
+        private void bPdfPageDown_Click(object sender, EventArgs e)
+        {
+            _fplayer.MovePage(true);
+        }
+
+        private void bPdfPageUp_Click(object sender, EventArgs e)
+        {
+            _fplayer.MovePage(false);
         }
     }
 }

@@ -47,10 +47,10 @@
             // axReader
             // 
             this.axReader.Enabled = true;
-            this.axReader.Location = new System.Drawing.Point(289, 111);
+            this.axReader.Location = new System.Drawing.Point(55, 26);
             this.axReader.Name = "axReader";
             this.axReader.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axReader.OcxState")));
-            this.axReader.Size = new System.Drawing.Size(170, 103);
+            this.axReader.Size = new System.Drawing.Size(506, 382);
             this.axReader.TabIndex = 5;
             this.axReader.UseWaitCursor = true;
             this.axReader.Visible = false;
@@ -58,11 +58,13 @@
             // wmPlayer
             // 
             this.wmPlayer.Enabled = true;
-            this.wmPlayer.Location = new System.Drawing.Point(79, 194);
+            this.wmPlayer.Location = new System.Drawing.Point(1, 1);
             this.wmPlayer.Name = "wmPlayer";
             this.wmPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("wmPlayer.OcxState")));
             this.wmPlayer.Size = new System.Drawing.Size(164, 118);
             this.wmPlayer.TabIndex = 4;
+            this.wmPlayer.Visible = false;
+            this.wmPlayer.MouseDownEvent += new AxWMPLib._WMPOCXEvents_MouseDownEventHandler(this.wmPlayer_MouseDownEvent);
             // 
             // FPlayer
             // 
@@ -71,7 +73,7 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.ClientSize = new System.Drawing.Size(506, 382);
+            this.ClientSize = new System.Drawing.Size(523, 399);
             this.Controls.Add(this.axReader);
             this.Controls.Add(this.wmPlayer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -79,7 +81,7 @@
             this.Name = "FPlayer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Media Player";
-            this.Load += new System.EventHandler(this.FPlayer_Load);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FPlayer_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axReader)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.wmPlayer)).EndInit();
