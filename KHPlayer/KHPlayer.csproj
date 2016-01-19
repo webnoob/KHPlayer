@@ -119,6 +119,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\ProgressEventArgs.cs" />
     <Compile Include="Services\SongService.cs" />
+    <Compile Include="Services\StreamService.cs" />
     <Compile Include="Services\ThumbnailService.cs" />
     <EmbeddedResource Include="Forms\FEditPlayList.resx">
       <DependentUpon>FEditPlayList.cs</DependentUpon>

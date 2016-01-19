@@ -268,5 +268,20 @@ namespace KHPlayer.Forms
 
             Process.Start(info);
         }
+
+        private void bAddStream_Click(object sender, EventArgs e)
+        {
+            var point = GetScreenPoint();
+            var url = Interaction.InputBox("Please enter the Url of the media you would like to stream.", "Stream Url Input", "", point.X, point.Y);
+            if (string.IsNullOrEmpty(url))
+                return;
+
+            var playList = GetSelectedPlayList();
+            if (playList == null)
+                return;
+
+            _playListItemService.AddToPlaylistUsingUrl(url, playList);
+            LoadPlayListItems();
+        }
     }
 }

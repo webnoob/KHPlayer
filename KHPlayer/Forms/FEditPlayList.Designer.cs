@@ -55,6 +55,7 @@
             this.pnlProgress = new System.Windows.Forms.Panel();
             this.progressBarMain = new System.Windows.Forms.ProgressBar();
             this.lblProgressStatus = new System.Windows.Forms.Label();
+            this.bAddStream = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.pnlProgress.SuspendLayout();
@@ -171,7 +172,7 @@
             this.bAddSong.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bAddSong.Location = new System.Drawing.Point(12, 56);
             this.bAddSong.Name = "bAddSong";
-            this.bAddSong.Size = new System.Drawing.Size(220, 64);
+            this.bAddSong.Size = new System.Drawing.Size(108, 64);
             this.bAddSong.TabIndex = 16;
             this.bAddSong.Text = "Add Song(s)";
             this.bAddSong.UseVisualStyleBackColor = true;
@@ -204,7 +205,7 @@
             this.playlistsFromDriveFromToolStripMenuItem,
             this.playlistsFromFileToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.importToolStripMenuItem.Text = "Import";
             // 
             // playlistsFromDriveFromToolStripMenuItem
@@ -226,7 +227,7 @@
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.playListsToFileToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Visible = false;
             // 
@@ -241,7 +242,7 @@
             this.maintenanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openThumbnailFolderToolStripMenuItem});
             this.maintenanceToolStripMenuItem.Name = "maintenanceToolStripMenuItem";
-            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.maintenanceToolStripMenuItem.Text = "Maintenance";
             // 
             // openThumbnailFolderToolStripMenuItem
@@ -254,7 +255,7 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Visible = false;
             // 
@@ -286,11 +287,23 @@
             this.lblProgressStatus.TabIndex = 20;
             this.lblProgressStatus.Text = "Copying ...";
             // 
+            // bAddStream
+            // 
+            this.bAddStream.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bAddStream.Location = new System.Drawing.Point(125, 56);
+            this.bAddStream.Name = "bAddStream";
+            this.bAddStream.Size = new System.Drawing.Size(108, 64);
+            this.bAddStream.TabIndex = 20;
+            this.bAddStream.Text = "Add URL to Stream";
+            this.bAddStream.UseVisualStyleBackColor = true;
+            this.bAddStream.Click += new System.EventHandler(this.bAddStream_Click);
+            // 
             // FEditPlayList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(470, 344);
+            this.Controls.Add(this.bAddStream);
             this.Controls.Add(this.pnlProgress);
             this.Controls.Add(this.bAddSong);
             this.Controls.Add(this.bPlayListItemDown);
@@ -348,5 +361,6 @@
         private System.Windows.Forms.Label lblProgressStatus;
         private System.Windows.Forms.ProgressBar progressBarMain;
         private System.Windows.Forms.ToolStripMenuItem openThumbnailFolderToolStripMenuItem;
+        private System.Windows.Forms.Button bAddStream;
     }
 }

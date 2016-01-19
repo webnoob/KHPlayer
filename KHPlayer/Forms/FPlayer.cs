@@ -128,6 +128,9 @@ namespace KHPlayer.Forms
         {
             wmPlayer.close();
             StopAndHidePlayer();
+
+            if (Settings.Default.ClosePlayerOnStop)
+                Close();
         }
 
         private void StopAndHidePlayer()
@@ -171,7 +174,6 @@ namespace KHPlayer.Forms
                     break;
                 case WMPPlayState.wmppsPlaying:
                     ShowPlayer();
-                    //wmPlayer.fullScreen = _parent.FullScreen;
                     break;
                 case WMPPlayState.wmppsScanForward:
                     break;

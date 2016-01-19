@@ -35,6 +35,8 @@ namespace KHPlayer.Classes
         public PlayListItemType Type { get; set; }
 
         public PlayListItemState State { get; set; }
+
+        public PlayListItemSource Source { get; set; }
     }
 
     public enum PlayListItemState
@@ -48,5 +50,11 @@ namespace KHPlayer.Classes
         Video,
         Audio,
         Pdf
+    }
+
+    public enum PlayListItemSource
+    {
+        Disk,
+        Streamed
     }
 }

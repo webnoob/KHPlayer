@@ -18,7 +18,7 @@ namespace KHPlayer.Services
                 _cachedPlaylistItemFiles = new List<PlaylistItemFile>();
         }
 
-        public PlaylistItemFile GetTag(string filePath)
+        public PlaylistItemFile GetTag(string filePath, PlayListItemSource source)
         {
             //No point loading the file again if we've already got the information.
             var playlistItemFile =
@@ -30,47 +30,50 @@ namespace KHPlayer.Services
 
             try
             {
-                using (var fileStream = new FileStream(filePath, FileMode.Open))
+                if (source == PlayListItemSource.Disk)
                 {
-                    try
+                    using (var fileStream = new FileStream(filePath, FileMode.Open))
                     {
-                        //TODO: Find out how to use the File.AddFileResolver as this means we can handle the custom file types we're currently catching.
-                        var file = File.Create(new StreamFileAbstraction(filePath, fileStream, fileStream));
-                        
-                        //This won't be hit if the file doesn't exist.
-                        playlistItemFile = new PlaylistItemFile
+                        try
                         {
-                            FileName = filePath,
-                            Type = file is TagLib.Mpeg.AudioFile ? PlayListItemType.Audio : PlayListItemType.Video,
-                            Tag = new PlayListItemFileTag
-                            {
-                                Title = file.Tag.Title,
-                                Track = file.Tag.Track
-                            }
-                        };
+                            //TODO: Find out how to use the File.AddFileResolver as this means we can handle the custom file types we're currently catching.
+                            var file = File.Create(new StreamFileAbstraction(filePath, fileStream, fileStream));
 
-                        foreach (var picture in file.Tag.Pictures)
-                        {
-                            playlistItemFile.Tag.Pictures.Add(new PlayListItemFileTagImage
+                            //This won't be hit if the file doesn't exist.
+                            playlistItemFile = new PlaylistItemFile
                             {
-                                MimeType = picture.MimeType,
-                                Data = new PlayListItemFileTagImageData
+                                FileName = filePath,
+                                Type = file is TagLib.Mpeg.AudioFile ? PlayListItemType.Audio : PlayListItemType.Video,
+                                Tag = new PlayListItemFileTag
                                 {
-                                    Data = picture.Data.Data
+                                    Title = file.Tag.Title,
+                                    Track = file.Tag.Track
                                 }
-                            });
-                        }
+                            };
 
-                        _cachedPlaylistItemFiles.Add(playlistItemFile);
-                        return playlistItemFile;
-                    }
-                    catch (UnsupportedFormatException)
-                    {
-                        //Ignore as we will create the file in TryMakeFileTag below.
+                            foreach (var picture in file.Tag.Pictures)
+                            {
+                                playlistItemFile.Tag.Pictures.Add(new PlayListItemFileTagImage
+                                {
+                                    MimeType = picture.MimeType,
+                                    Data = new PlayListItemFileTagImageData
+                                    {
+                                        Data = picture.Data.Data
+                                    }
+                                });
+                            }
+
+                            _cachedPlaylistItemFiles.Add(playlistItemFile);
+                            return playlistItemFile;
+                        }
+                        catch (UnsupportedFormatException)
+                        {
+                            //Ignore as we will create the file in TryMakeFileTag below.
+                        }
                     }
                 }
 
-                playlistItemFile = TryMakeFileTag(filePath);
+                playlistItemFile = TryMakeFileTag(filePath, source);
                 _cachedPlaylistItemFiles.Add(playlistItemFile);
                 return playlistItemFile;
             }
@@ -83,12 +86,18 @@ namespace KHPlayer.Services
             }
         }
 
-        private PlaylistItemFile TryMakeFileTag(string filePath)
+        private PlaylistItemFile TryMakeFileTag(string filePath, PlayListItemSource source)
         {
             switch (Path.GetExtension(filePath))
             {
                 case ".pdf":
                     return new PdfService().GetTag(filePath);
+                default:
+                    if (source == PlayListItemSource.Streamed)
+                    {
+                        return new StreamService().GetTag(filePath);
+                    }
+                    break;
             }
             return null;
         }

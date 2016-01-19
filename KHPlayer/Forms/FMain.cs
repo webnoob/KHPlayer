@@ -332,9 +332,6 @@ namespace KHPlayer.Forms
         {
             _playMode = PlayMode.Single;
             _fplayer.Stop();
-
-            if (Settings.Default.ClosePlayerOnStop)
-                ClosePlayer(sender, e);
         }
 
         private void bPause_Click(object sender, EventArgs e)

@@ -41,7 +41,7 @@ namespace KHPlayer.Services
 
             foreach (var file in allSongFiles)
             {
-                var tagFile = _fileTagService.GetTag(file);
+                var tagFile = _fileTagService.GetTag(file, PlayListItemSource.Disk);
                 if (tagFile == null)
                     continue;
 

@@ -56,25 +56,31 @@ namespace KHPlayer.Services
 
         public PlayListItem Create(string filePath, PlayList playList)
         {
+            var isStreamed = filePath.ToLower().Contains("http://") || 
+                filePath.ToLower().Contains("https://") ||
+                filePath.ToLower().Contains("ftp://");
+
             var plItem = new PlayListItem
             {
                 Guid = Guid.NewGuid().ToString(),
                 FileName = Path.GetFileName(filePath),
                 FilePath = filePath,
                 PlayListGuid = playList.Guid,
-                ThumbnailPath = _thumbnailService.GenerateForFile(filePath)
+                Source = isStreamed ? PlayListItemSource.Streamed : PlayListItemSource.Disk
             };
 
-            var fileInfo = new FileInfo(filePath);
-            if (fileInfo.IsLocked())
+            plItem.ThumbnailPath = _thumbnailService.GenerateForFile(filePath, plItem.Source);
+            if (PathHelper.FileIsLocked(filePath))
                 return null;
 
-            var tagFile = _fileTagService.GetTag(plItem.FilePath);
+            var tagFile = _fileTagService.GetTag(plItem.FilePath, plItem.Source);
             if (tagFile == null)
                 return null;
 
             plItem.Type = tagFile.Type;
-            plItem.TagName = String.Format("[{0}] - {1}", plItem.Type, tagFile.Tag.Title);
+            plItem.TagName = plItem.Source == PlayListItemSource.Streamed
+                ? string.Format("[{0} | {1}] - {2}", plItem.Source, plItem.Type, tagFile.Tag.Title)
+                : string.Format("[{0}] - {1}", plItem.Type, tagFile.Tag.Title);
             
             return plItem;
         }
@@ -94,6 +100,14 @@ namespace KHPlayer.Services
         {
             foreach (var filePath in filePaths)
                 AddToPlaylistUsingFilePath(filePath, playList);
+        }
+
+        public void AddToPlaylistUsingUrl(string url, PlayList playList)
+        {
+            var playListItem = GetByFileName(url, playList) ?? Create(url, playList);
+
+            if (playListItem != null)
+                Insert(playListItem, playList);
         }
     }
 }

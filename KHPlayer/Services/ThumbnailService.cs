@@ -16,13 +16,13 @@ namespace KHPlayer.Services
             _fileTagService = new FileTagService();
         }
 
-        public string GenerateForFile(string filePath)
+        public string GenerateForFile(string filePath, PlayListItemSource source)
         {
             var thumbnailDirectory = String.Format("{0}\\{1}", PathHelper.GetApplicationPath(), Settings.Default.ThumbnailLocation);
             if (!Directory.Exists(thumbnailDirectory))
                 Directory.CreateDirectory(thumbnailDirectory);
 
-            var tagFile = _fileTagService.GetTag(filePath);
+            var tagFile = _fileTagService.GetTag(filePath, source);
             if (tagFile == null)
                 return "";
 
@@ -34,9 +34,10 @@ namespace KHPlayer.Services
                         Settings.Default.ThumbnailLocation,
                         Path.GetFileName(filePath), picture.MimeType.Split('/').Last()
                         );
-                
+
                 if (File.Exists(imageFilePath))
                     return imageFilePath;
+
                 if (string.IsNullOrEmpty(picture.FilePath))
                 {
                     using (var ms = new MemoryStream(picture.Data.Data))
@@ -52,7 +53,6 @@ namespace KHPlayer.Services
 
                 return imageFilePath;
             }
-
             return "";
         }
     }
