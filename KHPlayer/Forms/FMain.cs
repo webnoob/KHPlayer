@@ -114,36 +114,12 @@ namespace KHPlayer.Forms
         {
             switch (_currentVideoState)
             {
-                case WMPPlayState.wmppsUndefined:
-                    break;
                 case WMPPlayState.wmppsStopped:
                     SetNextVideo();
-                    break;
-                case WMPPlayState.wmppsPaused:
-                    break;
-                case WMPPlayState.wmppsPlaying:
-                    break;
-                case WMPPlayState.wmppsScanForward:
-                    break;
-                case WMPPlayState.wmppsScanReverse:
-                    break;
-                case WMPPlayState.wmppsBuffering:
-                    break;
-                case WMPPlayState.wmppsWaiting:
                     break;
                 case WMPPlayState.wmppsMediaEnded:
                     SetNextVideo();
                     break;
-                case WMPPlayState.wmppsTransitioning:
-                    break;
-                case WMPPlayState.wmppsReady:
-                    break;
-                case WMPPlayState.wmppsReconnecting:
-                    break;
-                case WMPPlayState.wmppsLast:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
 
             SetButtonState();

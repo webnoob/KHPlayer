@@ -164,40 +164,15 @@ namespace KHPlayer.Forms
 
             switch (wmPlayer.playState)
             {
-                case WMPPlayState.wmppsUndefined:
-                    break;
                 case WMPPlayState.wmppsStopped:
                     SetStopped();
-                    break;
-                case WMPPlayState.wmppsPaused:
-                    ;
                     break;
                 case WMPPlayState.wmppsPlaying:
                     ShowPlayer();
                     break;
-                case WMPPlayState.wmppsScanForward:
-                    break;
-                case WMPPlayState.wmppsScanReverse:
-                    break;
-                case WMPPlayState.wmppsBuffering:
-                    ;
-                    break;
-                case WMPPlayState.wmppsWaiting:
-                    ;
-                    break;
                 case WMPPlayState.wmppsMediaEnded:
                     SetStopped();
                     break;
-                case WMPPlayState.wmppsTransitioning:
-                    break;
-                case WMPPlayState.wmppsReady:
-                    break;
-                case WMPPlayState.wmppsReconnecting:
-                    break;
-                case WMPPlayState.wmppsLast:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
 
