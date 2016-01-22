@@ -36,7 +36,6 @@
             this.bSaveAndContinue = new System.Windows.Forms.Button();
             this.cbPlaylists = new System.Windows.Forms.ComboBox();
             this.bAddNewPlayList = new System.Windows.Forms.Button();
-            this.pbCurrentlySelected = new System.Windows.Forms.PictureBox();
             this.bDeletePlayListItem = new System.Windows.Forms.Button();
             this.bPlayListItemUp = new System.Windows.Forms.Button();
             this.bPlayListItemDown = new System.Windows.Forms.Button();
@@ -51,14 +50,16 @@
             this.maintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openThumbnailFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.screenSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dDlgPlaylist = new System.Windows.Forms.FolderBrowserDialog();
             this.pnlProgress = new System.Windows.Forms.Panel();
             this.progressBarMain = new System.Windows.Forms.ProgressBar();
             this.lblProgressStatus = new System.Windows.Forms.Label();
             this.bAddStream = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
+            this.pbCurrentlySelected = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.pnlProgress.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
             this.SuspendLayout();
             // 
             // bAddVideos
@@ -126,17 +127,6 @@
             this.bAddNewPlayList.UseVisualStyleBackColor = true;
             this.bAddNewPlayList.Click += new System.EventHandler(this.bAddNewPlayList_Click);
             // 
-            // pbCurrentlySelected
-            // 
-            this.pbCurrentlySelected.Image = global::KHPlayer.Properties.Resources.jworg;
-            this.pbCurrentlySelected.InitialImage = global::KHPlayer.Properties.Resources.jworg;
-            this.pbCurrentlySelected.Location = new System.Drawing.Point(296, 196);
-            this.pbCurrentlySelected.Name = "pbCurrentlySelected";
-            this.pbCurrentlySelected.Size = new System.Drawing.Size(162, 134);
-            this.pbCurrentlySelected.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbCurrentlySelected.TabIndex = 12;
-            this.pbCurrentlySelected.TabStop = false;
-            // 
             // bDeletePlayListItem
             // 
             this.bDeletePlayListItem.Location = new System.Drawing.Point(238, 307);
@@ -194,7 +184,8 @@
             this.importToolStripMenuItem,
             this.exportToolStripMenuItem,
             this.maintenanceToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.screenSetupToolStripMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "Advanced";
@@ -259,6 +250,14 @@
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Visible = false;
             // 
+            // screenSetupToolStripMenuItem
+            // 
+            this.screenSetupToolStripMenuItem.Name = "screenSetupToolStripMenuItem";
+            this.screenSetupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.screenSetupToolStripMenuItem.Text = "Screen Setup";
+            this.screenSetupToolStripMenuItem.Visible = false;
+            this.screenSetupToolStripMenuItem.Click += new System.EventHandler(this.screenSetupToolStripMenuItem_Click);
+            // 
             // pnlProgress
             // 
             this.pnlProgress.Controls.Add(this.progressBarMain);
@@ -298,6 +297,17 @@
             this.bAddStream.UseVisualStyleBackColor = true;
             this.bAddStream.Click += new System.EventHandler(this.bAddStream_Click);
             // 
+            // pbCurrentlySelected
+            // 
+            this.pbCurrentlySelected.Image = global::KHPlayer.Properties.Resources.jworg;
+            this.pbCurrentlySelected.InitialImage = global::KHPlayer.Properties.Resources.jworg;
+            this.pbCurrentlySelected.Location = new System.Drawing.Point(238, 254);
+            this.pbCurrentlySelected.Name = "pbCurrentlySelected";
+            this.pbCurrentlySelected.Size = new System.Drawing.Size(52, 47);
+            this.pbCurrentlySelected.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbCurrentlySelected.TabIndex = 12;
+            this.pbCurrentlySelected.TabStop = false;
+            // 
             // FEditPlayList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -324,10 +334,10 @@
             this.MinimizeBox = false;
             this.Name = "FEditPlayList";
             this.Text = "Edit Playlists";
-            ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.pnlProgress.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -362,5 +372,6 @@
         private System.Windows.Forms.ProgressBar progressBarMain;
         private System.Windows.Forms.ToolStripMenuItem openThumbnailFolderToolStripMenuItem;
         private System.Windows.Forms.Button bAddStream;
+        private System.Windows.Forms.ToolStripMenuItem screenSetupToolStripMenuItem;
     }
 }

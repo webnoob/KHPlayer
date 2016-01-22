@@ -104,9 +104,10 @@ namespace KHPlayer.Forms
                 var confirmResult = MessageBox.Show("Save current play lists?", "Save Play List?",
                     MessageBoxButtons.YesNo);
                 if (confirmResult == DialogResult.Yes)
-                    _dbService.Save();
+                    _dbService.SaveOnOk();
             }
 
+            _dbService.Save();
             Settings.Default.Save();
         }
 

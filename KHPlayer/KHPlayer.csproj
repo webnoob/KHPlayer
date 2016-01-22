@@ -78,6 +78,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CopyFileEx.cs" />
+    <Compile Include="Classes\PlayerScreen.cs" />
+    <Compile Include="Data\ScreenCache.cs" />
     <Compile Include="Extensions\FileExtensions.cs" />
     <Compile Include="Forms\DriveDetector.cs">
       <SubType>Form</SubType>
@@ -88,6 +90,12 @@
     <Compile Include="Classes\VideoState.cs" />
     <Compile Include="Data\PlayListCache.cs" />
     <Compile Include="Extensions\SerializationExtensions.cs" />
+    <Compile Include="Forms\FDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FDialogue.Designer.cs">
+      <DependentUpon>FDialogue.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FEditPlayList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +116,12 @@
     </Compile>
     <Compile Include="Classes\PlayMode.cs" />
     <Compile Include="Classes\PlayListMode.cs" />
+    <Compile Include="Forms\FScreenSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FScreenSetup.Designer.cs">
+      <DependentUpon>FScreenSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\DbService.cs" />
     <Compile Include="Services\FileTagService.cs" />
     <Compile Include="Services\PdfService.cs" />
@@ -118,9 +132,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\ProgressEventArgs.cs" />
+    <Compile Include="Services\ScreenService.cs" />
     <Compile Include="Services\SongService.cs" />
     <Compile Include="Services\StreamService.cs" />
     <Compile Include="Services\ThumbnailService.cs" />
+    <EmbeddedResource Include="Forms\FDialogue.resx">
+      <DependentUpon>FDialogue.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FEditPlayList.resx">
       <DependentUpon>FEditPlayList.cs</DependentUpon>
     </EmbeddedResource>
@@ -129,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FPlayer.resx">
       <DependentUpon>FPlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FScreenSetup.resx">
+      <DependentUpon>FScreenSetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

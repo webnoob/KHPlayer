@@ -130,5 +130,17 @@ namespace KHPlayer.Properties {
                 this["ClosePlayerOnStop"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SavedScreens {
+            get {
+                return ((string)(this["SavedScreens"]));
+            }
+            set {
+                this["SavedScreens"] = value;
+            }
+        }
     }
 }

@@ -283,5 +283,13 @@ namespace KHPlayer.Forms
             _playListItemService.AddToPlaylistUsingUrl(url, playList);
             LoadPlayListItems();
         }
+
+        private void screenSetupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new FScreenSetup())
+            {
+                form.ShowDialog(this);
+            }
+        }
     }
 }
