@@ -11,6 +11,7 @@ using AxWMPLib;
 using iTextSharp.text.pdf;
 using KHPlayer.Classes;
 using KHPlayer.Properties;
+using NAudio.Wave;
 using WMPLib;
 
 namespace KHPlayer.Forms
@@ -95,7 +96,18 @@ namespace KHPlayer.Forms
             if (_currentlyPlayListItem.Type == PlayListItemType.Video ||
                 _currentlyPlayListItem.Type == PlayListItemType.Audio)
             {
-                wmPlayer.URL = playListItem.FilePath;
+                //This code allows us to play the audio via any device we choose, we just need to know the device ID.
+                using (var waveReader = new MediaFoundationReader(playListItem.FilePath))
+                {
+                    using (var waveOut = new WaveOut { DeviceNumber = 1 })
+                    {
+                        //waveOut.Init(waveReader);
+                        //wmPlayer.settings.volume = 0;
+                        wmPlayer.URL = playListItem.FilePath;
+                        //waveOut.Play();
+                    };
+                    
+                }
             }
             else if (_currentlyPlayListItem.Type == PlayListItemType.Pdf)
             {
