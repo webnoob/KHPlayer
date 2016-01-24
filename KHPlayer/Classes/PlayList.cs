@@ -35,12 +35,21 @@ namespace KHPlayer.Classes
 
         public int Group { get; set; }
 
+        public bool SupportsMultiCast { get { return Type == PlayListItemType.Video; } }
+
+        public string ScreenGuid { get; set; }
+
+        public PlayListItemSource Source { get; set; }
+
+        public PlayListItemType Type { get; set; }
+
         [JsonIgnore]
         public string CurrentTime { get; set; }
 
         [JsonIgnore]
         public string MaxTime { get; set; }
 
+        [JsonIgnore]
         public string Time
         {
             get
@@ -51,19 +60,11 @@ namespace KHPlayer.Classes
             }
         }
 
-        public string ScreenGuid { get; set; }
-
         [JsonIgnore]
         public PlayerScreen Screen { get; set; }
-        
-        public PlayListItemType Type { get; set; }
 
         [JsonIgnore]
         public PlayListItemState State { get; set; }
-
-        public PlayListItemSource Source { get; set; }
-
-        public bool SupportsMultiCast { get { return Type == PlayListItemType.Video; } }
     }
 
     public enum PlayListItemState
