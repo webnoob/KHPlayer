@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace KHPlayer.Classes
 {
@@ -34,10 +35,30 @@ namespace KHPlayer.Classes
 
         public int Group { get; set; }
 
+        [JsonIgnore]
+        public string CurrentTime { get; set; }
+
+        [JsonIgnore]
+        public string MaxTime { get; set; }
+
+        public string Time
+        {
+            get
+            {
+                return string.IsNullOrEmpty(CurrentTime) 
+                    ? "0:00" 
+                    : string.Format("{0} / {1}", CurrentTime, MaxTime);
+            }
+        }
+
+        public string ScreenGuid { get; set; }
+
+        [JsonIgnore]
         public PlayerScreen Screen { get; set; }
         
         public PlayListItemType Type { get; set; }
 
+        [JsonIgnore]
         public PlayListItemState State { get; set; }
 
         public PlayListItemSource Source { get; set; }
@@ -48,7 +69,8 @@ namespace KHPlayer.Classes
     public enum PlayListItemState
     {
         Queued,
-        Played
+        Played,
+        Playing
     }
 
     public enum PlayListItemType

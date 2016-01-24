@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FMain));
             this.bExit = new System.Windows.Forms.Button();
             this.bLaunch = new System.Windows.Forms.Button();
@@ -38,10 +39,8 @@
             this.bPause = new System.Windows.Forms.Button();
             this.bResume = new System.Windows.Forms.Button();
             this.cbPlayLists = new System.Windows.Forms.ComboBox();
-            this.pbCurrentlySelected = new System.Windows.Forms.PictureBox();
             this.cbFullScreen = new System.Windows.Forms.CheckBox();
             this.timerVideoClock = new System.Windows.Forms.Timer(this.components);
-            this.lblNowPlaying = new System.Windows.Forms.Label();
             this.bClosePlayerWindow = new System.Windows.Forms.Button();
             this.bPlayIntroMusic = new System.Windows.Forms.Button();
             this.bHelp = new System.Windows.Forms.Button();
@@ -51,22 +50,19 @@
             this.bPdfPageUp = new System.Windows.Forms.Button();
             this.bPdfPageDown = new System.Windows.Forms.Button();
             this.gvPlayListItems = new System.Windows.Forms.DataGridView();
-            this.colType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colImage = new System.Windows.Forms.DataGridViewImageColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hidColGuid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lbPlayListItems = new System.Windows.Forms.ListBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
+            this.colFullScreen = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gvPlayListItems)).BeginInit();
             this.SuspendLayout();
             // 
             // bExit
             // 
             this.bExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bExit.Location = new System.Drawing.Point(11, 573);
+            this.bExit.Location = new System.Drawing.Point(11, 597);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(447, 64);
+            this.bExit.Size = new System.Drawing.Size(447, 40);
             this.bExit.TabIndex = 0;
             this.bExit.Text = "Exit";
             this.bExit.UseVisualStyleBackColor = true;
@@ -87,9 +83,9 @@
             // bEditPlayList
             // 
             this.bEditPlayList.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bEditPlayList.Location = new System.Drawing.Point(11, 363);
+            this.bEditPlayList.Location = new System.Drawing.Point(11, 459);
             this.bEditPlayList.Name = "bEditPlayList";
-            this.bEditPlayList.Size = new System.Drawing.Size(447, 64);
+            this.bEditPlayList.Size = new System.Drawing.Size(447, 40);
             this.bEditPlayList.TabIndex = 2;
             this.bEditPlayList.Text = "Edit Playlists";
             this.bEditPlayList.UseVisualStyleBackColor = true;
@@ -150,23 +146,12 @@
             this.cbPlayLists.TabIndex = 10;
             this.cbPlayLists.SelectedIndexChanged += new System.EventHandler(this.cbPlayLists_SelectedIndexChanged);
             // 
-            // pbCurrentlySelected
-            // 
-            this.pbCurrentlySelected.Image = global::KHPlayer.Properties.Resources.jworg;
-            this.pbCurrentlySelected.InitialImage = global::KHPlayer.Properties.Resources.jworg;
-            this.pbCurrentlySelected.Location = new System.Drawing.Point(11, 293);
-            this.pbCurrentlySelected.Name = "pbCurrentlySelected";
-            this.pbCurrentlySelected.Size = new System.Drawing.Size(52, 52);
-            this.pbCurrentlySelected.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbCurrentlySelected.TabIndex = 11;
-            this.pbCurrentlySelected.TabStop = false;
-            // 
             // cbFullScreen
             // 
             this.cbFullScreen.AutoSize = true;
             this.cbFullScreen.Checked = true;
             this.cbFullScreen.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFullScreen.Location = new System.Drawing.Point(69, 293);
+            this.cbFullScreen.Location = new System.Drawing.Point(24, 474);
             this.cbFullScreen.Name = "cbFullScreen";
             this.cbFullScreen.Size = new System.Drawing.Size(102, 17);
             this.cbFullScreen.TabIndex = 12;
@@ -178,18 +163,6 @@
             // 
             this.timerVideoClock.Interval = 500;
             this.timerVideoClock.Tick += new System.EventHandler(this.timerVideoClock_Tick);
-            // 
-            // lblNowPlaying
-            // 
-            this.lblNowPlaying.AutoSize = true;
-            this.lblNowPlaying.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lblNowPlaying.Location = new System.Drawing.Point(65, 313);
-            this.lblNowPlaying.MaximumSize = new System.Drawing.Size(446, 0);
-            this.lblNowPlaying.MinimumSize = new System.Drawing.Size(390, 0);
-            this.lblNowPlaying.Name = "lblNowPlaying";
-            this.lblNowPlaying.Size = new System.Drawing.Size(390, 20);
-            this.lblNowPlaying.TabIndex = 16;
-            this.lblNowPlaying.Text = "Nothing currently playing.";
             // 
             // bClosePlayerWindow
             // 
@@ -208,9 +181,9 @@
             // bPlayIntroMusic
             // 
             this.bPlayIntroMusic.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bPlayIntroMusic.Location = new System.Drawing.Point(11, 433);
+            this.bPlayIntroMusic.Location = new System.Drawing.Point(11, 505);
             this.bPlayIntroMusic.Name = "bPlayIntroMusic";
-            this.bPlayIntroMusic.Size = new System.Drawing.Size(447, 64);
+            this.bPlayIntroMusic.Size = new System.Drawing.Size(447, 40);
             this.bPlayIntroMusic.TabIndex = 18;
             this.bPlayIntroMusic.Text = "Play Random Songs";
             this.bPlayIntroMusic.UseVisualStyleBackColor = true;
@@ -219,9 +192,9 @@
             // bHelp
             // 
             this.bHelp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bHelp.Location = new System.Drawing.Point(11, 503);
+            this.bHelp.Location = new System.Drawing.Point(11, 551);
             this.bHelp.Name = "bHelp";
-            this.bHelp.Size = new System.Drawing.Size(447, 64);
+            this.bHelp.Size = new System.Drawing.Size(447, 40);
             this.bHelp.TabIndex = 19;
             this.bHelp.Text = "Help";
             this.bHelp.UseVisualStyleBackColor = true;
@@ -281,71 +254,49 @@
             this.gvPlayListItems.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gvPlayListItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvPlayListItems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colType,
+            this.colImage,
             this.colName,
-            this.colStatus,
             this.colTime,
-            this.hidColGuid});
+            this.colFullScreen});
             this.gvPlayListItems.Location = new System.Drawing.Point(12, 179);
             this.gvPlayListItems.Name = "gvPlayListItems";
-            this.gvPlayListItems.ReadOnly = true;
             this.gvPlayListItems.RowHeadersVisible = false;
             this.gvPlayListItems.RowTemplate.Height = 18;
             this.gvPlayListItems.RowTemplate.ReadOnly = true;
             this.gvPlayListItems.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.gvPlayListItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gvPlayListItems.Size = new System.Drawing.Size(445, 108);
+            this.gvPlayListItems.Size = new System.Drawing.Size(445, 274);
             this.gvPlayListItems.TabIndex = 24;
+            this.gvPlayListItems.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gvPlayListItems_CellFormatting);
+            this.gvPlayListItems.SelectionChanged += new System.EventHandler(this.gvPlayListItems_SelectionChanged);
             // 
-            // colType
+            // colImage
             // 
-            this.colType.DataPropertyName = "Type";
-            this.colType.HeaderText = "Type";
-            this.colType.Name = "colType";
-            this.colType.ReadOnly = true;
-            this.colType.Width = 56;
+            this.colImage.HeaderText = "";
+            this.colImage.Name = "colImage";
+            this.colImage.Width = 5;
             // 
             // colName
             // 
             this.colName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colName.DataPropertyName = "TagName";
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colName.DefaultCellStyle = dataGridViewCellStyle1;
             this.colName.HeaderText = "Name";
             this.colName.Name = "colName";
-            this.colName.ReadOnly = true;
-            // 
-            // colStatus
-            // 
-            this.colStatus.DataPropertyName = "State";
-            this.colStatus.HeaderText = "Status";
-            this.colStatus.Name = "colStatus";
-            this.colStatus.ReadOnly = true;
-            this.colStatus.Width = 62;
             // 
             // colTime
             // 
+            this.colTime.DataPropertyName = "Time";
             this.colTime.HeaderText = "Time";
             this.colTime.Name = "colTime";
-            this.colTime.ReadOnly = true;
             this.colTime.Width = 55;
             // 
-            // hidColGuid
+            // colFullScreen
             // 
-            this.hidColGuid.DataPropertyName = "Guid";
-            this.hidColGuid.HeaderText = "Guid";
-            this.hidColGuid.Name = "hidColGuid";
-            this.hidColGuid.ReadOnly = true;
-            this.hidColGuid.Visible = false;
-            this.hidColGuid.Width = 54;
-            // 
-            // lbPlayListItems
-            // 
-            this.lbPlayListItems.FormattingEnabled = true;
-            this.lbPlayListItems.HorizontalScrollbar = true;
-            this.lbPlayListItems.Location = new System.Drawing.Point(240, 301);
-            this.lbPlayListItems.Name = "lbPlayListItems";
-            this.lbPlayListItems.Size = new System.Drawing.Size(218, 56);
-            this.lbPlayListItems.TabIndex = 6;
-            this.lbPlayListItems.SelectedIndexChanged += new System.EventHandler(this.lbPlayListItems_SelectedIndexChanged);
+            this.colFullScreen.HeaderText = "Full Screen";
+            this.colFullScreen.Name = "colFullScreen";
+            this.colFullScreen.Width = 66;
             // 
             // FMain
             // 
@@ -358,15 +309,12 @@
             this.Controls.Add(this.bHelp);
             this.Controls.Add(this.bPlayIntroMusic);
             this.Controls.Add(this.bClosePlayerWindow);
-            this.Controls.Add(this.lblNowPlaying);
             this.Controls.Add(this.cbFullScreen);
             this.Controls.Add(this.bPlayNext);
-            this.Controls.Add(this.pbCurrentlySelected);
             this.Controls.Add(this.cbPlayLists);
             this.Controls.Add(this.bResume);
             this.Controls.Add(this.bPause);
             this.Controls.Add(this.bStop);
-            this.Controls.Add(this.lbPlayListItems);
             this.Controls.Add(this.bEditPlayList);
             this.Controls.Add(this.bLaunch);
             this.Controls.Add(this.bExit);
@@ -375,7 +323,6 @@
             this.MaximizeBox = false;
             this.Name = "FMain";
             this.Text = "KHPlayer";
-            ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gvPlayListItems)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -396,10 +343,8 @@
         private System.Windows.Forms.Button bPause;
         private System.Windows.Forms.Button bResume;
         private System.Windows.Forms.ComboBox cbPlayLists;
-        private System.Windows.Forms.PictureBox pbCurrentlySelected;
         private System.Windows.Forms.CheckBox cbFullScreen;
         private System.Windows.Forms.Timer timerVideoClock;
-        private System.Windows.Forms.Label lblNowPlaying;
         private System.Windows.Forms.Button bClosePlayerWindow;
         private System.Windows.Forms.Button bPlayIntroMusic;
         private System.Windows.Forms.Button bHelp;
@@ -409,12 +354,10 @@
         private System.Windows.Forms.Button bPdfPageUp;
         private System.Windows.Forms.Button bPdfPageDown;
         private System.Windows.Forms.DataGridView gvPlayListItems;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colType;
+        private System.Windows.Forms.DataGridViewImageColumn colImage;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn hidColGuid;
-        private System.Windows.Forms.ListBox lbPlayListItems;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn colFullScreen;
     }
 }
 

@@ -1,4 +1,6 @@
-﻿namespace KHPlayer.Classes
+﻿using System.Drawing;
+
+namespace KHPlayer.Classes
 {
     public class PlayerScreen
     {
@@ -9,6 +11,10 @@
         public ScreenDevice ScreenDevice { get; set; }
 
         public AudioDevice AudioDevice { get; set; }
+
+        public bool DefaultScreen { get; set; }
+
+        public string ColourName { get; set; }
     }
 
     public class ScreenDevice

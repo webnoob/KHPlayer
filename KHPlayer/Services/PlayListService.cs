@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using KHPlayer.Classes;
 using KHPlayer.Data;
 
@@ -9,9 +8,26 @@ namespace KHPlayer.Services
 {
     public class PlayListService
     {
+        private readonly ScreenService _screenService;
+
+        public PlayListService()
+        {
+            _screenService = new ScreenService();
+        }
+
         public IEnumerable<PlayList> Get()
         {
-            return PlayListCache.PlayLists;
+            var playLists = PlayListCache.PlayLists;
+            foreach (var playList in playLists)
+            {
+                foreach (var playListItem in playList.Items)
+                {
+                    playListItem.Screen = _screenService.GetByGuid(playListItem.ScreenGuid);
+                    if (playListItem.Screen == null)
+                        playListItem.Screen = _screenService.GetDefaultScreen();
+                }
+            }
+            return playLists;
         }
 
         public PlayList GetByGuid(string guid)

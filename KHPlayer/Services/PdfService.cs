@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using iTextSharp.text.pdf;
 using KHPlayer.Classes;
+using KHPlayer.Helpers;
 using KHPlayer.Properties;
 
 namespace KHPlayer.Services

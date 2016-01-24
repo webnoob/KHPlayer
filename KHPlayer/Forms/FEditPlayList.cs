@@ -329,7 +329,7 @@ namespace KHPlayer.Forms
             if (playListItem == null)
                 return;
 
-            playListItem.Screen = cbScreen.SelectedItem as PlayerScreen;
+            playListItem.ScreenGuid = (cbScreen.SelectedItem as PlayerScreen).Guid;
         }
 
         private void numGroup_ValueChanged(object sender, EventArgs e)

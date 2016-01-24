@@ -81,7 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\CopyFileEx.cs" />
+    <Compile Include="Helpers\CopyFileEx.cs" />
     <Compile Include="Classes\PlayerScreen.cs" />
     <Compile Include="Data\ScreenCache.cs" />
     <Compile Include="Extensions\FileExtensions.cs" />
@@ -89,7 +89,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Classes\Ffmpeg.cs" />
-    <Compile Include="Classes\PathHelper.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Helpers\PathHelper.cs" />
     <Compile Include="Classes\PlayList.cs" />
     <Compile Include="Classes\VideoState.cs" />
     <Compile Include="Data\PlayListCache.cs" />

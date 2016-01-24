@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using KHPlayer.Extensions;
 
-namespace KHPlayer.Classes
+namespace KHPlayer.Helpers
 {
     public static class PathHelper
     {

@@ -31,12 +31,26 @@ namespace KHPlayer.Services
             return result;
         }
 
+        public PlayerScreen GetByGuid(string guid)
+        {
+            if (string.IsNullOrEmpty(guid))
+                return null;
+
+            return Get().FirstOrDefault(s => s.Guid.Equals(guid, StringComparison.OrdinalIgnoreCase));
+        }
+
         public PlayerScreen GetByName(string screenName)
         {
             if (string.IsNullOrEmpty(screenName))
                 return null;
             
             return Get().FirstOrDefault(s => s.FriendlyName.Equals(screenName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void Update(PlayerScreen screen)
+        {
+            Delete(screen);
+            Insert(screen);
         }
 
         public void Insert(PlayerScreen screen)
@@ -62,6 +76,11 @@ namespace KHPlayer.Services
         public void AddScreen(string screenName, int screenNumber, AudioDevice audioDevice, ScreenDevice screenDevice)
         {
             Insert(Create(screenName, screenNumber, audioDevice, screenDevice));
+        }
+
+        public PlayerScreen GetDefaultScreen()
+        {
+            return Get().FirstOrDefault(s => s.DefaultScreen);
         }
     }
 }

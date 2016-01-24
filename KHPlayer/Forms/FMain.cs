@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using KHPlayer.Classes;
+using KHPlayer.Helpers;
 using KHPlayer.Properties;
 using KHPlayer.Services;
 using WMPLib;
@@ -136,12 +138,12 @@ namespace KHPlayer.Forms
             LaunchPlayer(null);
         }
 
-        private FPlayer LaunchPlayer(PlayerScreen screen)
+        private FPlayer LaunchPlayer(PlayListItem playListItem)
         {
-            if (_fplayers.Any(p => p.PlayerScreen == screen))
+            if (_fplayers.Any(p => p.PlayListItem.Screen == playListItem.Screen))
                 return null;
 
-            var player = new FPlayer(this, screen);
+            var player = new FPlayer(this, playListItem);
             player.Closing += ClosePlayer;
             player.Show(this);
             _fplayers.Add(player);
@@ -160,7 +162,7 @@ namespace KHPlayer.Forms
             {
                 fplayer.DoBeforeClose();
                 fplayer.Dispose();
-                _fplayers.RemoveAll(p => p.PlayerScreen == fplayer.PlayerScreen);
+                _fplayers.RemoveAll(p => p.PlayListItem == null || p.PlayListItem.Screen == fplayer.PlayListItem.Screen);
             }
 
             SetButtonState();
@@ -193,31 +195,20 @@ namespace KHPlayer.Forms
             gvPlayListItems.AutoGenerateColumns = false;
             gvPlayListItems.DataSource = list;
 
-            lbPlayListItems.DataSource = playList.Items.Where(f => f != null).ToList();
-            lbPlayListItems.DisplayMember = "TagName";
-            lbPlayListItems.ValueMember = "FileName";
-
-            if (lbPlayListItems.Items.Count == 0)
-            {
-                //Selected index change won't be triggered so make sure the image resets.
-                pbCurrentlySelected.Image = pbCurrentlySelected.InitialImage;
-                return;
-            }
-
             if (!_currentPlayListItems.Any())
-                lbPlayListItems.SelectedIndex = 0;
+                gvPlayListItems.Rows[0].Selected = true;
             else
             {
-                for (int i = 0; i < lbPlayListItems.Items.Count; i++)
+                for (int i = 0; i < gvPlayListItems.RowCount; i++)
                 {
-                    var playListItem = lbPlayListItems.Items[i] as PlayListItem;
+                    var playListItem = gvPlayListItems.Rows[i].DataBoundItem as PlayListItem;
                     if (playListItem == null)
                         continue;
 
                     if (playListItem == _currentPlayListItems.FirstOrDefault())
                     {
-                        if (lbPlayListItems.Items.Count >= i)
-                            lbPlayListItems.SelectedIndex = i;
+                        //if (gvPlayListItems.RowCount >= i)
+                        //lbPlayListItems.SelectedIndex = i;
                         break;
                     }
                 }
@@ -268,8 +259,9 @@ namespace KHPlayer.Forms
 
             foreach (var playListItem in _currentPlayListItems)
             {
-                var player = LaunchPlayer(playListItem.Screen);
+                var player = LaunchPlayer(playListItem);
                 player.PlayPlayListItem(playListItem);
+                playListItem.State = PlayListItemState.Playing;
             }
 
             UpdatePlayListItemDisplays();
@@ -293,7 +285,7 @@ namespace KHPlayer.Forms
 
         private void SetNextVideo()
         {
-            if (_playListMode == PlayListMode.PlayList && lbPlayListItems.SelectedIndex != lbPlayListItems.Items.Count - 1)
+            /*if (_playListMode == PlayListMode.PlayList && lbPlayListItems.SelectedIndex != lbPlayListItems.Items.Count - 1)
             {
                 var nextIndex = lbPlayListItems.SelectedIndex + 1;
                 lbPlayListItems.SelectedIndex = nextIndex >= lbPlayListItems.Items.Count
@@ -301,9 +293,7 @@ namespace KHPlayer.Forms
                     : nextIndex;
             }
             else if (lbPlayListItems.Items.Count > 0)
-                lbPlayListItems.SelectedIndex = 0;
-
-            lblNowPlaying.Text = "Nothing currently playing.";
+                lbPlayListItems.SelectedIndex = 0;*/
 
             if (_playMode == PlayMode.AutoPlay)
                 PlayNext();
@@ -315,7 +305,11 @@ namespace KHPlayer.Forms
 
             //Don't foreach on this as .Stop() might close the player form if Settings.Default.ClosePlayerOnStop is true
             for (var i = _fplayers.Count - 1; i >= 0; i--)
+            {
+                _fplayers[i].PlayListItem.State = PlayListItemState.Played;
+                UpdatePlayListItemDisplays();
                 _fplayers[i].Stop();
+            }
         }
 
         private void bPause_Click(object sender, EventArgs e)
@@ -342,8 +336,8 @@ namespace KHPlayer.Forms
             bPause.Visible = !showPlay && _currentVideoState != WMPPlayState.wmppsPaused;
             bResume.Visible = _currentVideoState == WMPPlayState.wmppsPaused;
             timerVideoClock.Enabled = _currentVideoState == WMPPlayState.wmppsPlaying;
-            bClosePlayerWindow.Visible = _fplayers != null;
-            bLaunch.Visible = _fplayers == null;
+            bClosePlayerWindow.Visible = _fplayers != null && _fplayers.Count > 0;
+            bLaunch.Visible = _fplayers != null && _fplayers.Count == 0;
             bPdfScrollDown.Visible = currentFile != null && currentFile.Type == PlayListItemType.Pdf;
             bPdfScrollUp.Visible = bPdfScrollDown.Visible;
             bPdfPageUp.Visible = bPdfScrollDown.Visible;
@@ -364,20 +358,26 @@ namespace KHPlayer.Forms
             UpdatePlayListItemDisplays();
         }
 
-        private void lbPlayListItems_SelectedIndexChanged(object sender, EventArgs e)
+        private void gvPlayListItems_SelectionChanged(object sender, EventArgs e)
         {
             var playListItem = GetSelectedPlayListItem();
             if (playListItem == null)
                 return;
 
-            pbCurrentlySelected.Image = File.Exists(playListItem.ThumbnailPath)
-                ? Image.FromFile(playListItem.ThumbnailPath)
-                : pbCurrentlySelected.InitialImage;
+            if (playListItem.Group > 0)
+            {
+                foreach (var row in gvPlayListItems.Rows.Cast<DataGridViewRow>().Where(r => (r.DataBoundItem as PlayListItem).Group == playListItem.Group))
+                {
+                    row.Selected = true;
+                }
+            }
         }
 
         private PlayListItem GetSelectedPlayListItem()
         {
-            return gvPlayListItems.SelectedRows[0].DataBoundItem as PlayListItem;
+            return gvPlayListItems.SelectedRows.Count == 0
+                ? null
+                : gvPlayListItems.SelectedRows[0].DataBoundItem as PlayListItem;
         }
 
         private void cbFullScreen_CheckedChanged(object sender, EventArgs e)
@@ -394,16 +394,22 @@ namespace KHPlayer.Forms
             if (_fplayers == null)
                 return;
 
-            lblNowPlaying.Text = "";
-
             foreach (var playListItem in _currentPlayListItems)
             {
                 var player = GetPlayListItemPlayer(playListItem);
                 if (player == null)
                     continue;
 
-                lblNowPlaying.Text += String.Format("Playing: {0} [{1} / {2}] {3}", playListItem.TagName,
-                    player.WmPlayer.Ctlcontrols.currentPositionString, player.WmPlayer.currentMedia.durationString, Environment.NewLine);
+                player.PlayListItem.MaxTime = player.WmPlayer.currentMedia.durationString;
+                player.PlayListItem.CurrentTime = player.WmPlayer.Ctlcontrols.currentPositionString;
+                foreach (
+                    var row in
+                        gvPlayListItems.Rows.Cast<DataGridViewRow>().Where(r => r.DataBoundItem == player.PlayListItem))
+                {
+                    var rowTimeCell = row.Cells["colTime"];
+                    rowTimeCell.Value = player.PlayListItem.Time;
+                    gvPlayListItems.UpdateCellValue(rowTimeCell.ColumnIndex, row.Index);
+                }
             }
         }
 
@@ -412,12 +418,13 @@ namespace KHPlayer.Forms
             if (playListItem == null)
                 return null;
 
-            return _fplayers.FirstOrDefault(player => player.PlayerScreen == playListItem.Screen);
+            return _fplayers.FirstOrDefault(player => player.PlayListItem.Screen == playListItem.Screen);
         }
 
         private void bClosePlayerWindow_Click(object sender, EventArgs e)
         {
-            ClosePlayer(sender, e);
+            foreach (var player in _fplayers.ToList())
+                ClosePlayer(player, e);
         }
 
         private void bPlayIntroMusic_Click(object sender, EventArgs e)
@@ -480,6 +487,39 @@ namespace KHPlayer.Forms
                 return;
 
             player.MovePage(false);
+        }
+
+        private void gvPlayListItems_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            var playListItem = gvPlayListItems.Rows[e.RowIndex].DataBoundItem as PlayListItem;
+            if (playListItem == null)
+                return;
+
+            var currentColumn = gvPlayListItems.Columns[e.ColumnIndex];
+            var currentRow = gvPlayListItems.Rows[e.RowIndex];
+
+            if (playListItem.Screen != null)
+            {
+                if (playListItem.Screen.ColourName != null)
+                {
+                    var color = ColorTranslator.FromHtml(playListItem.Screen.ColourName);
+                    e.CellStyle.BackColor = color;
+                }
+            }
+
+            if (currentColumn.Name == "colImage")
+            {
+                currentColumn.Width = 50;
+                currentRow.Height = 50;
+                
+                currentColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                e.Value = ImageHelper.ResizeImage(playListItem.ThumbnailPath, 50, 50, true);
+            }
+
+            if (currentColumn.Name == "colName")
+            {
+                e.Value = string.Format("[Screen - {0}][Group - {1}]{2}[{3} - {4}] - {5}", playListItem.Screen != null ? playListItem.Screen.FriendlyName : "Main", playListItem.Group, Environment.NewLine, playListItem.State, playListItem.Type, e.Value);
+            }
         }
     }
 }

@@ -33,11 +33,11 @@ namespace KHPlayer.Forms
         [DllImport("user32.dll")]
         
         public static extern bool ReleaseCapture();
-        public PlayerScreen PlayerScreen { get; set; }
+        public PlayListItem PlayListItem { get; set; }
         
-        public FPlayer(FMain parent, PlayerScreen screen)
+        public FPlayer(FMain parent, PlayListItem playListItem)
         {
-            PlayerScreen = screen;
+            PlayListItem = playListItem;
             _parent = parent;
             
             //Do the window movement before InitializeComponent so we can ensure the window is located in the correct screen (full screen mode only).
@@ -58,8 +58,8 @@ namespace KHPlayer.Forms
 
         private void InitializeScreen()
         {
-            if (PlayerScreen != null)
-                MoveToScreen(PlayerScreen.ScreenDevice.Id);
+            if (PlayListItem != null && PlayListItem.Screen != null)
+                MoveToScreen(PlayListItem.Screen.ScreenDevice.Id);
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -107,14 +107,14 @@ namespace KHPlayer.Forms
             _currentlyPlayListItem = playListItem;
             ShowPlayer();
 
-            if (_currentlyPlayListItem.Type == PlayListItemType.Video ||
-                _currentlyPlayListItem.Type == PlayListItemType.Audio)
+            if (_currentlyPlayListItem.Type == PlayListItemType.Video || _currentlyPlayListItem.Type == PlayListItemType.Audio)
             {
-                if (playListItem.SupportsMultiCast)
+                //Don't split the audio out if this is the default screen or it's not a compatable item.
+                if (playListItem.SupportsMultiCast && !playListItem.Screen.DefaultScreen)
                 {
                     //This code allows us to play the audio via any device we choose, we just need to know the device ID.
                     var waveReader = new MediaFoundationReader(playListItem.FilePath);
-                    _waveOut = new WaveOut {DeviceNumber = PlayerScreen.AudioDevice.Id};
+                    _waveOut = new WaveOut {DeviceNumber = PlayListItem.Screen.AudioDevice.Id};
                     _waveOut.Init(waveReader);
                     wmPlayer.settings.volume = 0;
                     wmPlayer.URL = playListItem.FilePath;
@@ -229,14 +229,14 @@ namespace KHPlayer.Forms
 
         public void DoBeforeClose()
         {
-            if (axReader != null)
-            {
-                //The following lines are required in order to close the adobe PDF form viewer properly.
-                //Not sure why but the application hangs when closing without these.
-                axReader.LoadFile(""); //Ensure we release the previous file. This doesn't seem to always happen.
-                axReader.Dispose();
-                Application.DoEvents();
-            }
+            if (axReader == null) 
+                return;
+
+            //The following lines are required in order to close the adobe PDF form viewer properly.
+            //Not sure why but the application hangs when closing without these.
+            axReader.LoadFile(""); //Ensure we release the previous file. This doesn't seem to always happen.
+            axReader.Dispose();
+            Application.DoEvents();
         }
 
         public void ScrollPdf(bool down)

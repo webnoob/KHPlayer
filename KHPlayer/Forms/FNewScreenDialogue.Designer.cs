@@ -36,13 +36,17 @@
             this.lAudioDevice = new System.Windows.Forms.Label();
             this.cbAudioDevice = new System.Windows.Forms.ComboBox();
             this.cbScreenDevice = new System.Windows.Forms.ComboBox();
+            this.lColour = new System.Windows.Forms.Label();
+            this.cbDefault = new System.Windows.Forms.CheckBox();
+            this.colorDlgMain = new System.Windows.Forms.ColorDialog();
+            this.tbColour = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // bOk
             // 
-            this.bOk.Location = new System.Drawing.Point(12, 130);
+            this.bOk.Location = new System.Drawing.Point(11, 193);
             this.bOk.Name = "bOk";
-            this.bOk.Size = new System.Drawing.Size(261, 23);
+            this.bOk.Size = new System.Drawing.Size(263, 23);
             this.bOk.TabIndex = 11;
             this.bOk.Text = "Ok";
             this.bOk.UseVisualStyleBackColor = true;
@@ -67,7 +71,7 @@
             // lScreenNumber
             // 
             this.lScreenNumber.AutoSize = true;
-            this.lScreenNumber.Location = new System.Drawing.Point(12, 48);
+            this.lScreenNumber.Location = new System.Drawing.Point(12, 110);
             this.lScreenNumber.Name = "lScreenNumber";
             this.lScreenNumber.Size = new System.Drawing.Size(81, 13);
             this.lScreenNumber.TabIndex = 14;
@@ -75,9 +79,9 @@
             // 
             // bCancel
             // 
-            this.bCancel.Location = new System.Drawing.Point(12, 159);
+            this.bCancel.Location = new System.Drawing.Point(11, 222);
             this.bCancel.Name = "bCancel";
-            this.bCancel.Size = new System.Drawing.Size(261, 23);
+            this.bCancel.Size = new System.Drawing.Size(263, 23);
             this.bCancel.TabIndex = 16;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
@@ -86,7 +90,7 @@
             // lAudioDevice
             // 
             this.lAudioDevice.AutoSize = true;
-            this.lAudioDevice.Location = new System.Drawing.Point(12, 87);
+            this.lAudioDevice.Location = new System.Drawing.Point(13, 150);
             this.lAudioDevice.Name = "lAudioDevice";
             this.lAudioDevice.Size = new System.Drawing.Size(71, 13);
             this.lAudioDevice.TabIndex = 17;
@@ -96,7 +100,7 @@
             // 
             this.cbAudioDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAudioDevice.FormattingEnabled = true;
-            this.cbAudioDevice.Location = new System.Drawing.Point(12, 103);
+            this.cbAudioDevice.Location = new System.Drawing.Point(12, 166);
             this.cbAudioDevice.Name = "cbAudioDevice";
             this.cbAudioDevice.Size = new System.Drawing.Size(261, 21);
             this.cbAudioDevice.TabIndex = 18;
@@ -105,16 +109,52 @@
             // 
             this.cbScreenDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbScreenDevice.FormattingEnabled = true;
-            this.cbScreenDevice.Location = new System.Drawing.Point(12, 64);
+            this.cbScreenDevice.Location = new System.Drawing.Point(12, 126);
             this.cbScreenDevice.Name = "cbScreenDevice";
             this.cbScreenDevice.Size = new System.Drawing.Size(261, 21);
             this.cbScreenDevice.TabIndex = 19;
+            // 
+            // lColour
+            // 
+            this.lColour.AutoSize = true;
+            this.lColour.Location = new System.Drawing.Point(12, 48);
+            this.lColour.Name = "lColour";
+            this.lColour.Size = new System.Drawing.Size(37, 13);
+            this.lColour.TabIndex = 20;
+            this.lColour.Text = "Colour";
+            // 
+            // cbDefault
+            // 
+            this.cbDefault.AutoSize = true;
+            this.cbDefault.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbDefault.Location = new System.Drawing.Point(12, 90);
+            this.cbDefault.Name = "cbDefault";
+            this.cbDefault.Size = new System.Drawing.Size(97, 17);
+            this.cbDefault.TabIndex = 21;
+            this.cbDefault.Text = "Default Screen";
+            this.cbDefault.UseVisualStyleBackColor = true;
+            // 
+            // colorDlgMain
+            // 
+            this.colorDlgMain.AnyColor = true;
+            this.colorDlgMain.FullOpen = true;
+            // 
+            // tbColour
+            // 
+            this.tbColour.Location = new System.Drawing.Point(12, 64);
+            this.tbColour.Name = "tbColour";
+            this.tbColour.Size = new System.Drawing.Size(261, 20);
+            this.tbColour.TabIndex = 22;
+            this.tbColour.Click += new System.EventHandler(this.tbColour_Click);
             // 
             // FNewScreenDialogue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(285, 193);
+            this.ClientSize = new System.Drawing.Size(285, 258);
+            this.Controls.Add(this.tbColour);
+            this.Controls.Add(this.cbDefault);
+            this.Controls.Add(this.lColour);
             this.Controls.Add(this.cbScreenDevice);
             this.Controls.Add(this.cbAudioDevice);
             this.Controls.Add(this.lAudioDevice);
@@ -140,5 +180,9 @@
         private System.Windows.Forms.Label lAudioDevice;
         private System.Windows.Forms.ComboBox cbAudioDevice;
         private System.Windows.Forms.ComboBox cbScreenDevice;
+        private System.Windows.Forms.Label lColour;
+        private System.Windows.Forms.CheckBox cbDefault;
+        private System.Windows.Forms.ColorDialog colorDlgMain;
+        private System.Windows.Forms.TextBox tbColour;
     }
 }

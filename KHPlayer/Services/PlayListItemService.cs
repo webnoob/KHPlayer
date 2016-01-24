@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using KHPlayer.Classes;
 using KHPlayer.Extensions;
+using KHPlayer.Helpers;
 using TagLib;
 using File = System.IO.File;
 
