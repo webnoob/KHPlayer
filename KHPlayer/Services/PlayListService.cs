@@ -70,7 +70,7 @@ namespace KHPlayer.Services
             playList.Items.Insert(newIndex, playListItem);
         }
 
-        public IEnumerable<PlayListItem> GetAllPlatListItemsInGroup(PlayListItem playListItem)
+        public IEnumerable<PlayListItem> GetAllPlayListItemsInGroup(PlayListItem playListItem)
         {
             if (playListItem.Group == 0)
                 return new[] {playListItem};

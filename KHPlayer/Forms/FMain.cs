@@ -189,6 +189,10 @@ namespace KHPlayer.Forms
             if (playList == null)
                 return;
 
+            var list = new BindingList<PlayListItem>(playList.Items.Where(f => f != null).ToList());
+            gvPlayListItems.AutoGenerateColumns = false;
+            gvPlayListItems.DataSource = list;
+
             lbPlayListItems.DataSource = playList.Items.Where(f => f != null).ToList();
             lbPlayListItems.DisplayMember = "TagName";
             lbPlayListItems.ValueMember = "FileName";
@@ -277,7 +281,7 @@ namespace KHPlayer.Forms
             if (_playListMode == PlayListMode.RandomSong)
                 return new List<PlayListItem> {GetRandomSong()};
 
-            return _playListService.GetAllPlatListItemsInGroup(GetSelectedPlayListItem()).ToList();
+            return _playListService.GetAllPlayListItemsInGroup(GetSelectedPlayListItem()).ToList();
         }
 
         private PlayListItem GetRandomSong()
@@ -373,7 +377,7 @@ namespace KHPlayer.Forms
 
         private PlayListItem GetSelectedPlayListItem()
         {
-            return lbPlayListItems.SelectedItem as PlayListItem;
+            return gvPlayListItems.SelectedRows[0].DataBoundItem as PlayListItem;
         }
 
         private void cbFullScreen_CheckedChanged(object sender, EventArgs e)

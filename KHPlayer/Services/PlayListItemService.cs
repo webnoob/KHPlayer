@@ -88,9 +88,7 @@ namespace KHPlayer.Services
                 return null;
 
             plItem.Type = tagFile.Type;
-            plItem.TagName = plItem.Source == PlayListItemSource.Streamed
-                ? string.Format("[{0} | {1}] - {2}", plItem.Source, plItem.Type, tagFile.Tag.Title)
-                : string.Format("[{0}] - {1}", plItem.Type, tagFile.Tag.Title);
+            plItem.TagName = tagFile.Tag.Title;
             
             return plItem;
         }

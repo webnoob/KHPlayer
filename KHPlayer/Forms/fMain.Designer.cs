@@ -34,7 +34,6 @@
             this.bLaunch = new System.Windows.Forms.Button();
             this.bEditPlayList = new System.Windows.Forms.Button();
             this.bPlayNext = new System.Windows.Forms.Button();
-            this.lbPlayListItems = new System.Windows.Forms.ListBox();
             this.bStop = new System.Windows.Forms.Button();
             this.bPause = new System.Windows.Forms.Button();
             this.bResume = new System.Windows.Forms.Button();
@@ -51,7 +50,15 @@
             this.bPdfScrollUp = new System.Windows.Forms.Button();
             this.bPdfPageUp = new System.Windows.Forms.Button();
             this.bPdfPageDown = new System.Windows.Forms.Button();
+            this.gvPlayListItems = new System.Windows.Forms.DataGridView();
+            this.colType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hidColGuid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lbPlayListItems = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gvPlayListItems)).BeginInit();
             this.SuspendLayout();
             // 
             // bExit
@@ -98,16 +105,6 @@
             this.bPlayNext.Text = "Play";
             this.bPlayNext.UseVisualStyleBackColor = true;
             this.bPlayNext.Click += new System.EventHandler(this.bPlayNext_Click);
-            // 
-            // lbPlayListItems
-            // 
-            this.lbPlayListItems.FormattingEnabled = true;
-            this.lbPlayListItems.HorizontalScrollbar = true;
-            this.lbPlayListItems.Location = new System.Drawing.Point(12, 179);
-            this.lbPlayListItems.Name = "lbPlayListItems";
-            this.lbPlayListItems.Size = new System.Drawing.Size(445, 108);
-            this.lbPlayListItems.TabIndex = 6;
-            this.lbPlayListItems.SelectedIndexChanged += new System.EventHandler(this.lbPlayListItems_SelectedIndexChanged);
             // 
             // bStop
             // 
@@ -274,9 +271,86 @@
             this.bPdfPageDown.UseVisualStyleBackColor = true;
             this.bPdfPageDown.Click += new System.EventHandler(this.bPdfPageDown_Click);
             // 
+            // gvPlayListItems
+            // 
+            this.gvPlayListItems.AllowUserToAddRows = false;
+            this.gvPlayListItems.AllowUserToDeleteRows = false;
+            this.gvPlayListItems.AllowUserToResizeColumns = false;
+            this.gvPlayListItems.AllowUserToResizeRows = false;
+            this.gvPlayListItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.gvPlayListItems.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.gvPlayListItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gvPlayListItems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colType,
+            this.colName,
+            this.colStatus,
+            this.colTime,
+            this.hidColGuid});
+            this.gvPlayListItems.Location = new System.Drawing.Point(12, 179);
+            this.gvPlayListItems.Name = "gvPlayListItems";
+            this.gvPlayListItems.ReadOnly = true;
+            this.gvPlayListItems.RowHeadersVisible = false;
+            this.gvPlayListItems.RowTemplate.Height = 18;
+            this.gvPlayListItems.RowTemplate.ReadOnly = true;
+            this.gvPlayListItems.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.gvPlayListItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.gvPlayListItems.Size = new System.Drawing.Size(445, 108);
+            this.gvPlayListItems.TabIndex = 24;
+            // 
+            // colType
+            // 
+            this.colType.DataPropertyName = "Type";
+            this.colType.HeaderText = "Type";
+            this.colType.Name = "colType";
+            this.colType.ReadOnly = true;
+            this.colType.Width = 56;
+            // 
+            // colName
+            // 
+            this.colName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colName.DataPropertyName = "TagName";
+            this.colName.HeaderText = "Name";
+            this.colName.Name = "colName";
+            this.colName.ReadOnly = true;
+            // 
+            // colStatus
+            // 
+            this.colStatus.DataPropertyName = "State";
+            this.colStatus.HeaderText = "Status";
+            this.colStatus.Name = "colStatus";
+            this.colStatus.ReadOnly = true;
+            this.colStatus.Width = 62;
+            // 
+            // colTime
+            // 
+            this.colTime.HeaderText = "Time";
+            this.colTime.Name = "colTime";
+            this.colTime.ReadOnly = true;
+            this.colTime.Width = 55;
+            // 
+            // hidColGuid
+            // 
+            this.hidColGuid.DataPropertyName = "Guid";
+            this.hidColGuid.HeaderText = "Guid";
+            this.hidColGuid.Name = "hidColGuid";
+            this.hidColGuid.ReadOnly = true;
+            this.hidColGuid.Visible = false;
+            this.hidColGuid.Width = 54;
+            // 
+            // lbPlayListItems
+            // 
+            this.lbPlayListItems.FormattingEnabled = true;
+            this.lbPlayListItems.HorizontalScrollbar = true;
+            this.lbPlayListItems.Location = new System.Drawing.Point(240, 301);
+            this.lbPlayListItems.Name = "lbPlayListItems";
+            this.lbPlayListItems.Size = new System.Drawing.Size(218, 56);
+            this.lbPlayListItems.TabIndex = 6;
+            this.lbPlayListItems.SelectedIndexChanged += new System.EventHandler(this.lbPlayListItems_SelectedIndexChanged);
+            // 
             // FMain
             // 
             this.ClientSize = new System.Drawing.Size(470, 650);
+            this.Controls.Add(this.gvPlayListItems);
             this.Controls.Add(this.bPdfPageDown);
             this.Controls.Add(this.bPdfPageUp);
             this.Controls.Add(this.bPdfScrollUp);
@@ -302,6 +376,7 @@
             this.Name = "FMain";
             this.Text = "KHPlayer";
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gvPlayListItems)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -317,7 +392,6 @@
         private System.Windows.Forms.Button bLaunch;
         private System.Windows.Forms.Button bEditPlayList;
         private System.Windows.Forms.Button bPlayNext;
-        private System.Windows.Forms.ListBox lbPlayListItems;
         private System.Windows.Forms.Button bStop;
         private System.Windows.Forms.Button bPause;
         private System.Windows.Forms.Button bResume;
@@ -334,6 +408,13 @@
         private System.Windows.Forms.Button bPdfScrollUp;
         private System.Windows.Forms.Button bPdfPageUp;
         private System.Windows.Forms.Button bPdfPageDown;
+        private System.Windows.Forms.DataGridView gvPlayListItems;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn hidColGuid;
+        private System.Windows.Forms.ListBox lbPlayListItems;
     }
 }
 
