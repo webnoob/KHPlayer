@@ -17,6 +17,7 @@ namespace KHPlayer.Forms
         private readonly PlayListItemService _playListItemService;
         private readonly SongService _songService;
         private readonly PlaylistImportExportService _playlistImportExportService;
+        private readonly ScreenService _screenService;
 
         public FEditPlayList()
         {
@@ -27,6 +28,7 @@ namespace KHPlayer.Forms
             _songService = new SongService();
             _playlistImportExportService = new PlaylistImportExportService();
             _playlistImportExportService.OnUpdateProgress += UpdateProgress;
+            _screenService = new ScreenService();
             
             var driveDetector = new DriveDetector();
             driveDetector.DeviceArrived += OnDriveArrived;
@@ -179,9 +181,38 @@ namespace KHPlayer.Forms
             if (playListItem == null)
                 return;
 
+            LoadPlayListItemDetail(playListItem);
+        }
+
+        private void LoadPlayListItemDetail(PlayListItem playListItem)
+        {
             pbCurrentlySelected.Image = File.Exists(playListItem.ThumbnailPath)
                 ? Image.FromFile(playListItem.ThumbnailPath)
                 : pbCurrentlySelected.InitialImage;
+
+            numGroup.Text = playListItem.Group.ToString();
+            pScreenSelection.Visible = playListItem.SupportsMultiCast;
+            if (pScreenSelection.Visible)
+                LoadScreens(playListItem.Screen);
+        }
+
+        private void LoadScreens(PlayerScreen screen)
+        {
+            cbScreen.DataSource = _screenService.Get();
+            cbScreen.DisplayMember = "FriendlyName";
+            cbScreen.ValueMember = "Guid";
+
+            if (cbScreen.Items.Count > 0)
+            {
+                foreach (var item in cbScreen.Items.Cast<PlayerScreen>())
+                {
+                    if (screen == null || item.FriendlyName == screen.FriendlyName)
+                    {
+                        cbScreen.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
         }
 
         private PlayListItem GetSelectedPlayListItem()
@@ -286,10 +317,28 @@ namespace KHPlayer.Forms
 
         private void screenSetupToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var form = new FScreenSetup())
+            using (var form = new FScreenSetup { StartPosition = FormStartPosition.CenterParent }) 
             {
                 form.ShowDialog(this);
             }
+        }
+
+        private void cbScreen_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var playListItem = GetSelectedPlayListItem();
+            if (playListItem == null)
+                return;
+
+            playListItem.Screen = cbScreen.SelectedItem as PlayerScreen;
+        }
+
+        private void numGroup_ValueChanged(object sender, EventArgs e)
+        {
+            var playListItem = GetSelectedPlayListItem();
+            if (playListItem == null)
+                return;
+
+            playListItem.Group = Convert.ToInt32(numGroup.Value);
         }
     }
 }

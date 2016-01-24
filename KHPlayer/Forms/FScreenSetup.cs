@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using KHPlayer.Services;
 
@@ -26,19 +27,19 @@ namespace KHPlayer.Forms
 
             foreach (var screen in _screenService.Get())
             {
-                var listViewItem = new ListViewItem(new[] {screen.Name, screen.ScreenNumber.ToString(), "0"});
+                var listViewItem = new ListViewItem(new[] {screen.FriendlyName, screen.ScreenDevice.DeviceName, screen.AudioDevice.Name, "0"});
                 lvScreens.Items.Add(listViewItem);
             }
         }
 
         private void bAddNewScreen_Click(object sender, EventArgs e)
         {
-            using (var form = new FDialogue("Screen Name", "Screen Number"))
+            using (var form = new FNewScreenDialogue{ StartPosition = FormStartPosition.CenterParent })
             {
                 var dialogueResult = form.ShowDialog(this);
                 if (dialogueResult == DialogResult.OK)
                 {
-                    _screenService.AddScreen(form.ResultOne, Convert.ToInt32(form.ResultTwo));
+                    _screenService.Insert(form.Screen);
                 }
             }
 
@@ -47,8 +48,14 @@ namespace KHPlayer.Forms
 
         private void bDeleteScreen_Click(object sender, EventArgs e)
         {
+            if (lvScreens.SelectedItems.Count == 0)
+                return;
+
             var screenName = lvScreens.SelectedItems[0].Text;
             var screen = _screenService.GetByName(screenName);
+            if (screen == null)
+                return;
+
             _screenService.Delete(screen);
             LoadScreens();
         }

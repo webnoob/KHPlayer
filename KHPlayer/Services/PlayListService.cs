@@ -69,5 +69,14 @@ namespace KHPlayer.Services
             playList.Items.Remove(playListItem);
             playList.Items.Insert(newIndex, playListItem);
         }
+
+        public IEnumerable<PlayListItem> GetAllPlatListItemsInGroup(PlayListItem playListItem)
+        {
+            if (playListItem.Group == 0)
+                return new[] {playListItem};
+
+            var playList = GetByGuid(playListItem.PlayListGuid);
+            return playList.Items.Where(p => p.Group == playListItem.Group);
+        }
     }
 }

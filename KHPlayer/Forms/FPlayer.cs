@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using AxWMPLib;
 using iTextSharp.text.pdf;
 using KHPlayer.Classes;
@@ -25,26 +21,30 @@ namespace KHPlayer.Forms
         private readonly FMain _parent;
         private PlayListItem _currentlyPlayListItem;
         private WMPPlayState _currentState;
+        private WaveOut _waveOut;
         private int _axReaderCurrentScrollOffset;
         private int _axReaderCurrentPage;
         private int _axReaderTotalPages;
 
         public AxWindowsMediaPlayer WmPlayer { get { return wmPlayer; } }
-        [DllImportAttribute("user32.dll")]
+        [DllImport("user32.dll")]
 
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [DllImportAttribute("user32.dll")]
+        [DllImport("user32.dll")]
         
         public static extern bool ReleaseCapture();
-
-        public FPlayer(FMain parent, int screenNumber)
+        public PlayerScreen PlayerScreen { get; set; }
+        
+        public FPlayer(FMain parent, PlayerScreen screen)
         {
+            PlayerScreen = screen;
             _parent = parent;
-
+            
             //Do the window movement before InitializeComponent so we can ensure the window is located in the correct screen (full screen mode only).
             if (parent.FullScreen)
                 WindowState = FormWindowState.Maximized;
-            MoveToScreen(screenNumber);
+
+            InitializeScreen();
 
             InitializeComponent();
             
@@ -54,6 +54,12 @@ namespace KHPlayer.Forms
             _axReaderCurrentPage = 1;
             _axReaderTotalPages = 0;
             StopAndHidePlayer();
+        }
+
+        private void InitializeScreen()
+        {
+            if (PlayerScreen != null)
+                MoveToScreen(PlayerScreen.ScreenDevice.Id);
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -69,7 +75,15 @@ namespace KHPlayer.Forms
             {
                 wmPlayer.Dock = DockStyle.Fill;
                 if (_currentState == WMPPlayState.wmppsPlaying)
-                    wmPlayer.fullScreen = _parent.FullScreen;
+                {
+                    //Not using the .fullScreen property now as when playing multiple video
+                    //axWindowsMediaPlayer doesn't allow multiple FullScreen versions running
+                    //instead do a fake full screen (although I can't see any difference)
+                    //wmPlayer.fullScreen = _parent.FullScreen;
+                    wmPlayer.Height = this.Height;
+                    wmPlayer.Width = this.Width;
+                    wmPlayer.stretchToFit = true;   
+                }
             }
 
             axReader.Visible = _currentlyPlayListItem.Type == PlayListItemType.Pdf;
@@ -96,17 +110,19 @@ namespace KHPlayer.Forms
             if (_currentlyPlayListItem.Type == PlayListItemType.Video ||
                 _currentlyPlayListItem.Type == PlayListItemType.Audio)
             {
-                //This code allows us to play the audio via any device we choose, we just need to know the device ID.
-                using (var waveReader = new MediaFoundationReader(playListItem.FilePath))
+                if (playListItem.SupportsMultiCast)
                 {
-                    using (var waveOut = new WaveOut { DeviceNumber = 1 })
-                    {
-                        //waveOut.Init(waveReader);
-                        //wmPlayer.settings.volume = 0;
-                        wmPlayer.URL = playListItem.FilePath;
-                        //waveOut.Play();
-                    };
-                    
+                    //This code allows us to play the audio via any device we choose, we just need to know the device ID.
+                    var waveReader = new MediaFoundationReader(playListItem.FilePath);
+                    _waveOut = new WaveOut {DeviceNumber = PlayerScreen.AudioDevice.Id};
+                    _waveOut.Init(waveReader);
+                    wmPlayer.settings.volume = 0;
+                    wmPlayer.URL = playListItem.FilePath;
+                    _waveOut.Play();
+                }
+                else
+                {
+                    wmPlayer.URL = playListItem.FilePath;
                 }
             }
             else if (_currentlyPlayListItem.Type == PlayListItemType.Pdf)
@@ -120,7 +136,7 @@ namespace KHPlayer.Forms
                 //Get total number of pages for use in the navigation properties.
                 var pdfReader = new PdfReader(playListItem.FilePath);
                 _axReaderTotalPages = pdfReader.NumberOfPages;
-                
+
                 //This is madness. The PDF won't actually show unless the form is resized.
                 //Tried a refresh but didn't help. This causes a slight flicker but it's the best I can do for now.
                 var currentWindowState = WindowState;
@@ -138,6 +154,8 @@ namespace KHPlayer.Forms
 
         private void SetStopped()
         {
+            if (_waveOut != null)
+                _waveOut.Stop();
             wmPlayer.close();
             StopAndHidePlayer();
 
@@ -153,11 +171,15 @@ namespace KHPlayer.Forms
 
         public void Pause()
         {
+            if (_waveOut != null)
+                _waveOut.Pause();
             wmPlayer.Ctlcontrols.pause();
         }
 
         public void Resume()
         {
+            if (_waveOut != null)
+                _waveOut.Resume();
             wmPlayer.Ctlcontrols.play();
         }
 

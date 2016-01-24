@@ -23,12 +23,22 @@ namespace KHPlayer.Services
             _fileTagService = new FileTagService();
         }
 
+        public IEnumerable<PlayListItem> Get()
+        {
+            return _playListService.Get().SelectMany(p => p.Items);
+        }
+
         public IEnumerable<PlayListItem> Get(PlayList playList)
         {
             if (playList == null)
                 return null;
 
             return _playListService.GetByName(playList.Name).Items;
+        }
+
+        public PlayListItem GetByGuid(string guid)
+        {
+            return Get().FirstOrDefault(p => p.Guid == guid);
         }
 
         public PlayListItem GetByFileName(string fileName, PlayList playList)

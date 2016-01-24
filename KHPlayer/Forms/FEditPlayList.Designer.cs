@@ -57,9 +57,16 @@
             this.lblProgressStatus = new System.Windows.Forms.Label();
             this.bAddStream = new System.Windows.Forms.Button();
             this.pbCurrentlySelected = new System.Windows.Forms.PictureBox();
+            this.pScreenSelection = new System.Windows.Forms.Panel();
+            this.cbScreen = new System.Windows.Forms.ComboBox();
+            this.lScreen = new System.Windows.Forms.Label();
+            this.lGroup = new System.Windows.Forms.Label();
+            this.numGroup = new System.Windows.Forms.NumericUpDown();
             this.menuStrip1.SuspendLayout();
             this.pnlProgress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
+            this.pScreenSelection.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGroup)).BeginInit();
             this.SuspendLayout();
             // 
             // bAddVideos
@@ -196,7 +203,7 @@
             this.playlistsFromDriveFromToolStripMenuItem,
             this.playlistsFromFileToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.importToolStripMenuItem.Text = "Import";
             // 
             // playlistsFromDriveFromToolStripMenuItem
@@ -218,7 +225,7 @@
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.playListsToFileToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Visible = false;
             // 
@@ -233,7 +240,7 @@
             this.maintenanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openThumbnailFolderToolStripMenuItem});
             this.maintenanceToolStripMenuItem.Name = "maintenanceToolStripMenuItem";
-            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.maintenanceToolStripMenuItem.Text = "Maintenance";
             // 
             // openThumbnailFolderToolStripMenuItem
@@ -246,16 +253,15 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Visible = false;
             // 
             // screenSetupToolStripMenuItem
             // 
             this.screenSetupToolStripMenuItem.Name = "screenSetupToolStripMenuItem";
-            this.screenSetupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.screenSetupToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.screenSetupToolStripMenuItem.Text = "Screen Setup";
-            this.screenSetupToolStripMenuItem.Visible = false;
             this.screenSetupToolStripMenuItem.Click += new System.EventHandler(this.screenSetupToolStripMenuItem_Click);
             // 
             // pnlProgress
@@ -308,11 +314,59 @@
             this.pbCurrentlySelected.TabIndex = 12;
             this.pbCurrentlySelected.TabStop = false;
             // 
+            // pScreenSelection
+            // 
+            this.pScreenSelection.Controls.Add(this.cbScreen);
+            this.pScreenSelection.Controls.Add(this.lScreen);
+            this.pScreenSelection.Controls.Add(this.lGroup);
+            this.pScreenSelection.Controls.Add(this.numGroup);
+            this.pScreenSelection.Location = new System.Drawing.Point(296, 196);
+            this.pScreenSelection.Name = "pScreenSelection";
+            this.pScreenSelection.Size = new System.Drawing.Size(162, 134);
+            this.pScreenSelection.TabIndex = 25;
+            // 
+            // cbScreen
+            // 
+            this.cbScreen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbScreen.FormattingEnabled = true;
+            this.cbScreen.Location = new System.Drawing.Point(0, 73);
+            this.cbScreen.Name = "cbScreen";
+            this.cbScreen.Size = new System.Drawing.Size(162, 21);
+            this.cbScreen.TabIndex = 28;
+            this.cbScreen.SelectedIndexChanged += new System.EventHandler(this.cbScreen_SelectedIndexChanged);
+            // 
+            // lScreen
+            // 
+            this.lScreen.AutoSize = true;
+            this.lScreen.Location = new System.Drawing.Point(-3, 57);
+            this.lScreen.Name = "lScreen";
+            this.lScreen.Size = new System.Drawing.Size(97, 13);
+            this.lScreen.TabIndex = 27;
+            this.lScreen.Text = "Screen To Play On";
+            // 
+            // lGroup
+            // 
+            this.lGroup.AutoSize = true;
+            this.lGroup.Location = new System.Drawing.Point(-3, 13);
+            this.lGroup.Name = "lGroup";
+            this.lGroup.Size = new System.Drawing.Size(36, 13);
+            this.lGroup.TabIndex = 26;
+            this.lGroup.Text = "Group";
+            // 
+            // numGroup
+            // 
+            this.numGroup.Location = new System.Drawing.Point(0, 29);
+            this.numGroup.Name = "numGroup";
+            this.numGroup.Size = new System.Drawing.Size(162, 20);
+            this.numGroup.TabIndex = 25;
+            this.numGroup.ValueChanged += new System.EventHandler(this.numGroup_ValueChanged);
+            // 
             // FEditPlayList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(470, 344);
+            this.Controls.Add(this.pScreenSelection);
             this.Controls.Add(this.bAddStream);
             this.Controls.Add(this.pnlProgress);
             this.Controls.Add(this.bAddSong);
@@ -338,6 +392,9 @@
             this.menuStrip1.PerformLayout();
             this.pnlProgress.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).EndInit();
+            this.pScreenSelection.ResumeLayout(false);
+            this.pScreenSelection.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGroup)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -373,5 +430,10 @@
         private System.Windows.Forms.ToolStripMenuItem openThumbnailFolderToolStripMenuItem;
         private System.Windows.Forms.Button bAddStream;
         private System.Windows.Forms.ToolStripMenuItem screenSetupToolStripMenuItem;
+        private System.Windows.Forms.Panel pScreenSelection;
+        private System.Windows.Forms.ComboBox cbScreen;
+        private System.Windows.Forms.Label lScreen;
+        private System.Windows.Forms.Label lGroup;
+        private System.Windows.Forms.NumericUpDown numGroup;
     }
 }

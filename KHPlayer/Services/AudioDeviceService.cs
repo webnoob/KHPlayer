@@ -7,19 +7,22 @@ namespace KHPlayer.Services
 {
     public class AudioDeviceService
     {
-        public IEnumerable<AudioDevice> Get()
+        public List<AudioDevice> Get()
         {
+            var result = new List<AudioDevice>();
+
             var enumerator = new MMDeviceEnumerator();
             for (var i = 0; i < enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active).Count; i++)
             {
                 var endpoint = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active)[i];
-                yield return new AudioDevice
+                result.Add(new AudioDevice
                 {
                     Id = i,
-                    Name = endpoint.FriendlyName,
-                    Guid = Guid.NewGuid()
-                };
+                    Name = endpoint.FriendlyName
+                });
             }
+
+            return result;
         }
     }
 }

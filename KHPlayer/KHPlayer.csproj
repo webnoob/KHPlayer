@@ -65,6 +65,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -93,11 +94,11 @@
     <Compile Include="Classes\VideoState.cs" />
     <Compile Include="Data\PlayListCache.cs" />
     <Compile Include="Extensions\SerializationExtensions.cs" />
-    <Compile Include="Forms\FDialogue.cs">
+    <Compile Include="Forms\FNewScreenDialogue.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FDialogue.Designer.cs">
-      <DependentUpon>FDialogue.cs</DependentUpon>
+    <Compile Include="Forms\FNewScreenDialogue.Designer.cs">
+      <DependentUpon>FNewScreenDialogue.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FEditPlayList.cs">
       <SubType>Form</SubType>
@@ -141,8 +142,9 @@
     <Compile Include="Services\SongService.cs" />
     <Compile Include="Services\StreamService.cs" />
     <Compile Include="Services\ThumbnailService.cs" />
-    <EmbeddedResource Include="Forms\FDialogue.resx">
-      <DependentUpon>FDialogue.cs</DependentUpon>
+    <Compile Include="Settings.cs" />
+    <EmbeddedResource Include="Forms\FNewScreenDialogue.resx">
+      <DependentUpon>FNewScreenDialogue.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FEditPlayList.resx">
       <DependentUpon>FEditPlayList.cs</DependentUpon>

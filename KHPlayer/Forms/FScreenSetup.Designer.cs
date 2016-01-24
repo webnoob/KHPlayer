@@ -35,13 +35,14 @@
             this.colScreen = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colScreenNum = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.bClose = new System.Windows.Forms.Button();
+            this.colAudioDevice = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // bAddNewScreen
             // 
             this.bAddNewScreen.Location = new System.Drawing.Point(12, 113);
             this.bAddNewScreen.Name = "bAddNewScreen";
-            this.bAddNewScreen.Size = new System.Drawing.Size(112, 23);
+            this.bAddNewScreen.Size = new System.Drawing.Size(220, 23);
             this.bAddNewScreen.TabIndex = 10;
             this.bAddNewScreen.Text = "Add Screen";
             this.bAddNewScreen.UseVisualStyleBackColor = true;
@@ -50,9 +51,9 @@
             // bDeleteScreen
             // 
             this.bDeleteScreen.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.bDeleteScreen.Location = new System.Drawing.Point(130, 113);
+            this.bDeleteScreen.Location = new System.Drawing.Point(237, 113);
             this.bDeleteScreen.Name = "bDeleteScreen";
-            this.bDeleteScreen.Size = new System.Drawing.Size(102, 23);
+            this.bDeleteScreen.Size = new System.Drawing.Size(222, 23);
             this.bDeleteScreen.TabIndex = 9;
             this.bDeleteScreen.Text = "Delete Screen";
             this.bDeleteScreen.UseVisualStyleBackColor = true;
@@ -62,16 +63,17 @@
             // 
             this.lvScreens.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colScreen,
-            this.colScreenNum});
+            this.colScreenNum,
+            this.colAudioDevice});
             this.lvScreens.Location = new System.Drawing.Point(12, 12);
             this.lvScreens.Name = "lvScreens";
-            this.lvScreens.Size = new System.Drawing.Size(220, 95);
+            this.lvScreens.Size = new System.Drawing.Size(446, 95);
             this.lvScreens.TabIndex = 11;
             this.lvScreens.UseCompatibleStateImageBehavior = false;
             // 
             // colScreen
             // 
-            this.colScreen.Text = "Screen";
+            this.colScreen.Text = "Friendly Name";
             this.colScreen.Width = 105;
             // 
             // colScreenNum
@@ -81,20 +83,24 @@
             // 
             // bClose
             // 
-            this.bClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bClose.Location = new System.Drawing.Point(12, 142);
             this.bClose.Name = "bClose";
-            this.bClose.Size = new System.Drawing.Size(220, 52);
+            this.bClose.Size = new System.Drawing.Size(447, 23);
             this.bClose.TabIndex = 12;
             this.bClose.Text = "Close";
             this.bClose.UseVisualStyleBackColor = true;
             this.bClose.Click += new System.EventHandler(this.bClose_Click);
             // 
+            // colAudioDevice
+            // 
+            this.colAudioDevice.Width = 225;
+            // 
             // FScreenSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(244, 206);
+            this.ClientSize = new System.Drawing.Size(470, 177);
             this.Controls.Add(this.bClose);
             this.Controls.Add(this.lvScreens);
             this.Controls.Add(this.bAddNewScreen);
@@ -115,6 +121,7 @@
         private System.Windows.Forms.ColumnHeader colScreen;
         private System.Windows.Forms.ColumnHeader colScreenNum;
         private System.Windows.Forms.Button bClose;
+        private System.Windows.Forms.ColumnHeader colAudioDevice;
 
     }
 }

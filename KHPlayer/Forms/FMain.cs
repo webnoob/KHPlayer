@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -15,17 +16,14 @@ namespace KHPlayer.Forms
 {
     public partial class FMain : Form
     {
-        private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
-        private const int WM_APPCOMMAND = 0x319;
-
         private readonly PlayListService _playListService;
         private readonly DbService _dbService;
         private readonly SongService _songService;
         private readonly PlayListItemService _playListItemService;
 
-        private FPlayer _fplayer;
+        private readonly List<FPlayer> _fplayers;
         private FEditPlayList _fEditPlayList;
-        private PlayListItem _currentFile;
+        private List<PlayListItem> _currentPlayListItems;
         private WMPPlayState _currentVideoState;
         private PlayListMode _playListMode;
         private PlayMode _playMode;
@@ -55,6 +53,8 @@ namespace KHPlayer.Forms
             _dbService = new DbService();
             _songService = new SongService();
             _playListItemService = new PlayListItemService();
+            _currentPlayListItems = new List<PlayListItem>();
+            _fplayers = new List<FPlayer>();
 
             _currentVideoState = WMPPlayState.wmppsStopped;
             _playListMode = PlayListMode.PlayList;
@@ -69,13 +69,6 @@ namespace KHPlayer.Forms
             SetButtonState();
         }
 
-        //Not using this method at the moment as I'm not convinced about the reliability with not being able to check if sound is muted first.
-        //I need a Mute() and UnMute().
-        private void ToggleMute()
-        {
-            SendMessageW(Handle, WM_APPCOMMAND, Handle, (IntPtr)APPCOMMAND_VOLUME_MUTE);
-        }
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -83,8 +76,6 @@ namespace KHPlayer.Forms
             // Set window location
             Location = Settings.Default.WindowLocation;
             cbFullScreen.Checked = Settings.Default.FullScreen;
-            numScreen.Text = Settings.Default.LaunchScreen;
-            numScreen.Enabled = cbFullScreen.Checked;
             _dbService.Load();
 
             RefreshPlayLists(null, null);
@@ -97,7 +88,6 @@ namespace KHPlayer.Forms
             // Copy window location to app settings
             Settings.Default.WindowLocation = Location;
             Settings.Default.FullScreen = cbFullScreen.Checked;
-            Settings.Default.LaunchScreen = numScreen.Text;
 
             if (_fEditPlayList != null)
             {
@@ -143,13 +133,20 @@ namespace KHPlayer.Forms
 
         private void bLaunch_Click(object sender, EventArgs e)
         {
-            if (_fplayer == null)
-            {
-                _fplayer = new FPlayer(this, Convert.ToInt32(numScreen.Text));
-                _fplayer.Closing += ClosePlayer;
-                _fplayer.Show(this);
-                SetButtonState();
-            }
+            LaunchPlayer(null);
+        }
+
+        private FPlayer LaunchPlayer(PlayerScreen screen)
+        {
+            if (_fplayers.Any(p => p.PlayerScreen == screen))
+                return null;
+
+            var player = new FPlayer(this, screen);
+            player.Closing += ClosePlayer;
+            player.Show(this);
+            _fplayers.Add(player);
+            SetButtonState();
+            return player;
         }
 
         private void ClosePlayer(object sender, EventArgs e)
@@ -157,14 +154,15 @@ namespace KHPlayer.Forms
             if (_currentVideoState == WMPPlayState.wmppsPlaying || _currentVideoState == WMPPlayState.wmppsPaused)
                 bStop_Click(sender, e);
             
-            _currentFile = null;
-            if (_fplayer != null)
+            _currentPlayListItems.Clear();
+            var fplayer = sender as FPlayer;
+            if (fplayer != null)
             {
-                _fplayer.DoBeforeClose();
-                _fplayer.Dispose();
-                _fplayer = null;
+                fplayer.DoBeforeClose();
+                fplayer.Dispose();
+                _fplayers.RemoveAll(p => p.PlayerScreen == fplayer.PlayerScreen);
             }
-            
+
             SetButtonState();
         }
 
@@ -202,7 +200,7 @@ namespace KHPlayer.Forms
                 return;
             }
 
-            if (_currentFile == null)
+            if (!_currentPlayListItems.Any())
                 lbPlayListItems.SelectedIndex = 0;
             else
             {
@@ -212,7 +210,7 @@ namespace KHPlayer.Forms
                     if (playListItem == null)
                         continue;
 
-                    if (playListItem == _currentFile)
+                    if (playListItem == _currentPlayListItems.FirstOrDefault())
                     {
                         if (lbPlayListItems.Items.Count >= i)
                             lbPlayListItems.SelectedIndex = i;
@@ -249,35 +247,37 @@ namespace KHPlayer.Forms
                     return;
             }
 
-            _currentFile = GetNextFile();
-            if (_currentFile == null)
+            _currentPlayListItems = GetNextPlayListItems();
+            if (!_currentPlayListItems.Any())
             {
                 MessageBox.Show("No play list item selected.");
                 return;
             }
 
-            PlayCurrentFile();
+            PlayCurrent();
         }
 
-        private void PlayCurrentFile()
+        private void PlayCurrent()
         {
-            if (_fplayer == null)
-                bLaunch_Click(null, null);
-
-            if (_fplayer == null)
+            if (!_currentPlayListItems.Any())
                 return;
 
-            _fplayer.PlayPlayListItem(_currentFile);
+            foreach (var playListItem in _currentPlayListItems)
+            {
+                var player = LaunchPlayer(playListItem.Screen);
+                player.PlayPlayListItem(playListItem);
+            }
+
             UpdatePlayListItemDisplays();
             SetButtonState();
         }
 
-        private PlayListItem GetNextFile()
+        private List<PlayListItem> GetNextPlayListItems()
         {
             if (_playListMode == PlayListMode.RandomSong)
-                return GetRandomSong();
+                return new List<PlayListItem> {GetRandomSong()};
 
-            return GetSelectedPlayListItem();
+            return _playListService.GetAllPlatListItemsInGroup(GetSelectedPlayListItem()).ToList();
         }
 
         private PlayListItem GetRandomSong()
@@ -308,12 +308,16 @@ namespace KHPlayer.Forms
         private void bStop_Click(object sender, EventArgs e)
         {
             _playMode = PlayMode.Single;
-            _fplayer.Stop();
+
+            //Don't foreach on this as .Stop() might close the player form if Settings.Default.ClosePlayerOnStop is true
+            for (var i = _fplayers.Count - 1; i >= 0; i--)
+                _fplayers[i].Stop();
         }
 
         private void bPause_Click(object sender, EventArgs e)
         {
-            _fplayer.Pause();
+            foreach (var player in _fplayers)
+                player.Pause();
         }
 
         private void SetButtonState()
@@ -323,8 +327,10 @@ namespace KHPlayer.Forms
                            _currentVideoState == WMPPlayState.wmppsReady ||
                            _currentVideoState == WMPPlayState.wmppsUndefined);
 
-            if (_currentFile != null)
-                showPlay &= _currentFile.Type != PlayListItemType.Pdf;
+            var currentFile = _currentPlayListItems.FirstOrDefault();
+            
+            if (currentFile != null)
+                showPlay &= currentFile.Type != PlayListItemType.Pdf;
 
             bPlayNext.Visible = showPlay;
             
@@ -332,20 +338,21 @@ namespace KHPlayer.Forms
             bPause.Visible = !showPlay && _currentVideoState != WMPPlayState.wmppsPaused;
             bResume.Visible = _currentVideoState == WMPPlayState.wmppsPaused;
             timerVideoClock.Enabled = _currentVideoState == WMPPlayState.wmppsPlaying;
-            bClosePlayerWindow.Visible = _fplayer != null;
-            bLaunch.Visible = _fplayer == null;
-            bPdfScrollDown.Visible = _currentFile != null && _currentFile.Type == PlayListItemType.Pdf;
+            bClosePlayerWindow.Visible = _fplayers != null;
+            bLaunch.Visible = _fplayers == null;
+            bPdfScrollDown.Visible = currentFile != null && currentFile.Type == PlayListItemType.Pdf;
             bPdfScrollUp.Visible = bPdfScrollDown.Visible;
             bPdfPageUp.Visible = bPdfScrollDown.Visible;
             bPdfPageDown.Visible = bPdfScrollDown.Visible;
 
-            if (_currentFile != null)
-                bPause.Visible &= _currentFile.Type != PlayListItemType.Pdf;
+            if (currentFile != null)
+                bPause.Visible &= currentFile.Type != PlayListItemType.Pdf;
         }
 
         private void bResume_Click(object sender, EventArgs e)
         {
-            _fplayer.Resume();
+            foreach (var player in _fplayers)
+                player.Resume();
         }
 
         private void cbPlayLists_SelectedIndexChanged(object sender, EventArgs e)
@@ -371,26 +378,37 @@ namespace KHPlayer.Forms
 
         private void cbFullScreen_CheckedChanged(object sender, EventArgs e)
         {
-            if (_fplayer != null)
-                _fplayer.SetFullScreen(cbFullScreen.Checked);
+            if (!_fplayers.Any()) 
+                return;
 
-            numScreen.Enabled = cbFullScreen.Checked;
+            foreach (var player in _fplayers)
+                player.SetFullScreen(cbFullScreen.Checked);
         }
 
         private void timerVideoClock_Tick(object sender, EventArgs e)
         {
-            if (_fplayer == null)
+            if (_fplayers == null)
                 return;
 
-            lblNowPlaying.Text = String.Format("Playing: {0} [{1} / {2}]", _currentFile.TagName, _fplayer.WmPlayer.Ctlcontrols.currentPositionString, _fplayer.WmPlayer.currentMedia.durationString);
+            lblNowPlaying.Text = "";
+
+            foreach (var playListItem in _currentPlayListItems)
+            {
+                var player = GetPlayListItemPlayer(playListItem);
+                if (player == null)
+                    continue;
+
+                lblNowPlaying.Text += String.Format("Playing: {0} [{1} / {2}] {3}", playListItem.TagName,
+                    player.WmPlayer.Ctlcontrols.currentPositionString, player.WmPlayer.currentMedia.durationString, Environment.NewLine);
+            }
         }
 
-        private void numScreen_ValueChanged(object sender, EventArgs e)
+        private FPlayer GetPlayListItemPlayer(PlayListItem playListItem)
         {
-            if (_fplayer == null)
-                return;
+            if (playListItem == null)
+                return null;
 
-            _fplayer.MoveToScreen(Convert.ToInt32(numScreen.Text));
+            return _fplayers.FirstOrDefault(player => player.PlayerScreen == playListItem.Screen);
         }
 
         private void bClosePlayerWindow_Click(object sender, EventArgs e)
@@ -431,21 +449,33 @@ namespace KHPlayer.Forms
 
         private void DoScroll(object sender)
         {
-            if (_fplayer == null)
+            if (_fplayers == null)
                 return;
 
             var control = sender as Control;
-            _fplayer.ScrollPdf(control != null && control.Name.Contains("Down"));
+            var player = _fplayers.FirstOrDefault();
+            if (player == null)
+                return;
+
+            player.ScrollPdf(control != null && control.Name.Contains("Down"));
         }
 
         private void bPdfPageDown_Click(object sender, EventArgs e)
         {
-            _fplayer.MovePage(true);
+            var player = _fplayers.FirstOrDefault();
+            if (player == null)
+                return;
+
+            player.MovePage(true);
         }
 
         private void bPdfPageUp_Click(object sender, EventArgs e)
         {
-            _fplayer.MovePage(false);
+            var player = _fplayers.FirstOrDefault();
+            if (player == null)
+                return;
+
+            player.MovePage(false);
         }
     }
 }

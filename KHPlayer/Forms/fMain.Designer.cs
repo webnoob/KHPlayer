@@ -42,8 +42,6 @@
             this.pbCurrentlySelected = new System.Windows.Forms.PictureBox();
             this.cbFullScreen = new System.Windows.Forms.CheckBox();
             this.timerVideoClock = new System.Windows.Forms.Timer(this.components);
-            this.numScreen = new System.Windows.Forms.NumericUpDown();
-            this.lblScreen = new System.Windows.Forms.Label();
             this.lblNowPlaying = new System.Windows.Forms.Label();
             this.bClosePlayerWindow = new System.Windows.Forms.Button();
             this.bPlayIntroMusic = new System.Windows.Forms.Button();
@@ -54,7 +52,6 @@
             this.bPdfPageUp = new System.Windows.Forms.Button();
             this.bPdfPageDown = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numScreen)).BeginInit();
             this.SuspendLayout();
             // 
             // bExit
@@ -108,7 +105,7 @@
             this.lbPlayListItems.HorizontalScrollbar = true;
             this.lbPlayListItems.Location = new System.Drawing.Point(12, 179);
             this.lbPlayListItems.Name = "lbPlayListItems";
-            this.lbPlayListItems.Size = new System.Drawing.Size(278, 108);
+            this.lbPlayListItems.Size = new System.Drawing.Size(445, 108);
             this.lbPlayListItems.TabIndex = 6;
             this.lbPlayListItems.SelectedIndexChanged += new System.EventHandler(this.lbPlayListItems_SelectedIndexChanged);
             // 
@@ -160,9 +157,9 @@
             // 
             this.pbCurrentlySelected.Image = global::KHPlayer.Properties.Resources.jworg;
             this.pbCurrentlySelected.InitialImage = global::KHPlayer.Properties.Resources.jworg;
-            this.pbCurrentlySelected.Location = new System.Drawing.Point(296, 179);
+            this.pbCurrentlySelected.Location = new System.Drawing.Point(11, 293);
             this.pbCurrentlySelected.Name = "pbCurrentlySelected";
-            this.pbCurrentlySelected.Size = new System.Drawing.Size(162, 134);
+            this.pbCurrentlySelected.Size = new System.Drawing.Size(52, 52);
             this.pbCurrentlySelected.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbCurrentlySelected.TabIndex = 11;
             this.pbCurrentlySelected.TabStop = false;
@@ -172,7 +169,7 @@
             this.cbFullScreen.AutoSize = true;
             this.cbFullScreen.Checked = true;
             this.cbFullScreen.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFullScreen.Location = new System.Drawing.Point(12, 293);
+            this.cbFullScreen.Location = new System.Drawing.Point(69, 293);
             this.cbFullScreen.Name = "cbFullScreen";
             this.cbFullScreen.Size = new System.Drawing.Size(102, 17);
             this.cbFullScreen.TabIndex = 12;
@@ -185,37 +182,15 @@
             this.timerVideoClock.Interval = 500;
             this.timerVideoClock.Tick += new System.EventHandler(this.timerVideoClock_Tick);
             // 
-            // numScreen
-            // 
-            this.numScreen.Location = new System.Drawing.Point(253, 293);
-            this.numScreen.Name = "numScreen";
-            this.numScreen.Size = new System.Drawing.Size(37, 20);
-            this.numScreen.TabIndex = 14;
-            this.numScreen.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numScreen.ValueChanged += new System.EventHandler(this.numScreen_ValueChanged);
-            // 
-            // lblScreen
-            // 
-            this.lblScreen.AutoSize = true;
-            this.lblScreen.Location = new System.Drawing.Point(167, 294);
-            this.lblScreen.Name = "lblScreen";
-            this.lblScreen.Size = new System.Drawing.Size(80, 13);
-            this.lblScreen.TabIndex = 15;
-            this.lblScreen.Text = "Launch Screen";
-            // 
             // lblNowPlaying
             // 
             this.lblNowPlaying.AutoSize = true;
             this.lblNowPlaying.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lblNowPlaying.Location = new System.Drawing.Point(12, 316);
+            this.lblNowPlaying.Location = new System.Drawing.Point(65, 313);
             this.lblNowPlaying.MaximumSize = new System.Drawing.Size(446, 0);
-            this.lblNowPlaying.MinimumSize = new System.Drawing.Size(446, 0);
+            this.lblNowPlaying.MinimumSize = new System.Drawing.Size(390, 0);
             this.lblNowPlaying.Name = "lblNowPlaying";
-            this.lblNowPlaying.Size = new System.Drawing.Size(446, 20);
+            this.lblNowPlaying.Size = new System.Drawing.Size(390, 20);
             this.lblNowPlaying.TabIndex = 16;
             this.lblNowPlaying.Text = "Nothing currently playing.";
             // 
@@ -310,8 +285,6 @@
             this.Controls.Add(this.bPlayIntroMusic);
             this.Controls.Add(this.bClosePlayerWindow);
             this.Controls.Add(this.lblNowPlaying);
-            this.Controls.Add(this.lblScreen);
-            this.Controls.Add(this.numScreen);
             this.Controls.Add(this.cbFullScreen);
             this.Controls.Add(this.bPlayNext);
             this.Controls.Add(this.pbCurrentlySelected);
@@ -329,7 +302,6 @@
             this.Name = "FMain";
             this.Text = "KHPlayer";
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numScreen)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -353,8 +325,6 @@
         private System.Windows.Forms.PictureBox pbCurrentlySelected;
         private System.Windows.Forms.CheckBox cbFullScreen;
         private System.Windows.Forms.Timer timerVideoClock;
-        private System.Windows.Forms.NumericUpDown numScreen;
-        private System.Windows.Forms.Label lblScreen;
         private System.Windows.Forms.Label lblNowPlaying;
         private System.Windows.Forms.Button bClosePlayerWindow;
         private System.Windows.Forms.Button bPlayIntroMusic;

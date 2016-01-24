@@ -4,8 +4,17 @@
     {
         public string Guid { get; set; }
 
-        public int ScreenNumber { get; set; }
+        public string FriendlyName { get; set; }
 
-        public string Name { get; set; }
+        public ScreenDevice ScreenDevice { get; set; }
+
+        public AudioDevice AudioDevice { get; set; }
+    }
+
+    public class ScreenDevice
+    {
+        public string DeviceName { get; set; }
+
+        public int Id { get; set; }
     }
 }

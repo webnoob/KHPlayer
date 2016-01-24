@@ -31,12 +31,18 @@ namespace KHPlayer.Classes
         public string PlayListGuid { get; set; }
 
         public string TagName { get; set; }
+
+        public int Group { get; set; }
+
+        public PlayerScreen Screen { get; set; }
         
         public PlayListItemType Type { get; set; }
 
         public PlayListItemState State { get; set; }
 
         public PlayListItemSource Source { get; set; }
+
+        public bool SupportsMultiCast { get { return Type == PlayListItemType.Video; } }
     }
 
     public enum PlayListItemState
