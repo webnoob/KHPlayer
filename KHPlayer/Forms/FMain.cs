@@ -141,7 +141,7 @@ namespace KHPlayer.Forms
 
         private void PlayStateChanged()
         {
-            switch (_currentVideoState)
+            /*switch (_currentVideoState)
             {
                 case WMPPlayState.wmppsStopped:
                     SetNextVideo();
@@ -149,7 +149,7 @@ namespace KHPlayer.Forms
                 case WMPPlayState.wmppsMediaEnded:
                     SetNextVideo();
                     break;
-            }
+            }*/
 
             SetButtonState();
         }
@@ -328,15 +328,24 @@ namespace KHPlayer.Forms
 
         private void SetNextVideo()
         {
-            /*if (_playListMode == PlayListMode.PlayList && lbPlayListItems.SelectedIndex != lbPlayListItems.Items.Count - 1)
-            {
-                var nextIndex = lbPlayListItems.SelectedIndex + 1;
-                lbPlayListItems.SelectedIndex = nextIndex >= lbPlayListItems.Items.Count
-                    ? 0
-                    : nextIndex;
-            }
-            else if (lbPlayListItems.Items.Count > 0)
-                lbPlayListItems.SelectedIndex = 0;*/
+            //Get the last selected item in the list (as we could have 2 selected that are grouped).
+            var lastPlayingItem = gvPlayListItems.Rows.Cast<DataGridViewRow>().Last(r => r.Selected).DataBoundItem as PlayListItem;
+            
+            //Mark all the currently selected items as not selected.
+            for (var i = 0; i < gvPlayListItems.RowCount; i++)
+                gvPlayListItems.Rows[i].Selected = false;
+
+            //Select the next item in the list.
+            var index = (
+                from row in gvPlayListItems.Rows.Cast<DataGridViewRow>()
+                where row.DataBoundItem == lastPlayingItem
+                select row.Index)
+                .FirstOrDefault();
+
+            if (_playListMode == PlayListMode.PlayList && index != gvPlayListItems.RowCount - 1)
+                index = index + 1;
+
+            gvPlayListItems.Rows[index].Selected = true;
 
             if (_playMode == PlayMode.AutoPlay)
                 PlayNext();
@@ -353,6 +362,8 @@ namespace KHPlayer.Forms
                 UpdatePlayListItemDisplays();
                 _fplayers[i].Stop();
             }
+
+            SetNextVideo();
         }
 
         private void bPause_Click(object sender, EventArgs e)
@@ -539,39 +550,37 @@ namespace KHPlayer.Forms
 
         private void gvPlayListItems_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            var playListItem = gvPlayListItems.Rows[e.RowIndex].DataBoundItem as PlayListItem;
+            /*var playListItem = gvPlayListItems.Rows[e.RowIndex].DataBoundItem as PlayListItem;
             if (playListItem == null)
                 return;
 
             var currentColumn = gvPlayListItems.Columns[e.ColumnIndex];
-            var currentRow = gvPlayListItems.Rows[e.RowIndex];
-
-            if (currentColumn.Name == "colImage")
-            {
-                currentColumn.Width = 50;
-                currentRow.Height = 50;
-
-                currentColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                e.Value = ImageHelper.ResizeImage(playListItem.ThumbnailPath, 50, 50, true);
-            }
-
             if (currentColumn.Name == "colName")
             {
                 e.Value = string.Format("[Screen - {0}][Group - {1}]{2}[{3} - {4}] - {5}", playListItem.Screen != null ? playListItem.Screen.FriendlyName : "Main", playListItem.Group, Environment.NewLine, playListItem.State, playListItem.Type, e.Value);
-            }
+            }*/
         }
 
         private void gvPlayListItems_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            foreach (var currentRow in gvPlayListItems.Rows.Cast<DataGridViewRow>())
+            foreach (DataGridViewRow currentRow in gvPlayListItems.Rows)
             {
+                currentRow.Height = 50;
+
                 var playListItem = currentRow.DataBoundItem as PlayListItem;
                 if (playListItem == null)
                     return;
 
                 var colour = _groupColours[playListItem.Group];
-                currentRow.Cells[0].Style.BackColor = ColorTranslator.FromHtml(colour);
-                currentRow.Cells[0].Style.SelectionBackColor = ColorTranslator.FromHtml(colour);
+                //Colour Column
+                currentRow.Cells["colGroupColour"].Style.BackColor = ColorTranslator.FromHtml(colour);
+                currentRow.Cells["colGroupColour"].Style.SelectionBackColor = ColorTranslator.FromHtml(colour);
+                currentRow.Cells["colImage"].Value = ImageHelper.ResizeImage(playListItem.ThumbnailPath, 50, 50, true);
+
+                currentRow.Cells["colName"].Value = string.Format("[Screen - {0}][Group - {1}]{2}[{3} - {4}] - {5}",
+                    playListItem.Screen != null ? playListItem.Screen.FriendlyName : "Main", playListItem.Group,
+                    Environment.NewLine, playListItem.State, playListItem.Type, playListItem.TagName);
+                
 
                 if (playListItem.Screen != null)
                 {

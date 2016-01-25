@@ -283,14 +283,14 @@
             // 
             // colImage
             // 
+            this.colImage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.colImage.HeaderText = "";
             this.colImage.Name = "colImage";
-            this.colImage.Width = 5;
+            this.colImage.Width = 50;
             // 
             // colName
             // 
             this.colName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colName.DataPropertyName = "TagName";
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.colName.DefaultCellStyle = dataGridViewCellStyle1;
             this.colName.HeaderText = "Name";
