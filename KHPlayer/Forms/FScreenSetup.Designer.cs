@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FScreenSetup));
             this.bAddNewScreen = new System.Windows.Forms.Button();
             this.bDeleteScreen = new System.Windows.Forms.Button();
@@ -37,14 +36,7 @@
             this.colScreenNum = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAudioDevice1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.bClose = new System.Windows.Forms.Button();
-            this.gvScreens = new System.Windows.Forms.DataGridView();
-            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colScreenDevice = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.colAudioDevice = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.colDefault = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.colColor = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bEditScreen = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.gvScreens)).BeginInit();
             this.SuspendLayout();
             // 
             // bAddNewScreen
@@ -105,59 +97,6 @@
             this.bClose.UseVisualStyleBackColor = true;
             this.bClose.Click += new System.EventHandler(this.bClose_Click);
             // 
-            // gvScreens
-            // 
-            this.gvScreens.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.gvScreens.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gvScreens.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colName,
-            this.colScreenDevice,
-            this.colAudioDevice,
-            this.colDefault,
-            this.colColor});
-            this.gvScreens.Location = new System.Drawing.Point(212, 113);
-            this.gvScreens.Name = "gvScreens";
-            this.gvScreens.Size = new System.Drawing.Size(61, 50);
-            this.gvScreens.TabIndex = 13;
-            this.gvScreens.Visible = false;
-            // 
-            // colName
-            // 
-            this.colName.DataPropertyName = "FriendlyName";
-            this.colName.HeaderText = "Name";
-            this.colName.Name = "colName";
-            this.colName.Width = 90;
-            // 
-            // colScreenDevice
-            // 
-            this.colScreenDevice.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colScreenDevice.DefaultCellStyle = dataGridViewCellStyle1;
-            this.colScreenDevice.HeaderText = "Screen Device";
-            this.colScreenDevice.Name = "colScreenDevice";
-            this.colScreenDevice.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.colScreenDevice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.colScreenDevice.Width = 95;
-            // 
-            // colAudioDevice
-            // 
-            this.colAudioDevice.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.colAudioDevice.HeaderText = "Audio Device";
-            this.colAudioDevice.Name = "colAudioDevice";
-            this.colAudioDevice.Width = 69;
-            // 
-            // colDefault
-            // 
-            this.colDefault.HeaderText = "Default";
-            this.colDefault.Name = "colDefault";
-            this.colDefault.Width = 89;
-            // 
-            // colColor
-            // 
-            this.colColor.HeaderText = "Colour";
-            this.colColor.Name = "colColor";
-            this.colColor.Width = 90;
-            // 
             // bEditScreen
             // 
             this.bEditScreen.Location = new System.Drawing.Point(162, 113);
@@ -178,12 +117,10 @@
             this.Controls.Add(this.lvScreens);
             this.Controls.Add(this.bAddNewScreen);
             this.Controls.Add(this.bDeleteScreen);
-            this.Controls.Add(this.gvScreens);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FScreenSetup";
             this.Text = "Screen Setup";
-            ((System.ComponentModel.ISupportInitialize)(this.gvScreens)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -197,12 +134,6 @@
         private System.Windows.Forms.ColumnHeader colScreenNum;
         private System.Windows.Forms.Button bClose;
         private System.Windows.Forms.ColumnHeader colAudioDevice1;
-        private System.Windows.Forms.DataGridView gvScreens;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colName;
-        private System.Windows.Forms.DataGridViewComboBoxColumn colScreenDevice;
-        private System.Windows.Forms.DataGridViewComboBoxColumn colAudioDevice;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn colDefault;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colColor;
         private System.Windows.Forms.Button bEditScreen;
 
     }

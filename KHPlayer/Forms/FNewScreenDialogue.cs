@@ -27,6 +27,7 @@ namespace KHPlayer.Forms
                 tbScreenName.Text = Screen.FriendlyName;
                 tbColour.Text = Screen.ColourName;
                 cbDefault.Checked = Screen.DefaultScreen;
+                _selectedColour = ColorTranslator.FromHtml(screen.ColourName);
             }
 
             LoadComboBoxes();
@@ -82,6 +83,7 @@ namespace KHPlayer.Forms
 
         private void tbColour_Click(object sender, EventArgs e)
         {
+            colorDlgMain.Color = _selectedColour;
             var result = colorDlgMain.ShowDialog(this);
             if (result == DialogResult.OK)
             {

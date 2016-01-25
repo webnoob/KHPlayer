@@ -29,39 +29,12 @@ namespace KHPlayer.Forms
 
         private void LoadScreens()
         {
-            /*var list = new BindingList<PlayerScreen>(_screenService.Get().ToList());
-            gvScreens.AutoGenerateColumns = false;
-            LoadScreenDevicesComboBox();
-            LoadAudioDevicesComboBox();
-            gvScreens.DataSource = list;*/
-
             lvScreens.Items.Clear();
-
             foreach (var screen in _screenService.Get())
             {
                 var listViewItem = new ListViewItem(new[] {screen.FriendlyName, screen.ScreenDevice.DeviceName, screen.AudioDevice.Name, "0"});
                 lvScreens.Items.Add(listViewItem);
             }
-        }
-
-        private void LoadAudioDevicesComboBox()
-        {
-            var cb = gvScreens.Columns["colAudioDevice"] as DataGridViewComboBoxColumn;
-            if (cb == null)
-                return;
-            cb.ValueMember = "Id";
-            cb.DisplayMember = "Name";
-        }
-
-        private void LoadScreenDevicesComboBox()
-        {
-            var cb = gvScreens.Columns["colScreenDevice"] as DataGridViewComboBoxColumn;
-            if (cb == null)
-                return;
-
-            cb.ValueMember = "Id";
-            cb.DisplayMember = "DeviceName";
-            cb.DataSource = _screenService.GetAvailableScreens();
         }
 
         private void bAddNewScreen_Click(object sender, EventArgs e)
@@ -129,24 +102,5 @@ namespace KHPlayer.Forms
 
             LoadScreens();
         }
-
-        /*private void gvScreens_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            var screen = gvScreens.Rows[e.RowIndex].DataBoundItem as PlayerScreen;
-            if (screen == null)
-                return;
-
-            var currentColumn = gvScreens.Columns[e.ColumnIndex];
-            var currentRow = gvScreens.Rows[e.RowIndex];
-            if (currentColumn.Name == "colScreenDevice")
-            {
-                e.Value = screen.ScreenDevice.DeviceName;
-            }
-
-            if (currentColumn.Name == "colAudioDevice")
-            {
-                e.Value = screen.AudioDevice.Name;
-            }
-        }*/
     }
 }
