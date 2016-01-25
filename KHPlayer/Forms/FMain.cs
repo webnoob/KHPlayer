@@ -202,14 +202,11 @@ namespace KHPlayer.Forms
                 SelectAllPlayListItemsInGroup(gvPlayListItems.Rows[0].DataBoundItem as PlayListItem);
         }
 
-        private BindingList<PlayListItem> GetOrderedPlayListItems(List<PlayListItem> list)
+        private static BindingList<PlayListItem> GetOrderedPlayListItems(List<PlayListItem> list)
         {
             var result = new BindingList<PlayListItem>();
-            foreach (var playListItem in list)
+            foreach (var playListItem in list.Where(playListItem => playListItem != null && !result.Contains(playListItem)))
             {
-                if (playListItem == null || result.Contains(playListItem))
-                    continue;
-
                 if (playListItem.Group <= 0)
                 {
                     result.Add(playListItem);
