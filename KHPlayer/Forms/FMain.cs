@@ -191,7 +191,7 @@ namespace KHPlayer.Forms
             if (playList == null)
                 return;
 
-            var list = new BindingList<PlayListItem>(playList.Items.Where(f => f != null).ToList());
+            var list = GetOrderedPlayListItems(playList.Items.Where(f => f != null).ToList());
             gvPlayListItems.AutoGenerateColumns = false;
             gvPlayListItems.DataSource = list;
 
@@ -200,6 +200,29 @@ namespace KHPlayer.Forms
 
             if (gvPlayListItems.RowCount > 0 && gvPlayListItems.SelectedRows.Count == 0)
                 SelectAllPlayListItemsInGroup(gvPlayListItems.Rows[0].DataBoundItem as PlayListItem);
+        }
+
+        private BindingList<PlayListItem> GetOrderedPlayListItems(List<PlayListItem> list)
+        {
+            var result = new BindingList<PlayListItem>();
+            foreach (var playListItem in list)
+            {
+                if (playListItem == null || result.Contains(playListItem))
+                    continue;
+
+                if (playListItem.Group <= 0)
+                {
+                    result.Add(playListItem);
+                    continue;
+                }
+
+                result.Add(playListItem);
+                var item = playListItem;
+                foreach (var groupedItemToAdd in list.Where(p => p != item && p.Group == item.Group))
+                    result.Add(groupedItemToAdd);
+            }
+
+            return result;
         }
 
         private PlayList GetCurrentPlayList()
