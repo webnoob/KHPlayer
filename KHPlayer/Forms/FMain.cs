@@ -195,24 +195,11 @@ namespace KHPlayer.Forms
             gvPlayListItems.AutoGenerateColumns = false;
             gvPlayListItems.DataSource = list;
 
-            if (!_currentPlayListItems.Any())
-                gvPlayListItems.Rows[0].Selected = true;
-            else
-            {
-                for (int i = 0; i < gvPlayListItems.RowCount; i++)
-                {
-                    var playListItem = gvPlayListItems.Rows[i].DataBoundItem as PlayListItem;
-                    if (playListItem == null)
-                        continue;
+            foreach (var row in gvPlayListItems.Rows.Cast<DataGridViewRow>())
+                row.Selected = _currentPlayListItems.Contains(row.DataBoundItem);
 
-                    if (playListItem == _currentPlayListItems.FirstOrDefault())
-                    {
-                        //if (gvPlayListItems.RowCount >= i)
-                        //lbPlayListItems.SelectedIndex = i;
-                        break;
-                    }
-                }
-            }
+            if (gvPlayListItems.RowCount > 0 && gvPlayListItems.SelectedRows.Count == 0)
+                SelectAllPlayListItemsInGroup(gvPlayListItems.Rows[0].DataBoundItem as PlayListItem);
         }
 
         private PlayList GetCurrentPlayList()
@@ -364,12 +351,17 @@ namespace KHPlayer.Forms
             if (playListItem == null)
                 return;
 
-            if (playListItem.Group > 0)
+            SelectAllPlayListItemsInGroup(playListItem);
+        }
+
+        private void SelectAllPlayListItemsInGroup(PlayListItem playListItem)
+        {
+            if (playListItem.Group <= 0) 
+                return;
+
+            foreach (var row in gvPlayListItems.Rows.Cast<DataGridViewRow>().Where(r => (r.DataBoundItem as PlayListItem).Group == playListItem.Group))
             {
-                foreach (var row in gvPlayListItems.Rows.Cast<DataGridViewRow>().Where(r => (r.DataBoundItem as PlayListItem).Group == playListItem.Group))
-                {
-                    row.Selected = true;
-                }
+                row.Selected = true;
             }
         }
 
