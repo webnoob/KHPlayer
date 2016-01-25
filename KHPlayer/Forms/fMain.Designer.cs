@@ -50,6 +50,7 @@
             this.bPdfPageUp = new System.Windows.Forms.Button();
             this.bPdfPageDown = new System.Windows.Forms.Button();
             this.gvPlayListItems = new System.Windows.Forms.DataGridView();
+            this.colGroupColour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colImage = new System.Windows.Forms.DataGridViewImageColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -254,6 +255,7 @@
             this.gvPlayListItems.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gvPlayListItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvPlayListItems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colGroupColour,
             this.colImage,
             this.colName,
             this.colTime,
@@ -268,7 +270,16 @@
             this.gvPlayListItems.Size = new System.Drawing.Size(445, 274);
             this.gvPlayListItems.TabIndex = 24;
             this.gvPlayListItems.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gvPlayListItems_CellFormatting);
+            this.gvPlayListItems.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gvPlayListItems_DataBindingComplete);
             this.gvPlayListItems.SelectionChanged += new System.EventHandler(this.gvPlayListItems_SelectionChanged);
+            // 
+            // colGroupColour
+            // 
+            this.colGroupColour.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colGroupColour.HeaderText = "";
+            this.colGroupColour.Name = "colGroupColour";
+            this.colGroupColour.ReadOnly = true;
+            this.colGroupColour.Width = 10;
             // 
             // colImage
             // 
@@ -354,6 +365,7 @@
         private System.Windows.Forms.Button bPdfPageUp;
         private System.Windows.Forms.Button bPdfPageDown;
         private System.Windows.Forms.DataGridView gvPlayListItems;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colGroupColour;
         private System.Windows.Forms.DataGridViewImageColumn colImage;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTime;

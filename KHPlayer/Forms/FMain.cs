@@ -22,8 +22,9 @@ namespace KHPlayer.Forms
         private readonly DbService _dbService;
         private readonly SongService _songService;
         private readonly PlayListItemService _playListItemService;
-
         private readonly List<FPlayer> _fplayers;
+        private readonly Dictionary<int, string> _groupColours; 
+
         private FEditPlayList _fEditPlayList;
         private List<PlayListItem> _currentPlayListItems;
         private WMPPlayState _currentVideoState;
@@ -57,18 +58,53 @@ namespace KHPlayer.Forms
             _playListItemService = new PlayListItemService();
             _currentPlayListItems = new List<PlayListItem>();
             _fplayers = new List<FPlayer>();
+            _groupColours = new Dictionary<int, string>();
 
             _currentVideoState = WMPPlayState.wmppsStopped;
             _playListMode = PlayListMode.PlayList;
             _playMode = PlayMode.Single;
 
-            //Commenting this option out for now as it's hard to use when in the hall.
-            //If the projector is unplugged, it resets the optoin to zero which means it resets your
-            //saved value on close.
-            //numScreen.Maximum = Screen.AllScreens.Count() - 1;
-            
+            LoadGroupColours();
             RefreshPlayLists(null, null);
             SetButtonState();
+        }
+
+        private void LoadGroupColours()
+        {
+            _groupColours.Add(0, ColorTranslator.ToHtml(Color.White));
+            _groupColours.Add(1, ColorTranslator.ToHtml(Color.Blue));
+            _groupColours.Add(2, ColorTranslator.ToHtml(Color.Red));
+            _groupColours.Add(3, ColorTranslator.ToHtml(Color.Orange));
+            _groupColours.Add(4, ColorTranslator.ToHtml(Color.Aqua));
+            _groupColours.Add(5, ColorTranslator.ToHtml(Color.Lime));
+            _groupColours.Add(6, ColorTranslator.ToHtml(Color.Yellow));
+            _groupColours.Add(7, ColorTranslator.ToHtml(Color.MediumPurple));
+            _groupColours.Add(8, ColorTranslator.ToHtml(Color.DeepPink));
+            _groupColours.Add(9, ColorTranslator.ToHtml(Color.Gold));
+            _groupColours.Add(10, ColorTranslator.ToHtml(Color.Brown));
+
+
+            //Adds a slight delay on load and I really don't see us needing more than 10 groups.
+            /*for (var i = 1; i < 100; i++)
+            {
+                _groupColours.Add(i, GetRandomColor());
+            }*/
+        }
+
+        public string GetRandomColor()
+        {
+            while (true)
+            {
+                var randonGen = new Random();
+                var randomColor = Color.FromArgb((byte) randonGen.Next(255), (byte) randonGen.Next(255), (byte) randonGen.Next(255), (byte) randonGen.Next(255));
+                var htmlColor = ColorTranslator.ToHtml(randomColor);
+
+                if (_groupColours.ContainsValue(htmlColor)) 
+                    continue;
+
+                return htmlColor;
+                break;
+            }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -510,20 +546,11 @@ namespace KHPlayer.Forms
             var currentColumn = gvPlayListItems.Columns[e.ColumnIndex];
             var currentRow = gvPlayListItems.Rows[e.RowIndex];
 
-            if (playListItem.Screen != null)
-            {
-                if (playListItem.Screen.ColourName != null)
-                {
-                    var color = ColorTranslator.FromHtml(playListItem.Screen.ColourName);
-                    e.CellStyle.BackColor = color;
-                }
-            }
-
             if (currentColumn.Name == "colImage")
             {
                 currentColumn.Width = 50;
                 currentRow.Height = 50;
-                
+
                 currentColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 e.Value = ImageHelper.ResizeImage(playListItem.ThumbnailPath, 50, 50, true);
             }
@@ -531,6 +558,32 @@ namespace KHPlayer.Forms
             if (currentColumn.Name == "colName")
             {
                 e.Value = string.Format("[Screen - {0}][Group - {1}]{2}[{3} - {4}] - {5}", playListItem.Screen != null ? playListItem.Screen.FriendlyName : "Main", playListItem.Group, Environment.NewLine, playListItem.State, playListItem.Type, e.Value);
+            }
+        }
+
+        private void gvPlayListItems_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            foreach (var currentRow in gvPlayListItems.Rows.Cast<DataGridViewRow>())
+            {
+                var playListItem = currentRow.DataBoundItem as PlayListItem;
+                if (playListItem == null)
+                    return;
+
+                var colour = _groupColours[playListItem.Group];
+                currentRow.Cells[0].Style.BackColor = ColorTranslator.FromHtml(colour);
+                currentRow.Cells[0].Style.SelectionBackColor = ColorTranslator.FromHtml(colour);
+
+                if (playListItem.Screen != null)
+                {
+                    if (playListItem.Screen.ColourName != null)
+                    {
+                        for (var i = 1; i < currentRow.Cells.Count; i++)
+                        {
+                            var cellColour = ColorTranslator.FromHtml(playListItem.Screen.ColourName);
+                            currentRow.Cells[i].Style.BackColor = cellColour;
+                        }
+                    }
+                }
             }
         }
     }
