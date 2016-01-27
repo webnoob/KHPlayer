@@ -30,6 +30,7 @@ namespace KHPlayer.Forms
         private WMPPlayState _currentVideoState;
         private PlayListMode _playListMode;
         private PlayMode _playMode;
+        private PlayListItem _lastPlayedItem;
         
         public bool FullScreen { get { return cbFullScreen.Checked; } set { cbFullScreen.Checked = value; } }
 
@@ -232,10 +233,19 @@ namespace KHPlayer.Forms
             gvPlayListItems.DataSource = list;
 
             foreach (var row in gvPlayListItems.Rows.Cast<DataGridViewRow>())
+            {
                 row.Selected = _currentPlayListItems.Contains(row.DataBoundItem);
+                if (row.Selected)
+                    BringGridIndexIntoView(row.Index);
+            }
 
             if (gvPlayListItems.RowCount > 0 && gvPlayListItems.SelectedRows.Count == 0)
-                SelectAllPlayListItemsInGroup(gvPlayListItems.Rows[0].DataBoundItem as PlayListItem);
+                SelectAllPlayListItemsInGroup(gvPlayListItems.Rows[0].DataBoundItem as PlayListItem);    
+        }
+
+        private void BringGridIndexIntoView(int index)
+        {
+            gvPlayListItems.FirstDisplayedScrollingRowIndex = index > 0 ? index - 1 : index;
         }
 
         private static BindingList<PlayListItem> GetOrderedPlayListItems(List<PlayListItem> list)
@@ -329,23 +339,22 @@ namespace KHPlayer.Forms
         private void SetNextVideo()
         {
             //Get the last selected item in the list (as we could have 2 selected that are grouped).
-            var lastPlayingItem = gvPlayListItems.Rows.Cast<DataGridViewRow>().Last(r => r.Selected).DataBoundItem as PlayListItem;
-            
-            //Mark all the currently selected items as not selected.
-            for (var i = 0; i < gvPlayListItems.RowCount; i++)
-                gvPlayListItems.Rows[i].Selected = false;
-
             //Select the next item in the list.
             var index = (
                 from row in gvPlayListItems.Rows.Cast<DataGridViewRow>()
-                where row.DataBoundItem == lastPlayingItem
+                where row.DataBoundItem == _lastPlayedItem
                 select row.Index)
                 .FirstOrDefault();
 
-            if (_playListMode == PlayListMode.PlayList && index != gvPlayListItems.RowCount - 1)
+            if (_playListMode == PlayListMode.PlayList && index != gvPlayListItems.RowCount)
                 index = index + 1;
 
+            if (index == gvPlayListItems.RowCount)
+                index = 0;
+
+            gvPlayListItems.ClearSelection();
             gvPlayListItems.Rows[index].Selected = true;
+            BringGridIndexIntoView(index);
 
             if (_playMode == PlayMode.AutoPlay)
                 PlayNext();
@@ -354,15 +363,16 @@ namespace KHPlayer.Forms
         private void bStop_Click(object sender, EventArgs e)
         {
             _playMode = PlayMode.Single;
+            _lastPlayedItem = _fplayers.Last().PlayListItem; //Get so we know where to base the next selection off.
 
             //Don't foreach on this as .Stop() might close the player form if Settings.Default.ClosePlayerOnStop is true
             for (var i = _fplayers.Count - 1; i >= 0; i--)
             {
                 _fplayers[i].PlayListItem.State = PlayListItemState.Played;
-                UpdatePlayListItemDisplays();
-                _fplayers[i].Stop();
+                _fplayers[i].Stop();   
             }
 
+            UpdatePlayListItemDisplays();
             SetNextVideo();
         }
 
@@ -575,7 +585,8 @@ namespace KHPlayer.Forms
                 //Colour Column
                 currentRow.Cells["colGroupColour"].Style.BackColor = ColorTranslator.FromHtml(colour);
                 currentRow.Cells["colGroupColour"].Style.SelectionBackColor = ColorTranslator.FromHtml(colour);
-                currentRow.Cells["colImage"].Value = ImageHelper.ResizeImage(playListItem.ThumbnailPath, 50, 50, true);
+                currentRow.Cells["colImage"].Value = ImageHelper.ResizeImage(playListItem.ThumbnailPath, 50, 50, true) ??
+                                                     ImageHelper.ResizeImage(Resources.jworg, 50, 50, true);
 
                 currentRow.Cells["colName"].Value = string.Format("[Screen - {0}][Group - {1}]{2}[{3} - {4}] - {5}",
                     playListItem.Screen != null ? playListItem.Screen.FriendlyName : "Main", playListItem.Group,

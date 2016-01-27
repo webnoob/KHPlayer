@@ -38,16 +38,20 @@ namespace KHPlayer.Services
                         {
                             //TODO: Find out how to use the File.AddFileResolver as this means we can handle the custom file types we're currently catching.
                             var file = File.Create(new StreamFileAbstraction(filePath, fileStream, fileStream));
-
+                            var isCorrupt = file.CorruptionReasons != null && file.CorruptionReasons.Any();
+                            var title = isCorrupt ? Path.GetFileName(filePath) : file.Tag.Title;
+                            var track = isCorrupt ? 0 : file.Tag.Track;
+                            
                             //This won't be hit if the file doesn't exist.
                             playlistItemFile = new PlaylistItemFile
                             {
                                 FileName = filePath,
-                                Type = file is TagLib.Mpeg.AudioFile ? PlayListItemType.Audio : PlayListItemType.Video,
+                                Type =
+                                    file is TagLib.Mpeg.AudioFile ? PlayListItemType.Audio : PlayListItemType.Video,
                                 Tag = new PlayListItemFileTag
                                 {
-                                    Title = file.Tag.Title,
-                                    Track = file.Tag.Track
+                                    Title = title,
+                                    Track = track
                                 }
                             };
 
