@@ -14,11 +14,12 @@ namespace KHPlayer.Forms
 {
     public partial class FPlayer : Form
     {
+        private const bool Debug = false;
+
         private const string AxReaderViewMode = "FitH";
         private const int WmNclbuttonDown = 0xA1;
         private const int HtCaption = 0x2;
 
-        private readonly FMain _parent;
         private PlayListItem _currentlyPlayListItem;
         private WMPPlayState _currentPlayState;
         private WaveOut _waveOut;
@@ -35,17 +36,14 @@ namespace KHPlayer.Forms
         public WMPPlayState CurrentPlayState { get { return _currentPlayState; } }
         public PlayListItem PlayListItem { get { return _currentlyPlayListItem; } }
 
-        public delegate void CurrentPlayStateChangedHandler(object sender, EventArgs e);
-        public event CurrentPlayStateChangedHandler OnPlayStateChanged;
-
-        public delegate void CurrentWindowStateChangedHandler(object sender, EventArgs e);
-        public event CurrentPlayStateChangedHandler OnWindowStateChanged;
+        public delegate void StandardEventHandler(object sender, EventArgs e);
+        public event StandardEventHandler OnPlayStateChanged;
+        public event StandardEventHandler OnWindowStateChanged;
         
-        public FPlayer(FMain parent, PlayListItem playListItem)
+        public FPlayer(PlayListItem playListItem)
         {
             _currentlyPlayListItem = playListItem;
-            _parent = parent;
-            
+
             //Do the window movement before InitializeComponent so we can ensure the window is located in the correct screen (full screen mode only).
             if (_currentlyPlayListItem != null && _currentlyPlayListItem.FullScreen)
                 WindowState = FormWindowState.Maximized;
@@ -77,7 +75,7 @@ namespace KHPlayer.Forms
 
         public void ShowPlayer()
         {
-            wmPlayer.Visible = _currentlyPlayListItem.Type == PlayListItemType.Video || _currentlyPlayListItem.Type == PlayListItemType.Audio;
+            wmPlayer.Visible = _currentlyPlayListItem.Type == PlayListItemType.Video || Debug;
             if (wmPlayer.Visible)
             {
                 wmPlayer.Dock = DockStyle.Fill;
@@ -172,7 +170,9 @@ namespace KHPlayer.Forms
 
         private void StopAndHidePlayer()
         {
-            //wmPlayer.uiMode = Settings.Default.UiMode;
+            if (!Debug)
+                wmPlayer.uiMode = Settings.Default.UiMode;
+
             wmPlayer.Visible = false;
         }
 

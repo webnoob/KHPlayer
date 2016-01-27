@@ -142,7 +142,7 @@ namespace KHPlayer.Forms
             if (_fplayers.Any(p => p.PlayListItem.Screen == playListItem.Screen))
                 return null;
 
-            var player = new FPlayer(this, playListItem);
+            var player = new FPlayer(playListItem);
             player.Closing += ClosePlayer;
             player.OnPlayStateChanged += PlayStateChanged;
             player.Show(this);
@@ -329,6 +329,7 @@ namespace KHPlayer.Forms
             gvPlayListItems.ClearSelection();
             gvPlayListItems.Rows[index].Selected = true;
             BringGridIndexIntoView(index);
+            SetIntroMusicButtonText(14, "Play Random Songs");
 
             if (_playMode == PlayMode.AutoPlay)
                 PlayNext();
@@ -466,19 +467,35 @@ namespace KHPlayer.Forms
 
                 player.PlayListItem.MaxTime = player.WmPlayer.currentMedia.durationString;
                 player.PlayListItem.CurrentTime = player.WmPlayer.Ctlcontrols.currentPositionString;
-                foreach (
-                    var row in
-                        gvPlayListItems.Rows.Cast<DataGridViewRow>().Where(r => r.DataBoundItem == player.PlayListItem))
-                {
-                    var rowTimeCell = row.Cells["colTime"];
-                    rowTimeCell.Value = player.PlayListItem.Time;
-                    gvPlayListItems.UpdateCellValue(rowTimeCell.ColumnIndex, row.Index);
+                    
 
-                    var rowFullScreenCell = row.Cells["colFullScreen"];
-                    rowFullScreenCell.Value = playListItem.FullScreen;
-                    gvPlayListItems.UpdateCellValue(rowFullScreenCell.ColumnIndex, row.Index);
+                if (_playListMode == PlayListMode.RandomSong)
+                {
+                    SetIntroMusicButtonText(8f, string.Format("Playing Random Song - [{0}] {1}", player.PlayListItem.Time, player.PlayListItem.TagName));
+                }
+                else
+                {
+                    foreach (
+                        var row in
+                            gvPlayListItems.Rows.Cast<DataGridViewRow>()
+                                .Where(r => r.DataBoundItem == player.PlayListItem))
+                    {
+                        var rowTimeCell = row.Cells["colTime"];
+                        rowTimeCell.Value = player.PlayListItem.Time;
+                        gvPlayListItems.UpdateCellValue(rowTimeCell.ColumnIndex, row.Index);
+
+                        var rowFullScreenCell = row.Cells["colFullScreen"];
+                        rowFullScreenCell.Value = playListItem.FullScreen;
+                        gvPlayListItems.UpdateCellValue(rowFullScreenCell.ColumnIndex, row.Index);
+                    }
                 }
             }
+        }
+
+        private void SetIntroMusicButtonText(float fontSize, string text)
+        {
+            bPlayIntroMusic.Font = new Font(bPlayIntroMusic.Font.FontFamily.Name, fontSize);
+            bPlayIntroMusic.Text = text;
         }
 
         private FPlayer GetPlayListItemPlayer(PlayListItem playListItem)
