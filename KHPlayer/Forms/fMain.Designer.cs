@@ -278,7 +278,6 @@
             this.colGroupColour.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.colGroupColour.HeaderText = "";
             this.colGroupColour.Name = "colGroupColour";
-            this.colGroupColour.ReadOnly = true;
             this.colGroupColour.Width = 10;
             // 
             // colImage
@@ -305,9 +304,14 @@
             // 
             // colFullScreen
             // 
+            this.colFullScreen.DataPropertyName = "FullScreen";
+            this.colFullScreen.FalseValue = "";
             this.colFullScreen.HeaderText = "Full Screen";
             this.colFullScreen.Name = "colFullScreen";
-            this.colFullScreen.Width = 66;
+            this.colFullScreen.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.colFullScreen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.colFullScreen.TrueValue = "";
+            this.colFullScreen.Width = 85;
             // 
             // FMain
             // 

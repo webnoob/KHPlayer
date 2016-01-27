@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Newtonsoft.Json;
 
 namespace KHPlayer.Classes
@@ -38,6 +39,8 @@ namespace KHPlayer.Classes
         public bool SupportsMultiCast { get { return Type == PlayListItemType.Video; } }
 
         public string ScreenGuid { get; set; }
+
+        public bool FullScreen { get; set; }
 
         public PlayListItemSource Source { get; set; }
 

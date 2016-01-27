@@ -230,7 +230,9 @@ namespace KHPlayer.Forms
 
             var list = GetOrderedPlayListItems(playList.Items.Where(f => f != null).ToList());
             gvPlayListItems.AutoGenerateColumns = false;
+            gvPlayListItems[3, 0].ReadOnly = false;
             gvPlayListItems.DataSource = list;
+            
 
             foreach (var row in gvPlayListItems.Rows.Cast<DataGridViewRow>())
             {
@@ -240,7 +242,7 @@ namespace KHPlayer.Forms
             }
 
             if (gvPlayListItems.RowCount > 0 && gvPlayListItems.SelectedRows.Count == 0)
-                SelectAllPlayListItemsInGroup(gvPlayListItems.Rows[0].DataBoundItem as PlayListItem);    
+                SelectAllPlayListItemsInGroup(gvPlayListItems.Rows[0].DataBoundItem as PlayListItem);
         }
 
         private void BringGridIndexIntoView(int index)
@@ -433,10 +435,14 @@ namespace KHPlayer.Forms
 
         private void SelectAllPlayListItemsInGroup(PlayListItem playListItem)
         {
-            if (playListItem.Group <= 0) 
-                return;
-
-            foreach (var row in gvPlayListItems.Rows.Cast<DataGridViewRow>().Where(r => (r.DataBoundItem as PlayListItem).Group == playListItem.Group))
+            foreach (
+                var row in
+                    gvPlayListItems.Rows.Cast<DataGridViewRow>()
+                        .Where(
+                            r =>
+                                (r.DataBoundItem as PlayListItem) == playListItem ||
+                                ((r.DataBoundItem as PlayListItem).Group == playListItem.Group && playListItem.Group > 0))
+                )
             {
                 row.Selected = true;
             }
@@ -592,6 +598,7 @@ namespace KHPlayer.Forms
                     playListItem.Screen != null ? playListItem.Screen.FriendlyName : "Main", playListItem.Group,
                     Environment.NewLine, playListItem.State, playListItem.Type, playListItem.TagName);
                 
+                gvPlayListItems[3, 0].ReadOnly = false;
 
                 if (playListItem.Screen != null)
                 {

@@ -77,7 +77,7 @@ namespace KHPlayer.Services
                 FileName = Path.GetFileName(filePath),
                 FilePath = filePath,
                 PlayListGuid = playList.Guid,
-                Source = isStreamed ? PlayListItemSource.Streamed : PlayListItemSource.Disk
+                Source = isStreamed ? PlayListItemSource.Streamed : PlayListItemSource.Disk,
             };
 
             plItem.ThumbnailPath = _thumbnailService.GenerateForFile(filePath, plItem.Source);
@@ -90,6 +90,7 @@ namespace KHPlayer.Services
 
             plItem.Type = tagFile.Type;
             plItem.TagName = tagFile.Tag.Title;
+            plItem.FullScreen = plItem.Type != PlayListItemType.Audio;
             
             return plItem;
         }
