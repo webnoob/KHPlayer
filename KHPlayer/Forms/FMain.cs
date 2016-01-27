@@ -27,7 +27,6 @@ namespace KHPlayer.Forms
 
         private FEditPlayList _fEditPlayList;
         private List<PlayListItem> _currentPlayListItems;
-        private WMPPlayState _currentVideoState;
         private PlayListMode _playListMode;
         private PlayMode _playMode;
         private PlayListItem _lastPlayedItem;
@@ -35,16 +34,6 @@ namespace KHPlayer.Forms
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessageW(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
         
-        public WMPPlayState VideoState
-        {
-            get { return _currentVideoState; }
-            set
-            {
-                _currentVideoState = value;
-                PlayStateChanged();
-            }
-        }
-
         public FMain()
         {
             InitializeComponent();
@@ -59,7 +48,6 @@ namespace KHPlayer.Forms
             _fplayers = new List<FPlayer>();
             _groupColours = new Dictionary<int, string>();
 
-            _currentVideoState = WMPPlayState.wmppsStopped;
             _playListMode = PlayListMode.PlayList;
             _playMode = PlayMode.Single;
 
@@ -129,18 +117,8 @@ namespace KHPlayer.Forms
             Settings.Default.Save();
         }
 
-        private void PlayStateChanged()
+        private void PlayStateChanged(object sender, EventArgs eventArgs)
         {
-            /*switch (_currentVideoState)
-            {
-                case WMPPlayState.wmppsStopped:
-                    SetNextVideo();
-                    break;
-                case WMPPlayState.wmppsMediaEnded:
-                    SetNextVideo();
-                    break;
-            }*/
-
             SetButtonState();
         }
 
@@ -166,6 +144,7 @@ namespace KHPlayer.Forms
 
             var player = new FPlayer(this, playListItem);
             player.Closing += ClosePlayer;
+            player.OnPlayStateChanged += PlayStateChanged;
             player.Show(this);
             _fplayers.Add(player);
             SetButtonState();
@@ -174,20 +153,24 @@ namespace KHPlayer.Forms
 
         private void ClosePlayer(object sender, EventArgs e)
         {
-            if (_currentVideoState == WMPPlayState.wmppsPlaying || _currentVideoState == WMPPlayState.wmppsPaused)
-                bStop_Click(sender, e);
-            
-            _currentPlayListItems.Clear();
-            var fplayer = sender as FPlayer;
-            if (fplayer != null)
+            //TODO: Not happy with the ClosePlayer doing stuff like SetNextVideo().
+            //This should be up to stop but I'm having issues with various references
+            //so leaving for now.
+
+            var fPlayer = sender as FPlayer;
+            if (fPlayer != null)
             {
-                _lastPlayedItem = fplayer.PlayListItem; //Get so we know where to base the next selection off.)
-                fplayer.DoBeforeClose();
-                fplayer.Dispose();
-                _fplayers.RemoveAll(p => p.PlayListItem == null || p.PlayListItem.Screen == fplayer.PlayListItem.Screen);
+                if (fPlayer.CurrentPlayState == WMPPlayState.wmppsPlaying || fPlayer.CurrentPlayState == WMPPlayState.wmppsPaused)
+                    bStop_Click(sender, e);
+
+                _currentPlayListItems.RemoveAll(p => p == fPlayer.PlayListItem);
+                _lastPlayedItem = fPlayer.PlayListItem; //Get so we know where to base the next selection off.)
+                fPlayer.DoBeforeClose();
+                fPlayer.Dispose();
+                _fplayers.RemoveAll(p => p.PlayListItem == null || p.PlayListItem.Screen == fPlayer.PlayListItem.Screen);
+                SetNextVideo();
             }
 
-            SetNextVideo();
             SetButtonState();
         }
 
@@ -327,14 +310,16 @@ namespace KHPlayer.Forms
 
         private void SetNextVideo()
         {
+            //We don't want to move on to the next one if one video has stopped and we still have one playing.
+            if (_fplayers.Any(p => p.CurrentPlayState == WMPPlayState.wmppsPlaying) ||
+                _fplayers.Any(p => p.CurrentPlayState == WMPPlayState.wmppsPaused))
+            {
+                return;
+            }
+            
             //Get the last selected item in the list (as we could have 2 selected that are grouped).
-            //Select the next item in the list.
-            var index = (
-                from row in gvPlayListItems.Rows.Cast<DataGridViewRow>()
-                where row.DataBoundItem == _lastPlayedItem
-                select row.Index)
-                .FirstOrDefault();
-
+            //Select the next item in the list. 
+            var index = GetNextItemIndex();
             if (_playListMode == PlayListMode.PlayList && index != gvPlayListItems.RowCount)
                 index = index + 1;
 
@@ -349,13 +334,36 @@ namespace KHPlayer.Forms
                 PlayNext();
         }
 
+        private int GetNextItemIndex()
+        {
+            //Do the group index a little differently.
+            //We can't assume that item 2 will finish last so we must get the 
+            //last one in the group that is assigned to this PlayListItem
+            var groupNum = _lastPlayedItem.Group;
+            if (groupNum > 0)
+            {
+                return (
+                    from row in gvPlayListItems.Rows.Cast<DataGridViewRow>().OrderByDescending(r => r.Index) 
+                    let playListItem = (row.DataBoundItem as PlayListItem)
+                    where playListItem != null && playListItem.Group == groupNum
+                    select row.Index)
+                    .FirstOrDefault();
+            }
+
+            return (
+                from row in gvPlayListItems.Rows.Cast<DataGridViewRow>()
+                where row.DataBoundItem == _lastPlayedItem
+                select row.Index)
+                .FirstOrDefault();
+        }
+
         private void bStop_Click(object sender, EventArgs e)
         {
             if (!_fplayers.Any())
                 return;
 
             _playMode = PlayMode.Single;
-            _lastPlayedItem = _fplayers.Last().PlayListItem; //Get so we know where to base the next selection off.
+            //_lastPlayedItem = _fplayers.Last().PlayListItem; //Get so we know where to base the next selection off.
 
             //Don't foreach on this as .Stop() might close the player form if Settings.Default.ClosePlayerOnStop is true
             for (var i = _fplayers.Count - 1; i >= 0; i--)
@@ -364,8 +372,8 @@ namespace KHPlayer.Forms
                 _fplayers[i].Stop();   
             }
 
-            UpdatePlayListItemDisplays();
-            SetNextVideo();
+            /*UpdatePlayListItemDisplays();
+            SetNextVideo();*/
         }
 
         private void bPause_Click(object sender, EventArgs e)
@@ -376,22 +384,24 @@ namespace KHPlayer.Forms
 
         private void SetButtonState()
         {
-            var showPlay = (_currentVideoState == WMPPlayState.wmppsStopped ||
-                           _currentVideoState == WMPPlayState.wmppsTransitioning ||
-                           _currentVideoState == WMPPlayState.wmppsReady ||
-                           _currentVideoState == WMPPlayState.wmppsUndefined);
+            var showPlay = (!_fplayers.Any() ||
+                _fplayers.Any(p => p.CurrentPlayState == WMPPlayState.wmppsStopped) ||
+                           _fplayers.Any(p => p.CurrentPlayState == WMPPlayState.wmppsTransitioning) ||
+                           _fplayers.Any(p => p.CurrentPlayState == WMPPlayState.wmppsReady) ||
+                           _fplayers.Any(p => p.CurrentPlayState == WMPPlayState.wmppsUndefined));
 
+            //Using this on the assumption that the things requiring "currentFile" will
+            //only be played on their own (i.e PDFs)
             var currentFile = _currentPlayListItems.FirstOrDefault();
-            
             if (currentFile != null)
                 showPlay &= currentFile.Type != PlayListItemType.Pdf;
 
             bPlayNext.Visible = showPlay;
             
             bStop.Visible = !showPlay;
-            bPause.Visible = !showPlay && _currentVideoState != WMPPlayState.wmppsPaused;
-            bResume.Visible = _currentVideoState == WMPPlayState.wmppsPaused;
-            timerVideoClock.Enabled = _currentVideoState == WMPPlayState.wmppsPlaying;
+            bPause.Visible = !showPlay && _fplayers.Any(p => p.CurrentPlayState != WMPPlayState.wmppsPaused);
+            bResume.Visible = _fplayers.Any(p => p.CurrentPlayState == WMPPlayState.wmppsPaused);
+            timerVideoClock.Enabled = _fplayers.Any(p => p.CurrentPlayState == WMPPlayState.wmppsPlaying);
             bPdfScrollDown.Visible = currentFile != null && currentFile.Type == PlayListItemType.Pdf;
             bPdfScrollUp.Visible = bPdfScrollDown.Visible;
             bPdfPageUp.Visible = bPdfScrollDown.Visible;
@@ -463,6 +473,10 @@ namespace KHPlayer.Forms
                     var rowTimeCell = row.Cells["colTime"];
                     rowTimeCell.Value = player.PlayListItem.Time;
                     gvPlayListItems.UpdateCellValue(rowTimeCell.ColumnIndex, row.Index);
+
+                    var rowFullScreenCell = row.Cells["colFullScreen"];
+                    rowFullScreenCell.Value = playListItem.FullScreen;
+                    gvPlayListItems.UpdateCellValue(rowFullScreenCell.ColumnIndex, row.Index);
                 }
             }
         }
@@ -486,11 +500,18 @@ namespace KHPlayer.Forms
 
         private void bHelp_Click(object sender, EventArgs e)
         {
+            var filePath = PathHelper.GetApplicationPath() + "\\KHPlayer.chm";
+            if (!File.Exists(filePath))
+            {
+                MessageBox.Show("Help Not Found!");
+                return;
+            }
+
             var proc = new Process
             {
                 StartInfo =
                 {
-                    FileName = PathHelper.GetApplicationPath() + "\\KHPlayer.chm"
+                    FileName = filePath
                 }
             
             };
@@ -537,19 +558,6 @@ namespace KHPlayer.Forms
                 return;
 
             player.MovePage(false);
-        }
-
-        private void gvPlayListItems_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            /*var playListItem = gvPlayListItems.Rows[e.RowIndex].DataBoundItem as PlayListItem;
-            if (playListItem == null)
-                return;
-
-            var currentColumn = gvPlayListItems.Columns[e.ColumnIndex];
-            if (currentColumn.Name == "colName")
-            {
-                e.Value = string.Format("[Screen - {0}][Group - {1}]{2}[{3} - {4}] - {5}", playListItem.Screen != null ? playListItem.Screen.FriendlyName : "Main", playListItem.Group, Environment.NewLine, playListItem.State, playListItem.Type, e.Value);
-            }*/
         }
 
         private void gvPlayListItems_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)

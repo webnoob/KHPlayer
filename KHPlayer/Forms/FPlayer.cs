@@ -20,20 +20,26 @@ namespace KHPlayer.Forms
 
         private readonly FMain _parent;
         private PlayListItem _currentlyPlayListItem;
-        private WMPPlayState _currentState;
+        private WMPPlayState _currentPlayState;
         private WaveOut _waveOut;
         private int _axReaderCurrentScrollOffset;
         private int _axReaderCurrentPage;
         private int _axReaderTotalPages;
 
-        public AxWindowsMediaPlayer WmPlayer { get { return wmPlayer; } }
         [DllImport("user32.dll")]
-
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [DllImport("user32.dll")]
-        
         public static extern bool ReleaseCapture();
+
+        public AxWindowsMediaPlayer WmPlayer { get { return wmPlayer; } }
+        public WMPPlayState CurrentPlayState { get { return _currentPlayState; } }
         public PlayListItem PlayListItem { get { return _currentlyPlayListItem; } }
+
+        public delegate void CurrentPlayStateChangedHandler(object sender, EventArgs e);
+        public event CurrentPlayStateChangedHandler OnPlayStateChanged;
+
+        public delegate void CurrentWindowStateChangedHandler(object sender, EventArgs e);
+        public event CurrentPlayStateChangedHandler OnWindowStateChanged;
         
         public FPlayer(FMain parent, PlayListItem playListItem)
         {
@@ -49,7 +55,7 @@ namespace KHPlayer.Forms
             InitializeComponent();
             
             wmPlayer.settings.volume += 100;
-            _currentState = WMPPlayState.wmppsStopped;
+            _currentPlayState = WMPPlayState.wmppsStopped;
             _axReaderCurrentScrollOffset = 0;
             _axReaderCurrentPage = 1;
             _axReaderTotalPages = 0;
@@ -75,7 +81,7 @@ namespace KHPlayer.Forms
             if (wmPlayer.Visible)
             {
                 wmPlayer.Dock = DockStyle.Fill;
-                if (_currentState == WMPPlayState.wmppsPlaying)
+                if (_currentPlayState == WMPPlayState.wmppsPlaying)
                 {
                     //Not using the .fullScreen property now as when playing multiple video
                     //axWindowsMediaPlayer doesn't allow multiple FullScreen versions running
@@ -186,7 +192,7 @@ namespace KHPlayer.Forms
 
         private void timerPlayerStateChange_Tick(object sender, EventArgs e)
         {
-            if (wmPlayer.playState == _currentState)
+            if (wmPlayer.playState == _currentPlayState)
                 return;
 
             SetStateChanged(wmPlayer.playState);
@@ -194,9 +200,9 @@ namespace KHPlayer.Forms
 
         private void SetStateChanged(WMPPlayState playState)
         {
-            _parent.VideoState = playState;
-            _currentState = playState;
-
+            _currentPlayState = playState;
+            OnOnPlayStateChanged();
+            
             switch (wmPlayer.playState)
             {
                 case WMPPlayState.wmppsStopped:
@@ -331,22 +337,26 @@ namespace KHPlayer.Forms
             SendMessage(Handle, WmNclbuttonDown, HtCaption, 0);
         }
 
-        private void FPlayer_Resize(object sender, EventArgs e)
-        {
-            
-        }
-
         protected override void WndProc(ref Message m)
         {
-            FormWindowState org = this.WindowState;
+            var org = WindowState;
             base.WndProc(ref m);
-            if (this.WindowState != org)
-                this.OnFormWindowStateChanged(EventArgs.Empty);
+            if (WindowState != org)
+                OnOnWindowStateChanged();
         }
 
-        protected virtual void OnFormWindowStateChanged(EventArgs e)
+        protected virtual void OnOnPlayStateChanged()
         {
-            Console.WriteLine("Changed size: {0}", this.WindowState);
+            var handler = OnPlayStateChanged;
+            if (handler != null) 
+                handler(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnOnWindowStateChanged()
+        {
+            var handler = OnWindowStateChanged;
+            if (handler != null) 
+                handler(this, EventArgs.Empty);
         }
     }
 }

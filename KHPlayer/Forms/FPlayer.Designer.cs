@@ -82,7 +82,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Media Player";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FPlayer_MouseDown);
-            this.Resize += new System.EventHandler(this.FPlayer_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axReader)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.wmPlayer)).EndInit();

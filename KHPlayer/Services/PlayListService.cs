@@ -18,14 +18,10 @@ namespace KHPlayer.Services
         public IEnumerable<PlayList> Get()
         {
             var playLists = PlayListCache.PlayLists;
-            foreach (var playList in playLists)
+            foreach (var playListItem in playLists.SelectMany(playList => playList.Items))
             {
-                foreach (var playListItem in playList.Items)
-                {
-                    playListItem.Screen = _screenService.GetByGuid(playListItem.ScreenGuid);
-                    if (playListItem.Screen == null)
-                        playListItem.Screen = _screenService.GetDefaultScreen();
-                }
+                playListItem.Screen = _screenService.GetByGuid(playListItem.ScreenGuid) ??
+                                      _screenService.GetDefaultScreen();
             }
             return playLists;
         }

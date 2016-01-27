@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -34,7 +35,11 @@ namespace KHPlayer.Forms
             driveDetector.DeviceArrived += OnDriveArrived;
 
             fDlgPlayList.Multiselect = true;
-            
+            RefreshLists(null, null);
+        }
+
+        private void RefreshLists(object sender, EventArgs eventArgs)
+        {
             LoadPlayLists();
             LoadPlayListItems();
         }
@@ -192,13 +197,18 @@ namespace KHPlayer.Forms
 
             numGroup.Text = playListItem.Group.ToString();
             pScreenSelection.Visible = playListItem.SupportsMultiCast;
-            if (pScreenSelection.Visible)
+            if (playListItem.SupportsMultiCast)
                 LoadScreens(playListItem.Screen);
         }
 
         private void LoadScreens(PlayerScreen screen)
         {
-            cbScreen.DataSource = _screenService.Get();
+            //For some reason, binding the combobox below to the items var didn't update the cb.items).
+            //had to use a bindinglist and source. Strange.
+            var items = _screenService.Get();
+            var bindinglist = new BindingList<PlayerScreen>(items.ToList());
+            var bSource = new BindingSource {DataSource = bindinglist};
+            cbScreen.DataSource = bSource;
             cbScreen.DisplayMember = "FriendlyName";
             cbScreen.ValueMember = "Guid";
 
@@ -317,8 +327,9 @@ namespace KHPlayer.Forms
 
         private void screenSetupToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var form = new FScreenSetup { StartPosition = FormStartPosition.CenterParent }) 
+            using (var form = new FScreenSetup { StartPosition = FormStartPosition.CenterParent })
             {
+                form.Closed += RefreshLists;
                 form.ShowDialog(this);
             }
         }
@@ -329,7 +340,8 @@ namespace KHPlayer.Forms
             if (playListItem == null)
                 return;
 
-            playListItem.ScreenGuid = (cbScreen.SelectedItem as PlayerScreen).Guid;
+            playListItem.Screen = (cbScreen.SelectedItem as PlayerScreen);
+            playListItem.ScreenGuid = playListItem.Screen.Guid;
         }
 
         private void numGroup_ValueChanged(object sender, EventArgs e)

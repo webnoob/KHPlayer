@@ -227,7 +227,6 @@
             this.gvPlayListItems.Size = new System.Drawing.Size(445, 344);
             this.gvPlayListItems.TabIndex = 24;
             this.gvPlayListItems.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvPlayListItems_CellEndEdit);
-            this.gvPlayListItems.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.gvPlayListItems_CellFormatting);
             this.gvPlayListItems.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvPlayListItems_CellMouseUp);
             this.gvPlayListItems.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gvPlayListItems_DataBindingComplete);
             this.gvPlayListItems.SelectionChanged += new System.EventHandler(this.gvPlayListItems_SelectionChanged);
