@@ -9,14 +9,14 @@ namespace KHPlayer.Services
 {
     public class DbService
     {
-        public void SaveOnOk()
-        {
-            Settings.Default.SavedData = PlayListCache.PlayLists.ToSerializedJson();
-        }
-
-        public void Save()
+        public void Save(bool confirmedSave)
         {
             Settings.Default.SavedScreens = ScreenCache.Screens.ToSerializedJson();
+
+            if (confirmedSave)
+            {
+                Settings.Default.SavedData = PlayListCache.PlayLists.ToSerializedJson();
+            }
         }
 
         public void Load()

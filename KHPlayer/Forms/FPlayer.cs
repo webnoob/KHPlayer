@@ -33,15 +33,15 @@ namespace KHPlayer.Forms
         [DllImport("user32.dll")]
         
         public static extern bool ReleaseCapture();
-        public PlayListItem PlayListItem { get; set; }
+        public PlayListItem PlayListItem { get { return _currentlyPlayListItem; } }
         
         public FPlayer(FMain parent, PlayListItem playListItem)
         {
-            PlayListItem = playListItem;
+            _currentlyPlayListItem = playListItem;
             _parent = parent;
             
             //Do the window movement before InitializeComponent so we can ensure the window is located in the correct screen (full screen mode only).
-            if (parent.FullScreen)
+            if (_currentlyPlayListItem != null && _currentlyPlayListItem.FullScreen)
                 WindowState = FormWindowState.Maximized;
 
             InitializeScreen();
@@ -65,12 +65,13 @@ namespace KHPlayer.Forms
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            _parent.FullScreen = WindowState == FormWindowState.Maximized;
+            if (_currentlyPlayListItem != null)
+                _currentlyPlayListItem.FullScreen = WindowState == FormWindowState.Maximized;
         }
 
         public void ShowPlayer()
         {
-            wmPlayer.Visible = _currentlyPlayListItem.Type == PlayListItemType.Video;
+            wmPlayer.Visible = _currentlyPlayListItem.Type == PlayListItemType.Video || _currentlyPlayListItem.Type == PlayListItemType.Audio;
             if (wmPlayer.Visible)
             {
                 wmPlayer.Dock = DockStyle.Fill;
@@ -165,7 +166,7 @@ namespace KHPlayer.Forms
 
         private void StopAndHidePlayer()
         {
-            wmPlayer.uiMode = Settings.Default.UiMode;
+            //wmPlayer.uiMode = Settings.Default.UiMode;
             wmPlayer.Visible = false;
         }
 
@@ -212,10 +213,14 @@ namespace KHPlayer.Forms
 
         public void SetFullScreen(bool fullscreen)
         {
+            WindowState = fullscreen ? FormWindowState.Maximized : FormWindowState.Normal;
+
             if (wmPlayer.playState == WMPPlayState.wmppsPlaying || wmPlayer.playState == WMPPlayState.wmppsPaused)
             {
                 if (_currentlyPlayListItem.Type == PlayListItemType.Video)
+                {
                     wmPlayer.fullScreen = fullscreen;
+                }
             }
         }
 
@@ -324,6 +329,24 @@ namespace KHPlayer.Forms
         {
             ReleaseCapture();
             SendMessage(Handle, WmNclbuttonDown, HtCaption, 0);
+        }
+
+        private void FPlayer_Resize(object sender, EventArgs e)
+        {
+            
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            FormWindowState org = this.WindowState;
+            base.WndProc(ref m);
+            if (this.WindowState != org)
+                this.OnFormWindowStateChanged(EventArgs.Empty);
+        }
+
+        protected virtual void OnFormWindowStateChanged(EventArgs e)
+        {
+            Console.WriteLine("Changed size: {0}", this.WindowState);
         }
     }
 }

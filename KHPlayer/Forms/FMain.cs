@@ -32,8 +32,6 @@ namespace KHPlayer.Forms
         private PlayMode _playMode;
         private PlayListItem _lastPlayedItem;
         
-        public bool FullScreen { get { return cbFullScreen.Checked; } set { cbFullScreen.Checked = value; } }
-
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessageW(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
         
@@ -114,7 +112,6 @@ namespace KHPlayer.Forms
             
             // Set window location
             Location = Settings.Default.WindowLocation;
-            cbFullScreen.Checked = Settings.Default.FullScreen;
             _dbService.Load();
 
             RefreshPlayLists(null, null);
@@ -126,17 +123,9 @@ namespace KHPlayer.Forms
             
             // Copy window location to app settings
             Settings.Default.WindowLocation = Location;
-            Settings.Default.FullScreen = cbFullScreen.Checked;
-
-            if (_fEditPlayList != null)
-            {
-                var confirmResult = MessageBox.Show("Save current play lists?", "Save Play List?",
-                    MessageBoxButtons.YesNo);
-                if (confirmResult == DialogResult.Yes)
-                    _dbService.SaveOnOk();
-            }
-
-            _dbService.Save();
+            
+            var confirmResult = MessageBox.Show("Save current play lists?", "Save Play List?", MessageBoxButtons.YesNo);
+            _dbService.Save(confirmResult == DialogResult.Yes);
             Settings.Default.Save();
         }
 
@@ -170,11 +159,6 @@ namespace KHPlayer.Forms
             Close();
         }
 
-        private void bLaunch_Click(object sender, EventArgs e)
-        {
-            LaunchPlayer(null);
-        }
-
         private FPlayer LaunchPlayer(PlayListItem playListItem)
         {
             if (_fplayers.Any(p => p.PlayListItem.Screen == playListItem.Screen))
@@ -197,11 +181,13 @@ namespace KHPlayer.Forms
             var fplayer = sender as FPlayer;
             if (fplayer != null)
             {
+                _lastPlayedItem = fplayer.PlayListItem; //Get so we know where to base the next selection off.)
                 fplayer.DoBeforeClose();
                 fplayer.Dispose();
                 _fplayers.RemoveAll(p => p.PlayListItem == null || p.PlayListItem.Screen == fplayer.PlayListItem.Screen);
             }
 
+            SetNextVideo();
             SetButtonState();
         }
 
@@ -230,10 +216,8 @@ namespace KHPlayer.Forms
 
             var list = GetOrderedPlayListItems(playList.Items.Where(f => f != null).ToList());
             gvPlayListItems.AutoGenerateColumns = false;
-            gvPlayListItems[3, 0].ReadOnly = false;
             gvPlayListItems.DataSource = list;
             
-
             foreach (var row in gvPlayListItems.Rows.Cast<DataGridViewRow>())
             {
                 row.Selected = _currentPlayListItems.Contains(row.DataBoundItem);
@@ -315,6 +299,9 @@ namespace KHPlayer.Forms
             foreach (var playListItem in _currentPlayListItems)
             {
                 var player = LaunchPlayer(playListItem);
+                if (player == null)
+                    continue; 
+
                 player.PlayPlayListItem(playListItem);
                 playListItem.State = PlayListItemState.Playing;
             }
@@ -364,6 +351,9 @@ namespace KHPlayer.Forms
 
         private void bStop_Click(object sender, EventArgs e)
         {
+            if (!_fplayers.Any())
+                return;
+
             _playMode = PlayMode.Single;
             _lastPlayedItem = _fplayers.Last().PlayListItem; //Get so we know where to base the next selection off.
 
@@ -402,8 +392,6 @@ namespace KHPlayer.Forms
             bPause.Visible = !showPlay && _currentVideoState != WMPPlayState.wmppsPaused;
             bResume.Visible = _currentVideoState == WMPPlayState.wmppsPaused;
             timerVideoClock.Enabled = _currentVideoState == WMPPlayState.wmppsPlaying;
-            bClosePlayerWindow.Visible = _fplayers != null && _fplayers.Count > 0;
-            bLaunch.Visible = _fplayers != null && _fplayers.Count == 0;
             bPdfScrollDown.Visible = currentFile != null && currentFile.Type == PlayListItemType.Pdf;
             bPdfScrollUp.Visible = bPdfScrollDown.Visible;
             bPdfPageUp.Visible = bPdfScrollDown.Visible;
@@ -455,15 +443,6 @@ namespace KHPlayer.Forms
                 : gvPlayListItems.SelectedRows[0].DataBoundItem as PlayListItem;
         }
 
-        private void cbFullScreen_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!_fplayers.Any()) 
-                return;
-
-            foreach (var player in _fplayers)
-                player.SetFullScreen(cbFullScreen.Checked);
-        }
-
         private void timerVideoClock_Tick(object sender, EventArgs e)
         {
             if (_fplayers == null)
@@ -496,14 +475,10 @@ namespace KHPlayer.Forms
             return _fplayers.FirstOrDefault(player => player.PlayListItem.Screen == playListItem.Screen);
         }
 
-        private void bClosePlayerWindow_Click(object sender, EventArgs e)
-        {
-            foreach (var player in _fplayers.ToList())
-                ClosePlayer(player, e);
-        }
-
         private void bPlayIntroMusic_Click(object sender, EventArgs e)
         {
+            bStop_Click(sender, e);
+
             _playListMode = PlayListMode.RandomSong;
             _playMode = PlayMode.AutoPlay;
             PlayNext();
@@ -591,14 +566,13 @@ namespace KHPlayer.Forms
                 //Colour Column
                 currentRow.Cells["colGroupColour"].Style.BackColor = ColorTranslator.FromHtml(colour);
                 currentRow.Cells["colGroupColour"].Style.SelectionBackColor = ColorTranslator.FromHtml(colour);
-                currentRow.Cells["colImage"].Value = ImageHelper.ResizeImage(playListItem.ThumbnailPath, 50, 50, true) ??
-                                                     ImageHelper.ResizeImage(Resources.jworg, 50, 50, true);
+                currentRow.Cells["colImage"].Value =
+                    ImageHelper.ResizeImage(playListItem.ThumbnailPath, 50, 50, true) ??
+                    ImageHelper.ResizeImage(Resources.jworg, 50, 50, true);
 
                 currentRow.Cells["colName"].Value = string.Format("[Screen - {0}][Group - {1}]{2}[{3} - {4}] - {5}",
                     playListItem.Screen != null ? playListItem.Screen.FriendlyName : "Main", playListItem.Group,
                     Environment.NewLine, playListItem.State, playListItem.Type, playListItem.TagName);
-                
-                gvPlayListItems[3, 0].ReadOnly = false;
 
                 if (playListItem.Screen != null)
                 {
@@ -611,6 +585,30 @@ namespace KHPlayer.Forms
                         }
                     }
                 }
+            }
+        }
+
+        private void gvPlayListItems_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == gvPlayListItems.Columns["colFullScreen"].Index)
+            {
+                if (!_fplayers.Any())
+                    return;
+
+                var playListItem = gvPlayListItems.Rows[e.RowIndex].DataBoundItem as PlayListItem;
+                if (playListItem == null)
+                    return;
+
+                foreach (var player in _fplayers.Where(player => player.PlayListItem == playListItem))
+                    player.SetFullScreen(playListItem.FullScreen);
+            }
+        }
+
+        private void gvPlayListItems_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.ColumnIndex == gvPlayListItems.Columns["colFullScreen"].Index)
+            {
+                gvPlayListItems.EndEdit();
             }
         }
     }

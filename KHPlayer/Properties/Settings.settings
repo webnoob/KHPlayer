@@ -11,9 +11,6 @@
     <Setting Name="LaunchScreen" Type="System.String" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="FullScreen" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="SavedData" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
