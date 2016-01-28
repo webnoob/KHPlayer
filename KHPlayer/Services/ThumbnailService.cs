@@ -27,9 +27,10 @@ namespace KHPlayer.Services
             if (tagFile == null)
                 return "";
 
+            var imageFilePath = "";
             foreach (var picture in tagFile.Tag.Pictures)
             {
-                var imageFilePath =
+                imageFilePath =
                     String.Format("{0}\\{1}\\{2}.{3}",
                         PathHelper.GetApplicationPath(),
                         Settings.Default.ThumbnailLocation,
@@ -52,9 +53,26 @@ namespace KHPlayer.Services
                 else
                     imageFilePath = picture.FilePath;
 
+
                 return imageFilePath;
             }
-            return "";
+
+            try
+            {
+                imageFilePath =
+                    String.Format("{0}\\{1}\\{2}.{3}",
+                        PathHelper.GetApplicationPath(),
+                        Settings.Default.ThumbnailLocation,
+                        Path.GetFileName(filePath), "jpeg"
+                        );
+                new Ffmpeg().GetThumbnail(filePath, imageFilePath, "120x120");
+            }
+            catch
+            {
+                //I don't want the lack of an image to break anything here.
+            }
+
+            return imageFilePath;
         }
     }
 }
