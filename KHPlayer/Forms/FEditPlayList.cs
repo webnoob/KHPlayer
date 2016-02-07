@@ -19,6 +19,7 @@ namespace KHPlayer.Forms
         private readonly SongService _songService;
         private readonly PlaylistImportExportService _playlistImportExportService;
         private readonly ScreenService _screenService;
+        private readonly MaintenanceService _maintenanceService;
 
         public FEditPlayList()
         {
@@ -30,6 +31,7 @@ namespace KHPlayer.Forms
             _playlistImportExportService = new PlaylistImportExportService();
             _playlistImportExportService.OnUpdateProgress += UpdateProgress;
             _screenService = new ScreenService();
+            _maintenanceService = new MaintenanceService();
             
             var driveDetector = new DriveDetector();
             driveDetector.DeviceArrived += OnDriveArrived;
@@ -351,6 +353,20 @@ namespace KHPlayer.Forms
                 return;
 
             playListItem.Group = Convert.ToInt32(numGroup.Value);
+        }
+
+        private void verifyMediaIntegrityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var results = _maintenanceService.CheckMediaFiles().ToList();
+            if (results.All(r => r.Status == MaintenanceIntegrityResultStatus.Passed))
+            {
+                MessageBox.Show("All files Ok");
+                return;
+            }
+
+            MessageBox.Show(string.Join(Environment.NewLine,
+                results.Where(r => r.Status == MaintenanceIntegrityResultStatus.Failed)
+                    .Select(r => string.Format("{0} - {1}", r.FilePath, r.StatusDetail))));
         }
     }
 }

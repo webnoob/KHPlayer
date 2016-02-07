@@ -89,5 +89,19 @@ namespace KHPlayer.Services
             possibleSongs = GetPossibleSongs();
             return possibleSongs;
         }
+
+        public string GetRandomSongFilePath()
+        {
+            //If there are duplicate songs in the song folder with the same song number
+            //make sure the song we return actually exists (i.e 215 songs in folder and it 
+            //tries to load song 215, this won't exist.
+
+            var songNum = GetRandomSongNumer();
+            var songFilePath = GetSongFile(songNum);
+            while (!File.Exists(songFilePath))
+                songFilePath = GetRandomSongFilePath();
+
+            return songFilePath;
+        }
     }
 }

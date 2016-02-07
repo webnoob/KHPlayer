@@ -303,8 +303,7 @@ namespace KHPlayer.Forms
 
         private PlayListItem GetRandomSong()
         {
-            var songNum = _songService.GetRandomSongNumer();
-            var songFilePath = _songService.GetSongFile(songNum);
+            var songFilePath = _songService.GetRandomSongFilePath(); 
             return _playListItemService.Create(songFilePath, new PlayList {Guid = Guid.NewGuid().ToString()});
         }
 

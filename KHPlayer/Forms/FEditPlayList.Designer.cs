@@ -62,6 +62,7 @@
             this.lScreen = new System.Windows.Forms.Label();
             this.lGroup = new System.Windows.Forms.Label();
             this.numGroup = new System.Windows.Forms.NumericUpDown();
+            this.verifyMediaIntegrityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.pnlProgress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
@@ -203,7 +204,7 @@
             this.playlistsFromDriveFromToolStripMenuItem,
             this.playlistsFromFileToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.importToolStripMenuItem.Text = "Import";
             // 
             // playlistsFromDriveFromToolStripMenuItem
@@ -225,7 +226,7 @@
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.playListsToFileToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Visible = false;
             // 
@@ -238,9 +239,10 @@
             // maintenanceToolStripMenuItem
             // 
             this.maintenanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openThumbnailFolderToolStripMenuItem});
+            this.openThumbnailFolderToolStripMenuItem,
+            this.verifyMediaIntegrityToolStripMenuItem});
             this.maintenanceToolStripMenuItem.Name = "maintenanceToolStripMenuItem";
-            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.maintenanceToolStripMenuItem.Text = "Maintenance";
             // 
             // openThumbnailFolderToolStripMenuItem
@@ -253,14 +255,14 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Visible = false;
             // 
             // screenSetupToolStripMenuItem
             // 
             this.screenSetupToolStripMenuItem.Name = "screenSetupToolStripMenuItem";
-            this.screenSetupToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.screenSetupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.screenSetupToolStripMenuItem.Text = "Screen Setup";
             this.screenSetupToolStripMenuItem.Click += new System.EventHandler(this.screenSetupToolStripMenuItem_Click);
             // 
@@ -361,6 +363,13 @@
             this.numGroup.TabIndex = 25;
             this.numGroup.ValueChanged += new System.EventHandler(this.numGroup_ValueChanged);
             // 
+            // verifyMediaIntegrityToolStripMenuItem
+            // 
+            this.verifyMediaIntegrityToolStripMenuItem.Name = "verifyMediaIntegrityToolStripMenuItem";
+            this.verifyMediaIntegrityToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
+            this.verifyMediaIntegrityToolStripMenuItem.Text = "Verify Media Integrity";
+            this.verifyMediaIntegrityToolStripMenuItem.Click += new System.EventHandler(this.verifyMediaIntegrityToolStripMenuItem_Click);
+            // 
             // FEditPlayList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -435,5 +444,6 @@
         private System.Windows.Forms.Label lScreen;
         private System.Windows.Forms.Label lGroup;
         private System.Windows.Forms.NumericUpDown numGroup;
+        private System.Windows.Forms.ToolStripMenuItem verifyMediaIntegrityToolStripMenuItem;
     }
 }

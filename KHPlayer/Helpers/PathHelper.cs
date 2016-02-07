@@ -26,5 +26,10 @@ namespace KHPlayer.Helpers
 
             return false;
         }
+
+        public static string GetApplicationPath(string path)
+        {
+            return GetApplicationPath() + "\\" + path;
+        }
     }
 }

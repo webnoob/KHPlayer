@@ -131,6 +131,7 @@
     <Compile Include="Services\AudioDeviceService.cs" />
     <Compile Include="Services\DbService.cs" />
     <Compile Include="Services\FileTagService.cs" />
+    <Compile Include="Services\MaintenanceService.cs" />
     <Compile Include="Services\PdfService.cs" />
     <Compile Include="Services\PlaylistImportExportService.cs" />
     <Compile Include="Classes\PlaylistItemFile.cs" />
