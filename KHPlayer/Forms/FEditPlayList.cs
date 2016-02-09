@@ -33,8 +33,10 @@ namespace KHPlayer.Forms
             _screenService = new ScreenService();
             _maintenanceService = new MaintenanceService();
             
-            var driveDetector = new DriveDetector();
-            driveDetector.DeviceArrived += OnDriveArrived;
+            //This is causing the application to crash when the projectror / screen is plugged in / unplugged.
+            //We don't really need to offer USB import so I'm removing for now.
+            //var driveDetector = new DriveDetector();
+            //driveDetector.DeviceArrived += OnDriveArrived;
 
             fDlgPlayList.Multiselect = true;
             RefreshLists(null, null);
