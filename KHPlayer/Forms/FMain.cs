@@ -214,7 +214,8 @@ namespace KHPlayer.Forms
 
         private void BringGridIndexIntoView(int index)
         {
-            gvPlayListItems.FirstDisplayedScrollingRowIndex = index > 0 ? index - 1 : index;
+            if (gvPlayListItems.RowCount > 0)
+                gvPlayListItems.FirstDisplayedScrollingRowIndex = index > 0 ? index - 1 : index;
         }
 
         private static BindingList<PlayListItem> GetOrderedPlayListItems(List<PlayListItem> list)
@@ -325,8 +326,11 @@ namespace KHPlayer.Forms
             if (index == gvPlayListItems.RowCount)
                 index = 0;
 
-            gvPlayListItems.ClearSelection();
-            gvPlayListItems.Rows[index].Selected = true;
+            if (gvPlayListItems.RowCount > 0)
+            {
+                gvPlayListItems.ClearSelection();
+                gvPlayListItems.Rows[index].Selected = true;
+            }
             BringGridIndexIntoView(index);
             SetIntroMusicButtonText(14, "Play Random Songs");
 
