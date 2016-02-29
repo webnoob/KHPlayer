@@ -74,7 +74,12 @@
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(523, 399);
-            this.Controls.Add(this.axReader);
+            
+            //NOTE: This cannot be here. For some reason, opening the Edit Play List screen, closing it, playing a song then plugging in /
+            //turning on a screen / projector causes the app to crash and this little beasty is the cause.
+            //Have moved to the the form and it's added as a control when it's required which appears to solve the issue. Eh!?
+            //this.Controls.Add(this.axReader);
+            
             this.Controls.Add(this.wmPlayer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

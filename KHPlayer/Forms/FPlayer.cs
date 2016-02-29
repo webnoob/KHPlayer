@@ -114,6 +114,9 @@ namespace KHPlayer.Forms
 
             if (_currentlyPlayListItem.Type == PlayListItemType.Video || _currentlyPlayListItem.Type == PlayListItemType.Audio)
             {
+                if (playListItem.SupportsMultiCast && playListItem.Screen == null)
+                    throw new Exception("No Screen Setup");
+
                 //Don't split the audio out if this is the default screen or it's not a compatable item.
                 if (playListItem.SupportsMultiCast && !playListItem.Screen.DefaultScreen)
                 {
@@ -132,6 +135,9 @@ namespace KHPlayer.Forms
             }
             else if (_currentlyPlayListItem.Type == PlayListItemType.Pdf)
             {
+                //NOTE: See the comment in the InitializeComponent() method (where this code should actually be!)
+                this.Controls.Add(this.axReader);
+
                 axReader.LoadFile(playListItem.FilePath);
                 axReader.setView(AxReaderViewMode);
                 axReader.setShowScrollbars(false);
@@ -245,7 +251,7 @@ namespace KHPlayer.Forms
 
             //The following lines are required in order to close the adobe PDF form viewer properly.
             //Not sure why but the application hangs when closing without these.
-            axReader.LoadFile(""); //Ensure we release the previous file. This doesn't seem to always happen.
+            //axReader.LoadFile(""); //Ensure we release the previous file. This doesn't seem to always happen.
             axReader.Dispose();
             Application.DoEvents();
         }
