@@ -66,6 +66,10 @@ namespace KHPlayer.Services
                         Path.GetFileName(filePath), "jpeg"
                         );
                 new Ffmpeg().GetThumbnail(filePath, imageFilePath, "120x120");
+
+                //If Ffmpeg hasn't managed to get an image then assume this file IS an image at this point.
+                if (!File.Exists(imageFilePath))
+                    imageFilePath = filePath;
             }
             catch
             {

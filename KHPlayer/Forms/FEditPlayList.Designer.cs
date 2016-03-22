@@ -49,6 +49,7 @@
             this.playListsToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.maintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openThumbnailFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.verifyMediaIntegrityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.screenSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dDlgPlaylist = new System.Windows.Forms.FolderBrowserDialog();
@@ -62,7 +63,6 @@
             this.lScreen = new System.Windows.Forms.Label();
             this.lGroup = new System.Windows.Forms.Label();
             this.numGroup = new System.Windows.Forms.NumericUpDown();
-            this.verifyMediaIntegrityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.pnlProgress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
@@ -77,7 +77,7 @@
             this.bAddVideos.Name = "bAddVideos";
             this.bAddVideos.Size = new System.Drawing.Size(220, 64);
             this.bAddVideos.TabIndex = 2;
-            this.bAddVideos.Text = "Add Video / Drama / PDF";
+            this.bAddVideos.Text = "Add Video / Drama / PDF / Image";
             this.bAddVideos.UseVisualStyleBackColor = true;
             this.bAddVideos.Click += new System.EventHandler(this.bAddVideos_Click);
             // 
@@ -204,7 +204,7 @@
             this.playlistsFromDriveFromToolStripMenuItem,
             this.playlistsFromFileToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.importToolStripMenuItem.Text = "Import";
             // 
             // playlistsFromDriveFromToolStripMenuItem
@@ -226,7 +226,7 @@
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.playListsToFileToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Visible = false;
             // 
@@ -242,7 +242,7 @@
             this.openThumbnailFolderToolStripMenuItem,
             this.verifyMediaIntegrityToolStripMenuItem});
             this.maintenanceToolStripMenuItem.Name = "maintenanceToolStripMenuItem";
-            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.maintenanceToolStripMenuItem.Text = "Maintenance";
             // 
             // openThumbnailFolderToolStripMenuItem
@@ -252,17 +252,24 @@
             this.openThumbnailFolderToolStripMenuItem.Text = "Open Storage Folder in Explorer";
             this.openThumbnailFolderToolStripMenuItem.Click += new System.EventHandler(this.openThumbnailFolderToolStripMenuItem_Click);
             // 
+            // verifyMediaIntegrityToolStripMenuItem
+            // 
+            this.verifyMediaIntegrityToolStripMenuItem.Name = "verifyMediaIntegrityToolStripMenuItem";
+            this.verifyMediaIntegrityToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
+            this.verifyMediaIntegrityToolStripMenuItem.Text = "Verify Media Integrity";
+            this.verifyMediaIntegrityToolStripMenuItem.Click += new System.EventHandler(this.verifyMediaIntegrityToolStripMenuItem_Click);
+            // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Visible = false;
             // 
             // screenSetupToolStripMenuItem
             // 
             this.screenSetupToolStripMenuItem.Name = "screenSetupToolStripMenuItem";
-            this.screenSetupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.screenSetupToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.screenSetupToolStripMenuItem.Text = "Screen Setup";
             this.screenSetupToolStripMenuItem.Click += new System.EventHandler(this.screenSetupToolStripMenuItem_Click);
             // 
@@ -362,13 +369,6 @@
             this.numGroup.Size = new System.Drawing.Size(162, 20);
             this.numGroup.TabIndex = 25;
             this.numGroup.ValueChanged += new System.EventHandler(this.numGroup_ValueChanged);
-            // 
-            // verifyMediaIntegrityToolStripMenuItem
-            // 
-            this.verifyMediaIntegrityToolStripMenuItem.Name = "verifyMediaIntegrityToolStripMenuItem";
-            this.verifyMediaIntegrityToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
-            this.verifyMediaIntegrityToolStripMenuItem.Text = "Verify Media Integrity";
-            this.verifyMediaIntegrityToolStripMenuItem.Click += new System.EventHandler(this.verifyMediaIntegrityToolStripMenuItem_Click);
             // 
             // FEditPlayList
             // 

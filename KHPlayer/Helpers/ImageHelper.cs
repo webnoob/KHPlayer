@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 
 namespace KHPlayer.Helpers
 {
@@ -7,7 +8,7 @@ namespace KHPlayer.Helpers
     {
         public static Image ResizeImage(string file, int width, int height, bool onlyResizeIfWider)
         {
-            if (string.IsNullOrEmpty(file))
+            if (string.IsNullOrEmpty(file) || !File.Exists(file))
                 return null;
 
             using (var image = Image.FromFile(file))

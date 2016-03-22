@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -112,7 +113,8 @@ namespace KHPlayer.Forms
             _currentlyPlayListItem = playListItem;
             ShowPlayer();
 
-            if (_currentlyPlayListItem.Type == PlayListItemType.Video || _currentlyPlayListItem.Type == PlayListItemType.Audio)
+            if (_currentlyPlayListItem.Type == PlayListItemType.Video || 
+                _currentlyPlayListItem.Type == PlayListItemType.Audio)
             {
                 if (playListItem.SupportsMultiCast && playListItem.Screen == null)
                     throw new Exception("No Screen Setup");
@@ -153,6 +155,13 @@ namespace KHPlayer.Forms
                 var currentWindowState = WindowState;
                 WindowState = FormWindowState.Minimized;
                 WindowState = currentWindowState;
+            }
+            else if (_currentlyPlayListItem.Type == PlayListItemType.Image)
+            {
+                pbMain.Image = Image.FromFile(playListItem.FilePath);
+                pbMain.Visible = true;
+                pbMain.SizeMode = PictureBoxSizeMode.Zoom;
+                //pbMain.SizeMode  
             }
         }
 
@@ -363,6 +372,12 @@ namespace KHPlayer.Forms
             var handler = OnWindowStateChanged;
             if (handler != null) 
                 handler(this, EventArgs.Empty);
+        }
+
+        private void pbMain_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(Handle, WmNclbuttonDown, HtCaption, 0);
         }
     }
 }

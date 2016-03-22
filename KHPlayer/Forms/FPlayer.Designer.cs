@@ -34,9 +34,11 @@
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.axReader = new AxAcroPDFLib.AxAcroPDF();
             this.wmPlayer = new AxWMPLib.AxWindowsMediaPlayer();
+            this.pbMain = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axReader)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.wmPlayer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbMain)).BeginInit();
             this.SuspendLayout();
             // 
             // timerPlayerStateChange
@@ -66,6 +68,17 @@
             this.wmPlayer.Visible = false;
             this.wmPlayer.MouseDownEvent += new AxWMPLib._WMPOCXEvents_MouseDownEventHandler(this.wmPlayer_MouseDownEvent);
             // 
+            // pbMain
+            // 
+            this.pbMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pbMain.Location = new System.Drawing.Point(0, 0);
+            this.pbMain.Name = "pbMain";
+            this.pbMain.Size = new System.Drawing.Size(523, 399);
+            this.pbMain.TabIndex = 5;
+            this.pbMain.TabStop = false;
+            this.pbMain.Visible = false;
+            this.pbMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbMain_MouseDown);
+            // 
             // FPlayer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -74,12 +87,7 @@
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(523, 399);
-            
-            //NOTE: This cannot be here. For some reason, opening the Edit Play List screen, closing it, playing a song then plugging in /
-            //turning on a screen / projector causes the app to crash and this little beasty is the cause.
-            //Have moved to the the form and it's added as a control when it's required which appears to solve the issue. Eh!?
-            //this.Controls.Add(this.axReader);
-            
+            this.Controls.Add(this.pbMain);
             this.Controls.Add(this.wmPlayer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -90,6 +98,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axReader)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.wmPlayer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbMain)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -100,5 +109,6 @@
         private System.Windows.Forms.BindingSource bindingSource1;
         private AxAcroPDFLib.AxAcroPDF axReader;
         private AxWMPLib.AxWindowsMediaPlayer wmPlayer;
+        private System.Windows.Forms.PictureBox pbMain;
     }
 }

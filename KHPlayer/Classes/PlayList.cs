@@ -81,7 +81,8 @@ namespace KHPlayer.Classes
     {
         Video,
         Audio,
-        Pdf
+        Pdf,
+        Image
     }
 
     public enum PlayListItemSource

@@ -398,7 +398,7 @@ namespace KHPlayer.Forms
             //only be played on their own (i.e PDFs)
             var currentFile = _currentPlayListItems.FirstOrDefault();
             if (currentFile != null)
-                showPlay &= currentFile.Type != PlayListItemType.Pdf;
+                showPlay &= currentFile.Type != PlayListItemType.Pdf & currentFile.Type != PlayListItemType.Image;
 
             bPlayNext.Visible = showPlay;
             
@@ -412,7 +412,7 @@ namespace KHPlayer.Forms
             bPdfPageDown.Visible = bPdfScrollDown.Visible;
 
             if (currentFile != null)
-                bPause.Visible &= currentFile.Type != PlayListItemType.Pdf;
+                bPause.Visible &= currentFile.Type != PlayListItemType.Pdf & currentFile.Type != PlayListItemType.Image;
         }
 
         private void bResume_Click(object sender, EventArgs e)

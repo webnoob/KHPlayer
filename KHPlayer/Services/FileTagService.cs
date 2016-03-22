@@ -23,7 +23,7 @@ namespace KHPlayer.Services
             //No point loading the file again if we've already got the information.
             var playlistItemFile =
                 _cachedPlaylistItemFiles.FirstOrDefault(
-                    c => c.FileName.Equals(filePath, StringComparison.OrdinalIgnoreCase));
+                    c => c != null && c.FileName.Equals(filePath, StringComparison.OrdinalIgnoreCase));
 
             if (playlistItemFile != null)
                 return playlistItemFile;
@@ -39,21 +39,36 @@ namespace KHPlayer.Services
                             //TODO: Find out how to use the File.AddFileResolver as this means we can handle the custom file types we're currently catching.
                             var file = File.Create(new StreamFileAbstraction(filePath, fileStream, fileStream));
                             var isCorrupt = file.CorruptionReasons != null && file.CorruptionReasons.Any();
-                            var title = isCorrupt ? Path.GetFileName(filePath) : file.Tag.Title;
+                            var title = isCorrupt || file.Tag.Title == null ? Path.GetFileName(filePath) : file.Tag.Title;
                             var track = isCorrupt ? 0 : file.Tag.Track;
-                            
+
                             //This won't be hit if the file doesn't exist.
                             playlistItemFile = new PlaylistItemFile
                             {
                                 FileName = filePath,
-                                Type =
-                                    file is TagLib.Mpeg.AudioFile ? PlayListItemType.Audio : PlayListItemType.Video,
+                                Type = file is TagLib.Mpeg.AudioFile
+                                     ? PlayListItemType.Audio : PlayListItemType.Video,
                                 Tag = new PlayListItemFileTag
                                 {
                                     Title = title,
                                     Track = track
                                 }
                             };
+
+                            var fileTypeSplit = file.GetType().FullName.Split('.');
+                            if (fileTypeSplit.Length > 0)
+                            {
+                                switch (fileTypeSplit[1].ToLower())
+                                {
+                                    case "png":
+                                    case "jpg":
+                                    case "jpeg":
+                                    case "bmp":
+                                    case "image":
+                                    playlistItemFile.Type = PlayListItemType.Image;
+                                    break;
+                                }
+                            }
 
                             foreach (var picture in file.Tag.Pictures)
                             {
