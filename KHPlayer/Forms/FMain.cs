@@ -12,6 +12,7 @@ using KHPlayer.Classes;
 using KHPlayer.Helpers;
 using KHPlayer.Properties;
 using KHPlayer.Services;
+using Microsoft.VisualBasic;
 using WMPLib;
 
 namespace KHPlayer.Forms
@@ -284,7 +285,21 @@ namespace KHPlayer.Forms
             {
                 var player = LaunchPlayer(playListItem);
                 if (player == null)
-                    continue; 
+                    continue;
+
+                /*if (playListItem.Type == PlayListItemType.Pdf)
+                {
+                    var point = GetScreenPoint();
+                    var pageNumber = Interaction.InputBox("Enter Page Number", "Enter Page Number", "", point.X, point.Y);
+                    int number;
+                    if (string.IsNullOrEmpty(pageNumber) || !int.TryParse(pageNumber, out number))
+                    {
+                        MessageBox.Show("Not a valid number.");
+                        return;
+                    }
+
+                    playListItem.PageNumber = number;
+                }*/
 
                 player.PlayPlayListItem(playListItem);
                 playListItem.State = PlayListItemState.Playing;
@@ -406,11 +421,11 @@ namespace KHPlayer.Forms
             bPause.Visible = !showPlay && _fplayers.Any(p => p.CurrentPlayState != WMPPlayState.wmppsPaused);
             bResume.Visible = _fplayers.Any(p => p.CurrentPlayState == WMPPlayState.wmppsPaused);
             timerVideoClock.Enabled = _fplayers.Any(p => p.CurrentPlayState == WMPPlayState.wmppsPlaying);
-            bPdfScrollDown.Visible = currentFile != null && currentFile.Type == PlayListItemType.Pdf;
-            bPdfScrollUp.Visible = bPdfScrollDown.Visible;
-            bPdfPageUp.Visible = bPdfScrollDown.Visible;
-            bPdfPageDown.Visible = bPdfScrollDown.Visible;
-
+            bPdfPageUp.Visible = currentFile != null && currentFile.Type == PlayListItemType.Pdf;
+            bPdfPageDown.Visible = bPdfPageUp.Visible;
+            bPdfScrollDown.Visible = bPdfPageUp.Visible;
+            bPdfScrollUp.Visible = bPdfPageUp.Visible;
+            
             if (currentFile != null)
                 bPause.Visible &= currentFile.Type != PlayListItemType.Pdf & currentFile.Type != PlayListItemType.Image;
         }
@@ -638,6 +653,17 @@ namespace KHPlayer.Forms
             {
                 gvPlayListItems.EndEdit();
             }
+        }
+
+        //TODO: Move to base form, in a rush.
+        private Point GetScreenPoint()
+        {
+            var screen = Screen.FromControl(this);
+            var workingArea = screen.WorkingArea;
+            var x = Math.Max(workingArea.X, workingArea.X + (workingArea.Width - Width) / 2);
+            var y = Math.Max(workingArea.Y, workingArea.Y + (workingArea.Height - Height) / 2);
+
+            return new Point(x, y);
         }
     }
 }

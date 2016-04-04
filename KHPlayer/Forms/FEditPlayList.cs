@@ -201,6 +201,10 @@ namespace KHPlayer.Forms
 
             numGroup.Text = playListItem.Group.ToString();
             pScreenSelection.Visible = playListItem.SupportsMultiCast;
+            numPdfPageNumber.Text = playListItem.PdfPageNumber.ToString();
+            cbPdfView.SelectedIndex = playListItem.PdfView == "FitV" ? 1 : 0;
+
+            pPdfOptions.Visible = playListItem.Type == PlayListItemType.Pdf;
             if (playListItem.SupportsMultiCast)
                 LoadScreens(playListItem.Screen);
         }
@@ -369,6 +373,28 @@ namespace KHPlayer.Forms
             MessageBox.Show(string.Join(Environment.NewLine,
                 results.Where(r => r.Status == MaintenanceIntegrityResultStatus.Failed)
                     .Select(r => string.Format("{0} - {1}", r.FilePath, r.StatusDetail))));
+        }
+
+        private void numPdfPageNumber_ValueChanged(object sender, EventArgs e)
+        {
+            var playListItem = GetSelectedPlayListItem();
+            if (playListItem == null)
+                return;
+
+            playListItem.PdfPageNumber = Convert.ToInt32(numPdfPageNumber.Value);
+        }
+
+        private void cbPdfView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var playListItem = GetSelectedPlayListItem();
+            if (playListItem == null)
+                return;
+
+            switch (cbPdfView.SelectedIndex)
+            {
+                case 0: playListItem.PdfView = "FitH"; break;
+                case 1: playListItem.PdfView = "FitV"; break;
+            }
         }
     }
 }

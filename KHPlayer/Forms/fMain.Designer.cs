@@ -162,7 +162,7 @@
             // bPdfScrollDown
             // 
             this.bPdfScrollDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bPdfScrollDown.Location = new System.Drawing.Point(351, 12);
+            this.bPdfScrollDown.Location = new System.Drawing.Point(236, 46);
             this.bPdfScrollDown.Name = "bPdfScrollDown";
             this.bPdfScrollDown.Size = new System.Drawing.Size(108, 30);
             this.bPdfScrollDown.TabIndex = 20;
@@ -184,7 +184,7 @@
             // bPdfPageUp
             // 
             this.bPdfPageUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bPdfPageUp.Location = new System.Drawing.Point(237, 46);
+            this.bPdfPageUp.Location = new System.Drawing.Point(350, 12);
             this.bPdfPageUp.Name = "bPdfPageUp";
             this.bPdfPageUp.Size = new System.Drawing.Size(108, 30);
             this.bPdfPageUp.TabIndex = 22;

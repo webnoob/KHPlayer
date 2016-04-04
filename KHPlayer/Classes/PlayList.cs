@@ -68,6 +68,10 @@ namespace KHPlayer.Classes
 
         [JsonIgnore]
         public PlayListItemState State { get; set; }
+
+        public int PdfPageNumber { get; set; }
+
+        public string PdfView { get; set; }
     }
 
     public enum PlayListItemState

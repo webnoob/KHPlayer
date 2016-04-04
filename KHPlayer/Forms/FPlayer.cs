@@ -16,8 +16,6 @@ namespace KHPlayer.Forms
     public partial class FPlayer : Form
     {
         private const bool Debug = false;
-
-        private const string AxReaderViewMode = "FitH";
         private const int WmNclbuttonDown = 0xA1;
         private const int HtCaption = 0x2;
 
@@ -141,10 +139,11 @@ namespace KHPlayer.Forms
                 this.Controls.Add(this.axReader);
 
                 axReader.LoadFile(playListItem.FilePath);
-                axReader.setView(AxReaderViewMode);
+                axReader.setView(playListItem.PdfView);
                 axReader.setShowScrollbars(false);
                 axReader.setShowToolbar(false);
-                axReader.setCurrentPage(1);
+                axReader.setCurrentPage(playListItem.PdfPageNumber);
+                _axReaderCurrentPage = playListItem.PdfPageNumber;
 
                 //Get total number of pages for use in the navigation properties.
                 var pdfReader = new PdfReader(playListItem.FilePath);
@@ -310,7 +309,7 @@ namespace KHPlayer.Forms
                 _axReaderCurrentPage -= 1;
                 _axReaderCurrentScrollOffset = offsetResetValue;
                 axReader.setCurrentPage(_axReaderCurrentPage);
-                axReader.setViewScroll(AxReaderViewMode, _axReaderCurrentScrollOffset);
+                axReader.setViewScroll(_currentlyPlayListItem.PdfView, _axReaderCurrentScrollOffset);
                 return;
             }
             
@@ -319,8 +318,7 @@ namespace KHPlayer.Forms
                 _axReaderCurrentScrollOffset = 0; //Reset at start of document when 
 
             //Do the move.
-            axReader.setViewScroll(AxReaderViewMode, _axReaderCurrentScrollOffset);
-            Console.WriteLine(_axReaderCurrentPage);
+            axReader.setViewScroll(_currentlyPlayListItem.PdfView, _axReaderCurrentScrollOffset);
         }
 
         public void MovePage(bool down)

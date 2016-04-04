@@ -63,11 +63,18 @@
             this.lScreen = new System.Windows.Forms.Label();
             this.lGroup = new System.Windows.Forms.Label();
             this.numGroup = new System.Windows.Forms.NumericUpDown();
+            this.pPdfOptions = new System.Windows.Forms.Panel();
+            this.lPdfPageNumber = new System.Windows.Forms.Label();
+            this.numPdfPageNumber = new System.Windows.Forms.NumericUpDown();
+            this.lPdfViewType = new System.Windows.Forms.Label();
+            this.cbPdfView = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.pnlProgress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
             this.pScreenSelection.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGroup)).BeginInit();
+            this.pPdfOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPdfPageNumber)).BeginInit();
             this.SuspendLayout();
             // 
             // bAddVideos
@@ -370,11 +377,67 @@
             this.numGroup.TabIndex = 25;
             this.numGroup.ValueChanged += new System.EventHandler(this.numGroup_ValueChanged);
             // 
+            // pPdfOptions
+            // 
+            this.pPdfOptions.Controls.Add(this.cbPdfView);
+            this.pPdfOptions.Controls.Add(this.lPdfViewType);
+            this.pPdfOptions.Controls.Add(this.lPdfPageNumber);
+            this.pPdfOptions.Controls.Add(this.numPdfPageNumber);
+            this.pPdfOptions.Location = new System.Drawing.Point(296, 196);
+            this.pPdfOptions.Name = "pPdfOptions";
+            this.pPdfOptions.Size = new System.Drawing.Size(162, 133);
+            this.pPdfOptions.TabIndex = 30;
+            // 
+            // lPdfPageNumber
+            // 
+            this.lPdfPageNumber.AutoSize = true;
+            this.lPdfPageNumber.Location = new System.Drawing.Point(-1, 5);
+            this.lPdfPageNumber.Name = "lPdfPageNumber";
+            this.lPdfPageNumber.Size = new System.Drawing.Size(97, 13);
+            this.lPdfPageNumber.TabIndex = 28;
+            this.lPdfPageNumber.Text = "Start Page Number";
+            // 
+            // numPdfPageNumber
+            // 
+            this.numPdfPageNumber.Location = new System.Drawing.Point(2, 21);
+            this.numPdfPageNumber.Name = "numPdfPageNumber";
+            this.numPdfPageNumber.Size = new System.Drawing.Size(162, 20);
+            this.numPdfPageNumber.TabIndex = 27;
+            this.numPdfPageNumber.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numPdfPageNumber.ValueChanged += new System.EventHandler(this.numPdfPageNumber_ValueChanged);
+            // 
+            // lPdfViewType
+            // 
+            this.lPdfViewType.AutoSize = true;
+            this.lPdfViewType.Location = new System.Drawing.Point(-1, 44);
+            this.lPdfViewType.Name = "lPdfViewType";
+            this.lPdfViewType.Size = new System.Drawing.Size(30, 13);
+            this.lPdfViewType.TabIndex = 30;
+            this.lPdfViewType.Text = "View";
+            // 
+            // cbPdfView
+            // 
+            this.cbPdfView.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPdfView.FormattingEnabled = true;
+            this.cbPdfView.Items.AddRange(new object[] {
+            "Fit Horizontally",
+            "Fit Vertically"});
+            this.cbPdfView.Location = new System.Drawing.Point(1, 60);
+            this.cbPdfView.Name = "cbPdfView";
+            this.cbPdfView.Size = new System.Drawing.Size(160, 21);
+            this.cbPdfView.TabIndex = 31;
+            this.cbPdfView.SelectedIndexChanged += new System.EventHandler(this.cbPdfView_SelectedIndexChanged);
+            // 
             // FEditPlayList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(470, 344);
+            this.Controls.Add(this.pPdfOptions);
             this.Controls.Add(this.pScreenSelection);
             this.Controls.Add(this.bAddStream);
             this.Controls.Add(this.pnlProgress);
@@ -404,6 +467,9 @@
             this.pScreenSelection.ResumeLayout(false);
             this.pScreenSelection.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGroup)).EndInit();
+            this.pPdfOptions.ResumeLayout(false);
+            this.pPdfOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPdfPageNumber)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -445,5 +511,10 @@
         private System.Windows.Forms.Label lGroup;
         private System.Windows.Forms.NumericUpDown numGroup;
         private System.Windows.Forms.ToolStripMenuItem verifyMediaIntegrityToolStripMenuItem;
+        private System.Windows.Forms.Panel pPdfOptions;
+        private System.Windows.Forms.Label lPdfPageNumber;
+        private System.Windows.Forms.NumericUpDown numPdfPageNumber;
+        private System.Windows.Forms.Label lPdfViewType;
+        private System.Windows.Forms.ComboBox cbPdfView;
     }
 }
