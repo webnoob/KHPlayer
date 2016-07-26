@@ -117,6 +117,11 @@ namespace KHPlayer.Forms
                 if (playListItem.SupportsMultiCast && playListItem.Screen == null)
                     throw new Exception("No Screen Setup");
 
+                if (playListItem.StartMin > 0 || playListItem.StartSec > 0)
+                {
+                    wmPlayer.Ctlcontrols.currentPosition = (playListItem.StartMin*60) + playListItem.StartSec;
+                }
+
                 //Don't split the audio out if this is the default screen or it's not a compatable item.
                 if (playListItem.SupportsMultiCast && !playListItem.Screen.DefaultScreen)
                 {

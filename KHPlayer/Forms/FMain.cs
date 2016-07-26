@@ -477,7 +477,7 @@ namespace KHPlayer.Forms
             if (_fplayers == null)
                 return;
 
-            foreach (var playListItem in _currentPlayListItems)
+            foreach (var playListItem in _currentPlayListItems.ToList())
             {
                 var player = GetPlayListItemPlayer(playListItem);
                 if (player == null)
@@ -485,7 +485,9 @@ namespace KHPlayer.Forms
 
                 player.PlayListItem.MaxTime = player.WmPlayer.currentMedia.durationString;
                 player.PlayListItem.CurrentTime = player.WmPlayer.Ctlcontrols.currentPositionString;
-                    
+
+                if ((playListItem.StopMin > 0 || playListItem.StopSec > 0) && playListItem.StopTime == player.WmPlayer.Ctlcontrols.currentPositionString)
+                    bStop_Click(sender, e);
 
                 if (_playListMode == PlayListMode.RandomSong)
                 {

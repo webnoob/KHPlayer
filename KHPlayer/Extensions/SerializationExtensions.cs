@@ -36,14 +36,25 @@ namespace KHPlayer.Extensions
             return textWriter.ToString();
         }
 
-        public static string ToSerializedJson<T>(this T toSerialise)
+        public static string ToSerializedJson<T>(this T toSerialise, string filePath = null)
         {
-            return JsonConvert.SerializeObject(toSerialise);
+            var serializedString = JsonConvert.SerializeObject(toSerialise);
+            if (!string.IsNullOrEmpty(filePath))
+                using (var sr = new StreamWriter(filePath))
+                    sr.Write(serializedString);
+            
+            return serializedString;
         }
 
-        public static T ToDeserialisedJson<T>(this String obj)
+        public static T ToDeserialisedJson<T>(this String obj, bool isFile = false)
         {
-            return JsonConvert.DeserializeObject<T>(obj);
+            string useStr = obj.ToString();
+
+            if (isFile)
+                using (var sr = new StreamReader(obj.ToString(), System.Text.Encoding.UTF8))
+                    useStr = sr.ReadToEnd();
+
+            return JsonConvert.DeserializeObject<T>(useStr);
         }
     }
 }

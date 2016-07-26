@@ -204,6 +204,18 @@ namespace KHPlayer.Forms
             numPdfPageNumber.Text = playListItem.PdfPageNumber.ToString();
             cbPdfView.SelectedIndex = playListItem.PdfView == "FitV" ? 1 : 0;
 
+            if (playListItem.StartTime != null)
+            {
+                numStartMin.Text = playListItem.StartTime.Split(':').FirstOrDefault();
+                numStartSec.Text = playListItem.StartTime.Split(':').LastOrDefault();
+            }
+
+            if (playListItem.StopTime != null)
+            {
+                numStopMin.Text = playListItem.StopTime.Split(':').FirstOrDefault();
+                numStopSec.Text = playListItem.StopTime.Split(':').LastOrDefault();
+            }
+
             pPdfOptions.Visible = playListItem.Type == PlayListItemType.Pdf;
             if (playListItem.SupportsMultiCast)
                 LoadScreens(playListItem.Screen);
@@ -395,6 +407,42 @@ namespace KHPlayer.Forms
                 case 0: playListItem.PdfView = "FitH"; break;
                 case 1: playListItem.PdfView = "FitV"; break;
             }
+        }
+
+        private void numStarMin_ValueChanged(object sender, EventArgs e)
+        {
+            var playListItem = GetSelectedPlayListItem();
+            if (playListItem == null)
+                return;
+
+            playListItem.StartMin = Convert.ToInt32(numStartMin.Value);
+        }
+
+        private void numStopMin_ValueChanged(object sender, EventArgs e)
+        {
+            var playListItem = GetSelectedPlayListItem();
+            if (playListItem == null)
+                return;
+
+            playListItem.StopMin = Convert.ToInt32(numStopMin.Value);
+        }
+
+        private void numStartSec_ValueChanged(object sender, EventArgs e)
+        {
+            var playListItem = GetSelectedPlayListItem();
+            if (playListItem == null)
+                return;
+
+            playListItem.StartSec = Convert.ToInt32(numStartSec.Value);
+        }
+
+        private void numStopSec_ValueChanged(object sender, EventArgs e)
+        {
+            var playListItem = GetSelectedPlayListItem();
+            if (playListItem == null)
+                return;
+
+            playListItem.StopSec = Convert.ToInt32(numStopSec.Value);
         }
     }
 }

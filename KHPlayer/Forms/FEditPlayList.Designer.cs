@@ -64,10 +64,20 @@
             this.lGroup = new System.Windows.Forms.Label();
             this.numGroup = new System.Windows.Forms.NumericUpDown();
             this.pPdfOptions = new System.Windows.Forms.Panel();
+            this.cbPdfView = new System.Windows.Forms.ComboBox();
+            this.lPdfViewType = new System.Windows.Forms.Label();
             this.lPdfPageNumber = new System.Windows.Forms.Label();
             this.numPdfPageNumber = new System.Windows.Forms.NumericUpDown();
-            this.lPdfViewType = new System.Windows.Forms.Label();
-            this.cbPdfView = new System.Windows.Forms.ComboBox();
+            this.lStartTime = new System.Windows.Forms.Label();
+            this.numStartMin = new System.Windows.Forms.NumericUpDown();
+            this.numStartSec = new System.Windows.Forms.NumericUpDown();
+            this.lStartMin = new System.Windows.Forms.Label();
+            this.lStartSec = new System.Windows.Forms.Label();
+            this.lStopSec = new System.Windows.Forms.Label();
+            this.lStopMin = new System.Windows.Forms.Label();
+            this.numStopSec = new System.Windows.Forms.NumericUpDown();
+            this.numStopMin = new System.Windows.Forms.NumericUpDown();
+            this.lStopVideo = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.pnlProgress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbCurrentlySelected)).BeginInit();
@@ -75,6 +85,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numGroup)).BeginInit();
             this.pPdfOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPdfPageNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numStartMin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numStartSec)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numStopSec)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numStopMin)).BeginInit();
             this.SuspendLayout();
             // 
             // bAddVideos
@@ -144,7 +158,7 @@
             // 
             // bDeletePlayListItem
             // 
-            this.bDeletePlayListItem.Location = new System.Drawing.Point(238, 307);
+            this.bDeletePlayListItem.Location = new System.Drawing.Point(238, 327);
             this.bDeletePlayListItem.Name = "bDeletePlayListItem";
             this.bDeletePlayListItem.Size = new System.Drawing.Size(52, 23);
             this.bDeletePlayListItem.TabIndex = 13;
@@ -304,7 +318,7 @@
             this.lblProgressStatus.Location = new System.Drawing.Point(3, 34);
             this.lblProgressStatus.MinimumSize = new System.Drawing.Size(214, 97);
             this.lblProgressStatus.Name = "lblProgressStatus";
-            this.lblProgressStatus.Size = new System.Drawing.Size(214, 99);
+            this.lblProgressStatus.Size = new System.Drawing.Size(214, 125);
             this.lblProgressStatus.TabIndex = 20;
             this.lblProgressStatus.Text = "Copying ...";
             // 
@@ -323,7 +337,7 @@
             // 
             this.pbCurrentlySelected.Image = global::KHPlayer.Properties.Resources.jworg;
             this.pbCurrentlySelected.InitialImage = global::KHPlayer.Properties.Resources.jworg;
-            this.pbCurrentlySelected.Location = new System.Drawing.Point(238, 254);
+            this.pbCurrentlySelected.Location = new System.Drawing.Point(238, 256);
             this.pbCurrentlySelected.Name = "pbCurrentlySelected";
             this.pbCurrentlySelected.Size = new System.Drawing.Size(52, 47);
             this.pbCurrentlySelected.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -332,20 +346,30 @@
             // 
             // pScreenSelection
             // 
+            this.pScreenSelection.Controls.Add(this.lStopSec);
+            this.pScreenSelection.Controls.Add(this.lStopMin);
+            this.pScreenSelection.Controls.Add(this.numStopSec);
+            this.pScreenSelection.Controls.Add(this.numStopMin);
+            this.pScreenSelection.Controls.Add(this.lStopVideo);
+            this.pScreenSelection.Controls.Add(this.lStartSec);
+            this.pScreenSelection.Controls.Add(this.lStartMin);
+            this.pScreenSelection.Controls.Add(this.numStartSec);
+            this.pScreenSelection.Controls.Add(this.numStartMin);
+            this.pScreenSelection.Controls.Add(this.lStartTime);
             this.pScreenSelection.Controls.Add(this.cbScreen);
             this.pScreenSelection.Controls.Add(this.lScreen);
             this.pScreenSelection.Controls.Add(this.lGroup);
             this.pScreenSelection.Controls.Add(this.numGroup);
             this.pScreenSelection.Location = new System.Drawing.Point(296, 196);
             this.pScreenSelection.Name = "pScreenSelection";
-            this.pScreenSelection.Size = new System.Drawing.Size(162, 134);
+            this.pScreenSelection.Size = new System.Drawing.Size(162, 161);
             this.pScreenSelection.TabIndex = 25;
             // 
             // cbScreen
             // 
             this.cbScreen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbScreen.FormattingEnabled = true;
-            this.cbScreen.Location = new System.Drawing.Point(0, 73);
+            this.cbScreen.Location = new System.Drawing.Point(0, 55);
             this.cbScreen.Name = "cbScreen";
             this.cbScreen.Size = new System.Drawing.Size(162, 21);
             this.cbScreen.TabIndex = 28;
@@ -354,7 +378,7 @@
             // lScreen
             // 
             this.lScreen.AutoSize = true;
-            this.lScreen.Location = new System.Drawing.Point(-3, 57);
+            this.lScreen.Location = new System.Drawing.Point(-3, 39);
             this.lScreen.Name = "lScreen";
             this.lScreen.Size = new System.Drawing.Size(97, 13);
             this.lScreen.TabIndex = 27;
@@ -363,7 +387,7 @@
             // lGroup
             // 
             this.lGroup.AutoSize = true;
-            this.lGroup.Location = new System.Drawing.Point(-3, 13);
+            this.lGroup.Location = new System.Drawing.Point(-3, 0);
             this.lGroup.Name = "lGroup";
             this.lGroup.Size = new System.Drawing.Size(36, 13);
             this.lGroup.TabIndex = 26;
@@ -371,7 +395,7 @@
             // 
             // numGroup
             // 
-            this.numGroup.Location = new System.Drawing.Point(0, 29);
+            this.numGroup.Location = new System.Drawing.Point(0, 16);
             this.numGroup.Name = "numGroup";
             this.numGroup.Size = new System.Drawing.Size(162, 20);
             this.numGroup.TabIndex = 25;
@@ -387,6 +411,28 @@
             this.pPdfOptions.Name = "pPdfOptions";
             this.pPdfOptions.Size = new System.Drawing.Size(162, 133);
             this.pPdfOptions.TabIndex = 30;
+            // 
+            // cbPdfView
+            // 
+            this.cbPdfView.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPdfView.FormattingEnabled = true;
+            this.cbPdfView.Items.AddRange(new object[] {
+            "Fit Horizontally",
+            "Fit Vertically"});
+            this.cbPdfView.Location = new System.Drawing.Point(1, 60);
+            this.cbPdfView.Name = "cbPdfView";
+            this.cbPdfView.Size = new System.Drawing.Size(160, 21);
+            this.cbPdfView.TabIndex = 31;
+            this.cbPdfView.SelectedIndexChanged += new System.EventHandler(this.cbPdfView_SelectedIndexChanged);
+            // 
+            // lPdfViewType
+            // 
+            this.lPdfViewType.AutoSize = true;
+            this.lPdfViewType.Location = new System.Drawing.Point(-1, 44);
+            this.lPdfViewType.Name = "lPdfViewType";
+            this.lPdfViewType.Size = new System.Drawing.Size(30, 13);
+            this.lPdfViewType.TabIndex = 30;
+            this.lPdfViewType.Text = "View";
             // 
             // lPdfPageNumber
             // 
@@ -410,34 +456,97 @@
             0});
             this.numPdfPageNumber.ValueChanged += new System.EventHandler(this.numPdfPageNumber_ValueChanged);
             // 
-            // lPdfViewType
+            // lStartTime
             // 
-            this.lPdfViewType.AutoSize = true;
-            this.lPdfViewType.Location = new System.Drawing.Point(-1, 44);
-            this.lPdfViewType.Name = "lPdfViewType";
-            this.lPdfViewType.Size = new System.Drawing.Size(30, 13);
-            this.lPdfViewType.TabIndex = 30;
-            this.lPdfViewType.Text = "View";
+            this.lStartTime.AutoSize = true;
+            this.lStartTime.Location = new System.Drawing.Point(-1, 79);
+            this.lStartTime.Name = "lStartTime";
+            this.lStartTime.Size = new System.Drawing.Size(75, 13);
+            this.lStartTime.TabIndex = 29;
+            this.lStartTime.Text = "Start Video At:";
             // 
-            // cbPdfView
+            // numStartMin
             // 
-            this.cbPdfView.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbPdfView.FormattingEnabled = true;
-            this.cbPdfView.Items.AddRange(new object[] {
-            "Fit Horizontally",
-            "Fit Vertically"});
-            this.cbPdfView.Location = new System.Drawing.Point(1, 60);
-            this.cbPdfView.Name = "cbPdfView";
-            this.cbPdfView.Size = new System.Drawing.Size(160, 21);
-            this.cbPdfView.TabIndex = 31;
-            this.cbPdfView.SelectedIndexChanged += new System.EventHandler(this.cbPdfView_SelectedIndexChanged);
+            this.numStartMin.Location = new System.Drawing.Point(29, 95);
+            this.numStartMin.Name = "numStartMin";
+            this.numStartMin.Size = new System.Drawing.Size(48, 20);
+            this.numStartMin.TabIndex = 30;
+            this.numStartMin.ValueChanged += new System.EventHandler(this.numStarMin_ValueChanged);
+            // 
+            // numStartSec
+            // 
+            this.numStartSec.Location = new System.Drawing.Point(112, 95);
+            this.numStartSec.Name = "numStartSec";
+            this.numStartSec.Size = new System.Drawing.Size(48, 20);
+            this.numStartSec.TabIndex = 31;
+            this.numStartSec.ValueChanged += new System.EventHandler(this.numStartSec_ValueChanged);
+            // 
+            // lStartMin
+            // 
+            this.lStartMin.AutoSize = true;
+            this.lStartMin.Location = new System.Drawing.Point(-1, 97);
+            this.lStartMin.Name = "lStartMin";
+            this.lStartMin.Size = new System.Drawing.Size(24, 13);
+            this.lStartMin.TabIndex = 32;
+            this.lStartMin.Text = "Min";
+            // 
+            // lStartSec
+            // 
+            this.lStartSec.AutoSize = true;
+            this.lStartSec.Location = new System.Drawing.Point(80, 97);
+            this.lStartSec.Name = "lStartSec";
+            this.lStartSec.Size = new System.Drawing.Size(26, 13);
+            this.lStartSec.TabIndex = 33;
+            this.lStartSec.Text = "Sec";
+            // 
+            // lStopSec
+            // 
+            this.lStopSec.AutoSize = true;
+            this.lStopSec.Location = new System.Drawing.Point(80, 136);
+            this.lStopSec.Name = "lStopSec";
+            this.lStopSec.Size = new System.Drawing.Size(26, 13);
+            this.lStopSec.TabIndex = 38;
+            this.lStopSec.Text = "Sec";
+            // 
+            // lStopMin
+            // 
+            this.lStopMin.AutoSize = true;
+            this.lStopMin.Location = new System.Drawing.Point(-1, 136);
+            this.lStopMin.Name = "lStopMin";
+            this.lStopMin.Size = new System.Drawing.Size(24, 13);
+            this.lStopMin.TabIndex = 37;
+            this.lStopMin.Text = "Min";
+            // 
+            // numStopSec
+            // 
+            this.numStopSec.Location = new System.Drawing.Point(112, 134);
+            this.numStopSec.Name = "numStopSec";
+            this.numStopSec.Size = new System.Drawing.Size(48, 20);
+            this.numStopSec.TabIndex = 36;
+            this.numStopSec.ValueChanged += new System.EventHandler(this.numStopSec_ValueChanged);
+            // 
+            // numStopMin
+            // 
+            this.numStopMin.Location = new System.Drawing.Point(26, 134);
+            this.numStopMin.Name = "numStopMin";
+            this.numStopMin.Size = new System.Drawing.Size(48, 20);
+            this.numStopMin.TabIndex = 35;
+            this.numStopMin.ValueChanged += new System.EventHandler(this.numStopMin_ValueChanged);
+            // 
+            // lStopVideo
+            // 
+            this.lStopVideo.AutoSize = true;
+            this.lStopVideo.Location = new System.Drawing.Point(-1, 118);
+            this.lStopVideo.Name = "lStopVideo";
+            this.lStopVideo.Size = new System.Drawing.Size(75, 13);
+            this.lStopVideo.TabIndex = 34;
+            this.lStopVideo.Text = "Stop Video At:";
             // 
             // FEditPlayList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(470, 344);
-            this.Controls.Add(this.pPdfOptions);
+            this.ClientSize = new System.Drawing.Size(470, 359);
             this.Controls.Add(this.pScreenSelection);
             this.Controls.Add(this.bAddStream);
             this.Controls.Add(this.pnlProgress);
@@ -453,6 +562,7 @@
             this.Controls.Add(this.bDeletePlayList);
             this.Controls.Add(this.bAddVideos);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.pPdfOptions);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -470,6 +580,10 @@
             this.pPdfOptions.ResumeLayout(false);
             this.pPdfOptions.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPdfPageNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numStartMin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numStartSec)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numStopSec)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numStopMin)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -516,5 +630,15 @@
         private System.Windows.Forms.NumericUpDown numPdfPageNumber;
         private System.Windows.Forms.Label lPdfViewType;
         private System.Windows.Forms.ComboBox cbPdfView;
+        private System.Windows.Forms.Label lStopSec;
+        private System.Windows.Forms.Label lStopMin;
+        private System.Windows.Forms.NumericUpDown numStopSec;
+        private System.Windows.Forms.NumericUpDown numStopMin;
+        private System.Windows.Forms.Label lStopVideo;
+        private System.Windows.Forms.Label lStartSec;
+        private System.Windows.Forms.Label lStartMin;
+        private System.Windows.Forms.NumericUpDown numStartSec;
+        private System.Windows.Forms.NumericUpDown numStartMin;
+        private System.Windows.Forms.Label lStartTime;
     }
 }

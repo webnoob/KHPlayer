@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 
 namespace KHPlayer.Classes
@@ -72,6 +73,18 @@ namespace KHPlayer.Classes
         public int PdfPageNumber { get; set; }
 
         public string PdfView { get; set; }
+        
+        public int StartMin { get; set; }
+        public int StartSec { get; set; }
+        
+        [JsonIgnore]
+        public string StartTime { get { return string.Format("{0:D2}:{1:D2}", StartMin, StartSec); } }
+
+        public int StopMin { get; set; }
+        public int StopSec { get; set; }
+
+        [JsonIgnore]
+        public string StopTime { get { return string.Format("{0:D2}:{1:D2}", StopMin, StopSec); } }
     }
 
     public enum PlayListItemState
