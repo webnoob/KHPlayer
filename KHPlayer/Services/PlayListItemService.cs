@@ -12,12 +12,14 @@ namespace KHPlayer.Services
         private readonly PlayListService _playListService;
         private readonly ThumbnailService _thumbnailService;
         private readonly FileTagService _fileTagService;
+        private readonly ScreenService _screenService;
 
         public PlayListItemService()
         {
             _playListService = new PlayListService();
             _thumbnailService = new ThumbnailService();
             _fileTagService = new FileTagService();
+            _screenService = new ScreenService();
         }
 
         public IEnumerable<PlayListItem> Get()
@@ -74,6 +76,7 @@ namespace KHPlayer.Services
                 FilePath = filePath,
                 PlayListGuid = playList.Guid,
                 Source = isStreamed ? PlayListItemSource.Streamed : PlayListItemSource.Disk,
+                Screen = _screenService.GetDefaultScreen()
             };
 
             plItem.ThumbnailPath = _thumbnailService.GenerateForFile(filePath, plItem.Source);

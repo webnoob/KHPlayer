@@ -21,10 +21,10 @@ namespace KHPlayer.Services
             _totalSongCount = Directory.GetFiles(Settings.Default.SongLocation).Count();
         }
 
-        public string GetSongFile(string songStr)
+        public string GetSongFile(string songStr, bool withLyrics)
         {
             var songNumber = GetSongNumber(songStr);
-            return GetSongFile(songNumber);
+            return GetSongFile(songNumber, withLyrics);
         }
 
         private int GetSongNumber(string songStr)
@@ -36,19 +36,26 @@ namespace KHPlayer.Services
             return 0;
         }
 
-        public string GetSongFile(int songNumber)
+        public string GetSongFile(int songNumber, bool withLyrics)
         {
-            var allSongFiles = Directory.GetFiles(PathHelper.GetApplicationPath() + "\\" + Settings.Default.SongLocation);
+            var songPath = PathHelper.GetApplicationPath() + "\\" + Settings.Default.SongLocation;
+            var songPathWithLyrics = PathHelper.GetApplicationPath() + "\\" + Settings.Default.SongLocation + "\\WithLyrics";
+            var newSongPathWithLyrics = PathHelper.GetApplicationPath() + "\\" + Settings.Default.SongLocation + "\\New";
+            string[] allSongFiles;
+            if (Settings.Default.UseNewSongs)
+            {
+                allSongFiles = withLyrics
+                    ? Directory.GetFiles(songPathWithLyrics)
+                    : Directory.GetFiles(newSongPathWithLyrics);
+            }
+            else
+            {
+                allSongFiles = Directory.GetFiles(songPath);
+            }
 
             foreach (var file in allSongFiles)
-            {
-                var tagFile = _fileTagService.GetTag(file, PlayListItemSource.Disk);
-                if (tagFile == null)
-                    continue;
-
-                if (tagFile.Tag.Track == songNumber)
+                if (Path.GetFileNameWithoutExtension(file) == songNumber.ToString())
                     return file;
-            }
 
             return "";
         }
@@ -97,11 +104,34 @@ namespace KHPlayer.Services
             //tries to load song 215, this won't exist.
 
             var songNum = GetRandomSongNumer();
-            var songFilePath = GetSongFile(songNum);
+            var songFilePath = GetSongFile(songNum, Settings.Default.UseLyricsOnRandomSongs);
             while (!File.Exists(songFilePath))
                 songFilePath = GetRandomSongFilePath();
 
             return songFilePath;
+        }
+
+        public void RenameAllNewSongFolders()
+        {
+            string[] pathsToFix = new[] {
+                PathHelper.GetApplicationPath() + "\\" + Settings.Default.SongLocation + "\\WithLyrics",
+                PathHelper.GetApplicationPath() + "\\" + Settings.Default.SongLocation + "\\New"
+            };
+
+            foreach (string path in pathsToFix)
+            {
+                var files = Directory.GetFiles(path).ToList();
+                foreach (var file in files)
+                {
+                    // Looks odd but we get the number as 001 (string) then convert to int to get 1, then back to string for file name :)
+                    var songNumber = Convert.ToInt32(new string(Path.GetFileNameWithoutExtension(file).Replace("720P", "").Where(char.IsDigit).ToArray()));
+                    var newFilePath = Path.Combine(Path.GetDirectoryName(file), songNumber.ToString() + Path.GetExtension(file));
+                    if (!newFilePath.Equals(file, StringComparison.OrdinalIgnoreCase))
+                    {
+                        File.Move(file, newFilePath);
+                    }
+                }
+            }
         }
     }
 }

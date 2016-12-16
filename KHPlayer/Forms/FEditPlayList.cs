@@ -46,6 +46,7 @@ namespace KHPlayer.Forms
         {
             LoadPlayLists();
             LoadPlayListItems();
+            SetupNewSongsAndLyricsButtons();
         }
 
         private void UpdateProgress(object sender, ProgressEventArgs e)
@@ -274,7 +275,7 @@ namespace KHPlayer.Forms
             LoadPlayListItems();
         }
 
-        private void bAddSong_Click(object sender, EventArgs e)
+        private void AddSongs(bool withLyrics)
         {
             var point = GetScreenPoint();
             var songList = Interaction.InputBox("Please enter your songs (split multiple song numbers with comma, space, fullstop or hyphen)", "Song Selection", "", point.X, point.Y);
@@ -289,7 +290,7 @@ namespace KHPlayer.Forms
             var errorStr = "";
             foreach (var songStr in songStrings)
             {
-                var songFilePath = _songService.GetSongFile(songStr);
+                var songFilePath = _songService.GetSongFile(songStr, withLyrics);
                 if (!File.Exists(songFilePath))
                 {
                     errorStr += String.Format("Could not add song number {0} - Invalid Number / Song Not Found. {1}", songStr, Environment.NewLine);
@@ -306,6 +307,16 @@ namespace KHPlayer.Forms
             }
 
             LoadPlayListItems();
+        }
+
+        private void bAddSongWithLyrics_Click(object sender, EventArgs e)
+        {
+            AddSongs(true);
+        }
+
+        private void bAddSong_Click(object sender, EventArgs e)
+        {
+            AddSongs(false);
         }
 
         private async void playlistsFromDriveFromToolStripMenuItem_Click(object sender, EventArgs e)
@@ -443,6 +454,37 @@ namespace KHPlayer.Forms
                 return;
 
             playListItem.StopSec = Convert.ToInt32(numStopSec.Value);
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            return;
+        }
+
+        private void SetupNewSongsAndLyricsButtons()
+        {
+            bAddSongWithLyrics.Enabled = Settings.Default.UseNewSongs;
+            enableNewSongsToolStripMenuItem.Text = (Settings.Default.UseNewSongs ? "Disable" : "Enable") + " New Songs";
+            enableLyricsOnRandomSongsToolStripMenuItem.Text = (Settings.Default.UseLyricsOnRandomSongs ? "Disable" : "Enable") + " Lyrics on Random Songs";
+        }
+        
+        private void makeNewSongFileNamesToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            _songService.RenameAllNewSongFolders();
+        }
+
+        private void enableNewSongsToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            Settings.Default.UseNewSongs = !Settings.Default.UseNewSongs;
+            Settings.Default.Save();
+            SetupNewSongsAndLyricsButtons();
+        }
+
+        private void enableLyricsOnRandomSongsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Settings.Default.UseLyricsOnRandomSongs = !Settings.Default.UseLyricsOnRandomSongs;
+            Settings.Default.Save();
+            SetupNewSongsAndLyricsButtons();
         }
     }
 }

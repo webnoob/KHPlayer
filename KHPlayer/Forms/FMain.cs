@@ -614,7 +614,6 @@ namespace KHPlayer.Forms
                 currentRow.Cells["colImage"].Value =
                     ImageHelper.ResizeImage(playListItem.ThumbnailPath, 50, 50, true) ??
                     ImageHelper.ResizeImage(Resources.jworg, 50, 50, true);
-
                 currentRow.Cells["colName"].Value = string.Format("[Screen - {0}][Group - {1}]{2}[{3} - {4}] - {5}",
                     playListItem.Screen != null ? playListItem.Screen.FriendlyName : "Main", playListItem.Group,
                     Environment.NewLine, playListItem.State, playListItem.Type, playListItem.TagName);
